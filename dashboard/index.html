@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trading Systems Overview Dashboard</title>
+    <meta name="description" content="Shared dashboard for all trading systems" />
+    <link rel="stylesheet" href="../css/styles.css" />
+</head>
+
+<body>
+    <div class="app">
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div id="strategyTitle" class="strategy-title"></div>
+                <div id="strategyDescription" class="strategy-description"></div>
+                <div class="topbar-nav-row">
+                    <span class="active-tab-label" id="activeTabLabel">Overview</span>
+                    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+                <nav class="tabs" id="mainNav" aria-label="Report Tabs">
+                    <button class="tab active" data-tab="overview">
+                        <span class="tab-icon icon-overview"></span>
+                        <span>Overview</span>
+                    </button>
+                    <button class="tab" data-tab="equity-curve">
+                        <span class="tab-icon icon-equity"></span>
+                        <span>Equity Curve</span>
+                    </button>
+                    <button class="tab" data-tab="metrics-report">
+                        <span class="tab-icon icon-metrics"></span>
+                        <span>Metrics Report</span>
+                    </button>
+                    <button class="tab" data-tab="monthly-returns">
+                        <span class="tab-icon icon-monthly"></span>
+                        <span>Monthly Returns</span>
+                    </button>
+                    <button class="tab" data-tab="positions">
+                        <span class="tab-icon icon-positions"></span>
+                        <span>Positions</span>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <main class="content">
+            <section class="panel active" id="overview">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Overview</div>
+                        <div class="panel-subtitle" id="overviewSubtitle"></div>
+                    </div>
+                    <div class="badge" id="lastUpdateBadge">No data loaded yet</div>
+                </div>
+                <div class="body-section">
+                    <div class="grid-cards" id="overviewCards"></div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>KPI</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="overviewTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel" id="equity-curve">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Equity Curve</div>
+                    </div>
+                </div>
+                <div class="chart-wrap">
+                    <div class="chart-box">
+                        <svg id="equityChart" viewBox="0 0 1000 340" preserveAspectRatio="xMidYMid meet" aria-label="Equity Curve Chart"></svg>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel" id="metrics-report">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Metrics Report</div>
+                    </div>
+                </div>
+                <div class="body-section table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>KPI</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="metricsTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel" id="monthly-returns">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Monthly Returns</div>
+                    </div>
+                </div>
+                <div class="body-section">
+                    <div class="months-grid" id="monthlyReturnsGrid"></div>
+                </div>
+            </section>
+
+            <section class="panel" id="positions">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Positions</div>
+                    </div>
+                </div>
+                <div class="body-section table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="col-symbol">Symbol</th>
+                                <th class="sortable" data-sort="entryDate">Entry Date <span class="sort-icon"></span></th>
+                                <th class="sortable" data-sort="exitDate">Exit Date <span class="sort-icon"></span></th>
+                                <th class="col-hide-mobile">Entry Price</th>
+                                <th class="col-hide-mobile">Exit Price</th>
+                                <th class="col-hide-mobile">Qty</th>
+                                <th class="col-hide-mobile">P/L</th>
+                                <th class="sortable" data-sort="plPercent">P/L % <span class="sort-icon"></span></th>
+                                <th>Days Held</th>
+                            </tr>
+                        </thead>
+                        <tbody id="positionsTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="cardTooltip" class="card-tooltip" role="tooltip"></div>
+    <script src="../js/monthly-returns.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/dashboard-loader.js"></script>
+</body>
+
+</html>
