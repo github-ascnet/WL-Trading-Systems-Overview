@@ -79,19 +79,13 @@ body {
 
 .system-card-head {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
 }
 
 .system-card-head h2 {
   margin: 0;
   font-size: 18px;
-}
-
-.system-id {
-  color: var(--muted);
-  font-size: 12px;
 }
 
 .system-description {

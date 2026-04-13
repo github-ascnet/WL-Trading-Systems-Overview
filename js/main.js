@@ -251,9 +251,7 @@ function renderOverview(currentState, positions) {
   if (!overviewCards || !overviewTableBody) return;
 
   if (overviewSubtitle) {
-    overviewSubtitle.textContent = buildOverviewSummary(
-      currentState.strategyDescription
-    );
+    overviewSubtitle.textContent = "";
   }
   if (lastUpdateBadge) {
     lastUpdateBadge.textContent = `Updated: ${formatDate(
@@ -767,10 +765,8 @@ function setupCardTooltip() {
   const tooltip = document.getElementById("cardTooltip");
   if (!tooltip || document.body.dataset.cardTooltipBound === "1") return;
 
-  document.addEventListener("mouseover", (e) => {
-    const target = e.target.closest(".card-info");
-    if (!target) return;
-    const text = target.dataset.tooltip;
+  function showTooltip(target) {
+    const text = target?.dataset.tooltip;
     if (!text) return;
 
     tooltip.textContent = text;
@@ -792,11 +788,33 @@ function setupCardTooltip() {
 
     tooltip.style.left = `${left}px`;
     tooltip.style.top = `${top}px`;
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove("visible");
+  }
+
+  document.addEventListener("mouseover", (e) => {
+    const target = e.target.closest("[data-tooltip]");
+    if (!target) return;
+    showTooltip(target);
   });
 
   document.addEventListener("mouseout", (e) => {
-    if (e.target.closest(".card-info")) {
-      tooltip.classList.remove("visible");
+    if (e.target.closest("[data-tooltip]")) {
+      hideTooltip();
+    }
+  });
+
+  document.addEventListener("focusin", (e) => {
+    const target = e.target.closest("[data-tooltip]");
+    if (!target) return;
+    showTooltip(target);
+  });
+
+  document.addEventListener("focusout", (e) => {
+    if (e.target.closest("[data-tooltip]")) {
+      hideTooltip();
     }
   });
 
@@ -816,10 +834,24 @@ function bootDashboard({ systemId, currentState, equity, positions, signals }) {
     );
 
     const cleanedName = cleanStrategyName(safeCurrentState.strategyName);
+    const fullStrategyDescription = String(
+      safeCurrentState.strategyDescription ?? ""
+    ).trim();
 
     const strategyTitleEl = document.getElementById("strategyTitle");
     if (strategyTitleEl) {
       strategyTitleEl.textContent = cleanedName || systemId || "Dashboard";
+    }
+
+    const strategyInfoEl = document.getElementById("strategyInfo");
+    if (strategyInfoEl) {
+      if (fullStrategyDescription) {
+        strategyInfoEl.dataset.tooltip = fullStrategyDescription;
+        strategyInfoEl.hidden = false;
+      } else {
+        delete strategyInfoEl.dataset.tooltip;
+        strategyInfoEl.hidden = true;
+      }
     }
 
     if (cleanedName) {
@@ -828,7 +860,7 @@ function bootDashboard({ systemId, currentState, equity, positions, signals }) {
 
     const strategyDescEl = document.getElementById("strategyDescription");
     if (strategyDescEl) {
-      strategyDescEl.textContent = safeCurrentState.strategyDescription || "";
+      strategyDescEl.textContent = "";
     }
 
     const metaDesc = document.querySelector('meta[name="description"]');

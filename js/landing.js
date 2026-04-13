@@ -101,7 +101,6 @@
       )}">
         <div class="system-card-head">
           <h2>${escapeHtml(strategyName)}</h2>
-          <span class="system-id">${escapeHtml(systemId)}</span>
         </div>
         ${
           strategyDescription
@@ -138,7 +137,6 @@
       <article class="system-card system-card-error">
         <div class="system-card-head">
           <h2>${escapeHtml(systemId)}</h2>
-          <span class="system-id">Error</span>
         </div>
         <p class="system-description">${escapeHtml(message)}</p>
       </article>

@@ -21,6 +21,7 @@
   function renderLoaderError(message) {
     const strategyTitle = document.getElementById("strategyTitle");
     const strategyDescription = document.getElementById("strategyDescription");
+    const strategyInfo = document.getElementById("strategyInfo");
     const badge = document.getElementById("lastUpdateBadge");
     const overviewSubtitle = document.getElementById("overviewSubtitle");
 
@@ -28,7 +29,11 @@
       strategyTitle.textContent = "System loading failed";
     }
     if (strategyDescription) {
-      strategyDescription.textContent = message;
+      strategyDescription.textContent = "";
+    }
+    if (strategyInfo) {
+      strategyInfo.dataset.tooltip = message;
+      strategyInfo.hidden = false;
     }
     if (overviewSubtitle) {
       overviewSubtitle.textContent = "";

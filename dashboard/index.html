@@ -13,8 +13,16 @@
     <div class="app">
         <header class="topbar">
             <div class="topbar-inner">
-                <div id="strategyTitle" class="strategy-title"></div>
-                <div id="strategyDescription" class="strategy-description"></div>
+                <div class="topbar-header-row">
+                    <div>
+                        <div class="strategy-title-row">
+                            <div id="strategyTitle" class="strategy-title"></div>
+                            <span id="strategyInfo" class="header-info" role="button" tabindex="0" aria-label="Show strategy description" hidden>!</span>
+                        </div>
+                        <div id="strategyDescription" class="strategy-description"></div>
+                    </div>
+                    <a class="topbar-back-link" href="../index.html" aria-label="Back to Dashboard">Back to Dashboard</a>
+                </div>
                 <div class="topbar-nav-row">
                     <span class="active-tab-label" id="activeTabLabel">Overview</span>
                     <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
