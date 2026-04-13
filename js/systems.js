@@ -7,6 +7,10 @@ const SYSTEMS = [
     id: "multifactor-edge",
     dataPath: "./systems/multifactor-edge",
   },
+  {
+    id: "short-burst-momentum",
+    dataPath: "./systems/short-burst-momentum",
+  },
 ];
 
 window.SYSTEMS = SYSTEMS;
