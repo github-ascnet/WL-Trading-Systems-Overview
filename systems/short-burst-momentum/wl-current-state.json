@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "Short Burst Momentum",
-  "strategyDescription": "Dieses System ist ein kurzfristiger Momentum-Breakout-Ansatz, der nur dann einsteigt, wenn ein bereits starker Markt zusätzliche Aufwärtsdynamik zeigt, und dadurch in impulsiven Phasen durchaus attraktive, aber kleine und häufige Gewinne generieren kann. Gleichzeitig ist es anfällig für Fehlsignale und Handelskosten durch die sehr kurze Haltedauer, wodurch der langfristige Erfolg stark von stabiler Marktdynamik, sauberer Ausführung und der Vermeidung von Overfitting abhängt.",
+  "strategyDescription": "Dieses System ist ein kurzfristiger Momentum-Breakout-Ansatz mittels Themed ETFs, der nur dann einsteigt, wenn ein bereits starker Markt zusätzliche Aufwärtsdynamik zeigt, und dadurch in impulsiven Phasen durchaus attraktive, aber kleine und häufige Gewinne generieren kann. Gleichzeitig ist es aber auch anfällig für Fehlsignale und Handelskosten durch die sehr kurze Haltedauer, wodurch der langfristige Erfolg stark von stabiler Marktdynamik, sauberer Ausführung und der Vermeidung von Overfitting abhängt.",
   "symbolUniverse": "Short Burst Momentum ETFs",
   "benchmark": "QQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-13 12:32:06",
+  "lastUpdate": "2026-04-13 12:35:08",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-13",
   "apr": 69.0298471414525,
