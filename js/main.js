@@ -18,6 +18,14 @@ function formatNumber(value, decimals = 2) {
   }).format(Number(value));
 }
 
+function formatStartingCapital(value, decimals = 0) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) {
+    return "-";
+  }
+
+  return formatNumber(Number(value) / 100, decimals);
+}
+
 function formatPercent(value, decimals = 2) {
   if (value === null || value === undefined || Number.isNaN(Number(value))) {
     return "-";
@@ -344,7 +352,7 @@ function renderOverview(currentState, positions) {
     .join("");
 
   const metrics = [
-    ["Starting Capital", formatNumber(currentState.startingCapital, 0)],
+    ["Starting Capital", formatStartingCapital(currentState.startingCapital)],
     ["Start Date", formatDateLong(currentState.backtestStartDate)],
     ["Universe", currentState.universeName],
     ["Datasource", currentState.datasourceName],
@@ -376,7 +384,7 @@ function renderMetricsReport(currentState) {
   if (!metricsTableBody) return;
 
   const rows = [
-    ["Starting Capital", formatNumber(currentState.startingCapital, 0)],
+    ["Starting Capital", formatStartingCapital(currentState.startingCapital)],
     ["Start Date", formatDateLong(currentState.backtestStartDate)],
     ["APR", formatPercent(currentState.apr)],
     ["Profit %", formatPercent(currentState.profitPercent)],
@@ -549,6 +557,7 @@ function renderEquityChart(equityData) {
 
   const width = 1000;
   const height = 340;
+  const yAxisLabelDivisor = 100;
   const margin = { top: 20, right: 20, bottom: 40, left: 60 };
   const chartWidth = width - margin.left - margin.right;
   const chartHeight = height - margin.top - margin.bottom;
@@ -596,7 +605,7 @@ function renderEquityChart(equityData) {
     const value = Math.exp(logValue);
     const y = margin.top + (i / 4) * chartHeight + 4;
     return `<text x="10" y="${y}" fill="#aeb4be" font-size="12">${escapeHtml(
-      formatNumber(value, 0)
+      formatNumber(value / yAxisLabelDivisor, 0)
     )}</text>`;
   }).join("");
 
