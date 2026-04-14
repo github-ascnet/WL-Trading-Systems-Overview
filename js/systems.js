@@ -16,6 +16,10 @@ const SYSTEMS = [
     dataPath: "./systems/capitulation-bounce",
   },
   {
+    id: "monday-anchor-reversion",
+    dataPath: "./systems/monday-anchor-reversion",
+  },
+  {
     id: "dip-snapback",
     dataPath: "./systems/dip-snapback",
   },
