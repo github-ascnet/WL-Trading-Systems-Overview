@@ -273,9 +273,9 @@ function renderOverview(currentState, positions) {
       cssClass: getValueClass(currentState.apr),
     },
     {
-      label: "Profit (USD)",
-      value: formatNumber(currentState.profit, 0),
-      cssClass: getValueClass(currentState.profit),
+      label: "Profit %",
+      value: formatPercent(currentState.profitPercent),
+      cssClass: getValueClass(currentState.profitPercent),
     },
     {
       label: "Max Drawdown",
@@ -349,7 +349,6 @@ function renderOverview(currentState, positions) {
     ["Universe", currentState.universeName],
     ["Datasource", currentState.datasourceName],
     ["Benchmark", currentState.benchmark],
-    ["Profit", formatNumber(currentState.profit, 0)],
     ["Profit %", formatPercent(currentState.profitPercent)],
     ["Position Count", currentState.positionCount],
     ["Avg Return % (Year)", formatPercent(currentState.avgReturnYear)],
@@ -380,7 +379,6 @@ function renderMetricsReport(currentState) {
     ["Starting Capital", formatNumber(currentState.startingCapital, 0)],
     ["Start Date", formatDateLong(currentState.backtestStartDate)],
     ["APR", formatPercent(currentState.apr)],
-    ["Profit", formatNumber(currentState.profit, 0)],
     ["Profit %", formatPercent(currentState.profitPercent)],
     ["Risk-Return Meta Score", currentState.riskReturnMetaScore],
     ["Sharpe Ratio", formatNumber(currentState.sharpeRatio)],
