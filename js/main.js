@@ -435,13 +435,8 @@ function renderPositionsRows(positions) {
 
   positionsTableBody.innerHTML = positions
     .map((position) => {
-      const plClass = getValueClass(position.pl);
       const plPercentClass = getValueClass(position.plPercent);
       const symbol = String(position.symbol ?? "").replace(/\..*$/, "");
-      const plFormatted = `USD ${new Intl.NumberFormat("en-GB", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(Math.round(position.pl ?? 0))}`;
       const exitDateDisplay = position.exitDate
         ? formatDateLong(position.exitDate)
         : "Open";
@@ -466,12 +461,6 @@ function renderPositionsRows(positions) {
         <td class="col-hide-mobile">${escapeHtml(
           formatNumber(position.exitPrice)
         )}</td>
-        <td class="col-hide-mobile">${escapeHtml(
-          formatNumber(position.qty, 0)
-        )}</td>
-        <td class="col-hide-mobile ${escapeHtml(plClass)}">${escapeHtml(
-        plFormatted
-      )}</td>
         <td class="${escapeHtml(plPercentClass)}">${escapeHtml(
         formatPercent(position.plPercent)
       )}</td>
@@ -488,7 +477,7 @@ function renderPositions(positions) {
 
   if (!Array.isArray(positions) || positions.length === 0) {
     positionsTableBody.innerHTML =
-      '<tr><td colspan="9" class="empty">No positions available.</td></tr>';
+      '<tr><td colspan="7" class="empty">No positions available.</td></tr>';
     return;
   }
 
