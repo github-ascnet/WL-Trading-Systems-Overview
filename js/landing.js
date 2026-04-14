@@ -185,7 +185,7 @@
       formatPercent(apr)
     )}</dd></div>
           <div><dt>Profit %</dt><dd>${escapeHtml(
-            formatPercent(profitPercent)
+            formatPercent(profitPercent, 0)
           )}</dd></div>
           <div><dt>Profitable %</dt><dd class="${getProfitableClass(
             profitablePercent

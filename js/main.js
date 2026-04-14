@@ -282,7 +282,7 @@ function renderOverview(currentState, positions) {
     },
     {
       label: "Profit %",
-      value: formatPercent(currentState.profitPercent),
+      value: formatPercent(currentState.profitPercent, 0),
       cssClass: getValueClass(currentState.profitPercent),
     },
     {
@@ -357,7 +357,7 @@ function renderOverview(currentState, positions) {
     ["Universe", currentState.universeName],
     ["Datasource", currentState.datasourceName],
     ["Benchmark", currentState.benchmark],
-    ["Profit %", formatPercent(currentState.profitPercent)],
+    ["Profit %", formatPercent(currentState.profitPercent, 0)],
     ["Position Count", currentState.positionCount],
     ["Avg Return % (Year)", formatPercent(currentState.avgReturnYear)],
     ["Std. Deviation (Year)", formatNumber(currentState.stdDeviationYear)],
@@ -387,7 +387,7 @@ function renderMetricsReport(currentState) {
     ["Starting Capital", formatStartingCapital(currentState.startingCapital)],
     ["Start Date", formatDateLong(currentState.backtestStartDate)],
     ["APR", formatPercent(currentState.apr)],
-    ["Profit %", formatPercent(currentState.profitPercent)],
+    ["Profit %", formatPercent(currentState.profitPercent, 0)],
     ["Risk-Return Meta Score", currentState.riskReturnMetaScore],
     ["Sharpe Ratio", formatNumber(currentState.sharpeRatio)],
     ["MAR Ratio", formatNumber(currentState.marRatio)],
