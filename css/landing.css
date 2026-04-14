@@ -62,7 +62,9 @@ body {
 .system-card {
   text-decoration: none;
   color: inherit;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: linear-gradient(180deg, var(--panel) 0%, #1a202b 100%);
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -73,8 +75,9 @@ body {
 
 .system-card:hover {
   transform: translateY(-3px);
-  border-color: var(--accent);
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.42);
+  border-color: #b98a2f;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(185, 138, 47, 0.28), 0 0 18px rgba(185, 138, 47, 0.16);
 }
 
 .system-card-head {
@@ -92,13 +95,19 @@ body {
   margin: 10px 0 14px;
   color: #d2dbeb;
   font-size: 13px;
+  min-height: calc(1.55em * 8);
   line-height: 1.55;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
 }
 
 .system-meta {
   margin: 0;
   display: grid;
   gap: 8px;
+  margin-top: auto;
 }
 
 .system-meta div {
@@ -119,6 +128,24 @@ body {
   text-align: right;
   font-size: 13px;
   color: var(--text);
+  font-weight: 600;
+}
+
+.system-meta dd.kpi-positive {
+  color: #6ee7a8;
+}
+
+.system-meta dd.kpi-warning {
+  color: #ffd166;
+}
+
+.system-meta dd.kpi-danger {
+  color: #ff7b7b;
+}
+
+.kpi-trophy {
+  font-size: 12px;
+  vertical-align: baseline;
 }
 
 .system-card-error {

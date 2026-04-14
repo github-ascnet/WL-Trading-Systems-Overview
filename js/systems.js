@@ -4,12 +4,12 @@ const SYSTEMS = [
     dataPath: "./systems/strong-volume-trend",
   },
   {
-    id: "multifactor-edge",
-    dataPath: "./systems/multifactor-edge",
-  },
-  {
     id: "short-burst-momentum",
     dataPath: "./systems/short-burst-momentum",
+  },
+  {
+    id: "multifactor-edge",
+    dataPath: "./systems/multifactor-edge",
   },
   {
     id: "capitulation-bounce",
