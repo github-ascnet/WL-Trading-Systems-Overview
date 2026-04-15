@@ -1,5 +1,23 @@
 (function dashboardLoader() {
   const SLUG_PATTERN = /^[a-z0-9-]+$/;
+  const LOADER_MIN_VISIBLE_MS = 300;
+
+  function delay(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  function setLoadingState(isLoading, message = "Loading system data...") {
+    const loader = document.getElementById("pageLoader");
+    const loaderText = document.getElementById("pageLoaderText");
+
+    if (loaderText) {
+      loaderText.textContent = message;
+    }
+
+    if (loader) {
+      loader.classList.toggle("hidden", !isLoading);
+    }
+  }
 
   function getSystemIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
@@ -68,7 +86,7 @@
 
     const positionsTableBody = document.getElementById("positionsTableBody");
     if (positionsTableBody) {
-      positionsTableBody.innerHTML = `<tr><td colspan="9" class="error">${safeMessage}</td></tr>`;
+      positionsTableBody.innerHTML = `<tr><td colspan="7" class="error">${safeMessage}</td></tr>`;
     }
 
     const equityChart = document.getElementById("equityChart");
@@ -101,10 +119,15 @@
 
   async function bootFromUrl() {
     const systemId = getSystemIdFromUrl().trim();
+    const loadingStartedAt = Date.now();
+    setLoadingState(true, "Loading selected system...");
+
     if (!systemId) {
       renderGlobalError(
         "Missing URL parameter 'system'. Example: ?system=strong-volume-trend"
       );
+      await delay(LOADER_MIN_VISIBLE_MS);
+      setLoadingState(false);
       return;
     }
 
@@ -112,6 +135,8 @@
       renderGlobalError(
         "Invalid system slug. Only lowercase letters, digits, and hyphens are allowed."
       );
+      await delay(LOADER_MIN_VISIBLE_MS);
+      setLoadingState(false);
       return;
     }
 
@@ -126,6 +151,11 @@
     } catch (error) {
       console.error(error);
       renderGlobalError(error.message || "Unknown loading error");
+    } finally {
+      const elapsed = Date.now() - loadingStartedAt;
+      const remaining = Math.max(0, LOADER_MIN_VISIBLE_MS - elapsed);
+      await delay(remaining);
+      setLoadingState(false);
     }
   }
 
