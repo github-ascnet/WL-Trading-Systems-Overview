@@ -715,7 +715,7 @@ function renderEquityChart(equityData) {
 
     tooltipValueEl.setAttribute("x", boxX + pad);
     tooltipValueEl.setAttribute("y", boxY + 37);
-    tooltipValueEl.textContent = `USD ${formatNumber(point.equity, 0)}`;
+    tooltipValueEl.textContent = `USD ${formatNumber(point.equity / 100, 0)}`;
   });
 
   overlay.addEventListener("mouseleave", () => {
