@@ -23,6 +23,10 @@ const SYSTEMS = [
     id: "dip-snapback",
     dataPath: "./systems/dip-snapback",
   },
+  {
+    id: "bear-market-reversion",
+    dataPath: "./systems/bear-market-reversion",
+  },
 ];
 
 window.SYSTEMS = SYSTEMS;
