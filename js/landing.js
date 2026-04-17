@@ -60,66 +60,18 @@
       .replace(/'/g, "&#039;");
   }
 
-  function getAprClass(value) {
-    const numericValue = Number(value);
-    if (Number.isNaN(numericValue)) return "";
-    return numericValue >= 30 ? "kpi-positive" : "kpi-warning";
-  }
-
-  function getSharpeConfig(value) {
-    const numericValue = Number(value);
-    if (Number.isNaN(numericValue)) {
+  function getKpiConfig(metricKey, value) {
+    if (typeof window.getKpiPresentation !== "function") {
       return { className: "", suffix: "" };
     }
 
-    if (numericValue >= 2) {
-      return {
-        className: "kpi-positive",
-        suffix: ' <span class="kpi-trophy" aria-hidden="true">&#127942;</span>',
-      };
-    }
-
-    if (numericValue >= 1) {
-      return { className: "kpi-positive", suffix: "" };
-    }
-
-    return { className: "kpi-danger", suffix: "" };
-  }
-
-  function getRiskReturnConfig(value) {
-    const numericValue = Number(value);
-    if (Number.isNaN(numericValue)) {
-      return { className: "", suffix: "" };
-    }
-
-    if (numericValue >= 80) {
-      return {
-        className: "kpi-positive",
-        suffix: ' <span class="kpi-trophy" aria-hidden="true">&#127942;</span>',
-      };
-    }
-
-    if (numericValue >= 50) {
-      return { className: "kpi-positive", suffix: "" };
-    }
-
-    if (numericValue >= 35) {
-      return { className: "kpi-warning", suffix: "" };
-    }
-
-    return { className: "kpi-danger", suffix: "" };
-  }
-
-  function getMaxDrawdownClass(value) {
-    const numericValue = Math.abs(Number(value));
-    if (Number.isNaN(numericValue)) return "";
-    return numericValue >= 25 ? "kpi-danger" : "kpi-warning";
-  }
-
-  function getProfitableClass(value) {
-    const numericValue = Number(value);
-    if (Number.isNaN(numericValue)) return "";
-    return numericValue >= 50 ? "kpi-positive" : "kpi-danger";
+    const result = window.getKpiPresentation(metricKey, value, "landing");
+    return {
+      className: result.className || "",
+      suffix: result.trophy
+        ? ' <span class="kpi-trophy" aria-hidden="true">&#127942;</span>'
+        : "",
+    };
   }
 
   function createCardHtml(systemId, currentState) {
@@ -162,8 +114,17 @@
       null
     );
 
-    const sharpeConfig = getSharpeConfig(sharpeRatio);
-    const riskReturnConfig = getRiskReturnConfig(riskReturnMetaScore);
+    const aprConfig = getKpiConfig("apr", apr);
+    const sharpeConfig = getKpiConfig("sharpeRatio", sharpeRatio);
+    const riskReturnConfig = getKpiConfig(
+      "riskReturnMetaScore",
+      riskReturnMetaScore
+    );
+    const profitableConfig = getKpiConfig(
+      "profitablePercent",
+      profitablePercent
+    );
+    const maxDrawdownConfig = getKpiConfig("maxDrawdown", maxDrawdown);
 
     return `
       <a class="system-card" href="./dashboard/index.html?system=${encodeURIComponent(
@@ -181,15 +142,17 @@
         }
         <dl class="system-meta">
           <div><dt>Universe</dt><dd>${escapeHtml(symbolUniverse)}</dd></div>
-          <div><dt>APR/CAGR</dt><dd class="${getAprClass(apr)}">${escapeHtml(
+          <div><dt>APR/CAGR</dt><dd class="${aprConfig.className}">${escapeHtml(
       formatPercent(apr)
     )}</dd></div>
           <div><dt>Profit %</dt><dd>${escapeHtml(
             formatPercent(profitPercent, 0)
           )}</dd></div>
-          <div><dt>Profitable %</dt><dd class="${getProfitableClass(
-            profitablePercent
-          )}">${escapeHtml(formatPercent(profitablePercent))}</dd></div>
+          <div><dt>Profitable %</dt><dd class="${
+            profitableConfig.className
+          }">${escapeHtml(formatPercent(profitablePercent))}${
+      profitableConfig.suffix
+    }</dd></div>
           <div><dt>Sharpe Ratio</dt><dd class="${
             sharpeConfig.className
           }">${escapeHtml(formatNumber(sharpeRatio))}${
@@ -200,9 +163,9 @@
           }">${escapeHtml(formatNumber(riskReturnMetaScore))}${
       riskReturnConfig.suffix
     }</dd></div>
-          <div><dt>Max Drawdown</dt><dd class="${getMaxDrawdownClass(
-            maxDrawdown
-          )}">${escapeHtml(formatPercent(maxDrawdown))}</dd></div>
+          <div><dt>Max Drawdown</dt><dd class="${
+            maxDrawdownConfig.className
+          }">${escapeHtml(formatPercent(maxDrawdown))}</dd></div>
           <div><dt>Last Updated</dt><dd>${escapeHtml(
             formatDate(lastUpdated)
           )}</dd></div>

@@ -70,6 +70,18 @@ function getValueClass(value) {
   return "neutral";
 }
 
+function getConfiguredMetric(metricKey, value, fallback = "neutral") {
+  if (typeof window.getKpiPresentation !== "function") {
+    return { className: fallback, trophy: false };
+  }
+
+  const result = window.getKpiPresentation(metricKey, value, "dashboard");
+  return {
+    className: result.className || fallback,
+    trophy: Boolean(result.trophy),
+  };
+}
+
 function cleanStrategyName(name) {
   return String(name ?? "")
     .replace(/\s*\(.*?\)/g, "")
@@ -273,12 +285,45 @@ function renderOverview(currentState, positions) {
     : countOpenPositions(positions);
   const riskScore = Number(currentState.riskReturnMetaScore);
   const profitablePercent = Number(currentState.profitablePercent);
+  const aprConfig = getConfiguredMetric(
+    "apr",
+    currentState.apr,
+    getValueClass(currentState.apr)
+  );
+  const maxDrawdownConfig = getConfiguredMetric(
+    "maxDrawdown",
+    currentState.maxDrawdown,
+    getValueClass(currentState.maxDrawdown)
+  );
+  const sharpeConfig = getConfiguredMetric(
+    "sharpeRatio",
+    currentState.sharpeRatio,
+    "neutral"
+  );
+  const riskScoreConfig = getConfiguredMetric(
+    "riskReturnMetaScore",
+    currentState.riskReturnMetaScore,
+    Number.isNaN(riskScore)
+      ? "neutral"
+      : riskScore >= 50
+      ? "positive"
+      : riskScore >= 35
+      ? "neutral"
+      : "negative"
+  );
+  const profitableConfig = getConfiguredMetric(
+    "profitablePercent",
+    currentState.profitablePercent,
+    !Number.isNaN(profitablePercent) && profitablePercent > 50
+      ? "positive"
+      : "negative"
+  );
 
   const cards = [
     {
       label: "APR",
       value: formatPercent(currentState.apr),
-      cssClass: getValueClass(currentState.apr),
+      cssClass: aprConfig.className,
     },
     {
       label: "Profit %",
@@ -288,12 +333,13 @@ function renderOverview(currentState, positions) {
     {
       label: "Max Drawdown",
       value: formatPercent(currentState.maxDrawdown),
-      cssClass: getValueClass(currentState.maxDrawdown),
+      cssClass: maxDrawdownConfig.className,
     },
     {
       label: "Sharpe Ratio",
       value: formatNumber(currentState.sharpeRatio),
-      cssClass: "neutral",
+      cssClass: sharpeConfig.className,
+      valueSuffix: sharpeConfig.trophy ? " 🏆" : "",
     },
     {
       label: "MAR Ratio",
@@ -303,24 +349,16 @@ function renderOverview(currentState, positions) {
     {
       label: "Risk-Return Score",
       value: formatNumber(currentState.riskReturnMetaScore),
-      cssClass: Number.isNaN(riskScore)
-        ? "neutral"
-        : riskScore >= 50
-        ? "positive"
-        : riskScore >= 35
-        ? "neutral"
-        : "negative",
-      valueSuffix: !Number.isNaN(riskScore) && riskScore >= 80 ? " 🏆" : "",
+      cssClass: riskScoreConfig.className,
+      valueSuffix: riskScoreConfig.trophy ? " 🏆" : "",
       tooltip:
         "RRSuperScore combines APR, MAR Ratio, Recovery Factor, stability metrics, maximum drawdown, and the share of extreme outliers into a weighted total score between 0 and 100.\n\nInterpretation:\n80-100 Very good - low risk, strong resilience\n50-79 Good - stable strategy with acceptable risk\n35-49 Average - visible weaknesses\n20-34 Weak - either inefficient or risky\n0-19 Critical - not recommended",
     },
     {
       label: "Profitable %",
       value: formatPercent(currentState.profitablePercent),
-      cssClass:
-        !Number.isNaN(profitablePercent) && profitablePercent > 50
-          ? "positive"
-          : "negative",
+      cssClass: profitableConfig.className,
+      valueSuffix: profitableConfig.trophy ? " 🏆" : "",
     },
     {
       label: "Open Trades",
