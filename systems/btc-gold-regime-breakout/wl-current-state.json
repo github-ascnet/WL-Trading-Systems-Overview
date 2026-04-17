@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "BTC-Gold Regime Breakout",
-  "strategyDescription": "The Saylor Schiff Ratio system from Figuring out Monet. See our Youtube video below for more details:\n\n[https://youtu.be/mCECMhBc-Fg](https://youtu.be/mCECMhBc-Fg)\n\n",
+  "strategyDescription": "Ein wochenbasiertes Relative-Strength-Trendmodell, das Bitcoin nur dann long handelt, wenn BTC gegenüber Gold neues positives Momentum aufbaut und dieses durch einen Breakout ueber das Wochenhoch bestätigt wird. Es zielt darauf ab, die grossen Bitcoin-Risk-on-Phasen mitzunehmen, während schwächer werdende Regime über einen gestaffelten Stop-Exit verlassen werden.\n",
   "symbolUniverse": "BTC.USD;Cryptocompare",
   "benchmark": "BTC.USD",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-17 10:39:35",
+  "lastUpdate": "2026-04-17 10:41:25",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-17",
   "apr": 65.6647644356858,
