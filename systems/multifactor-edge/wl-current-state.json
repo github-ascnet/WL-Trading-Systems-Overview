@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "Multifactor Edge",
   "strategyDescription": "Ein gestaffeltes TQQQ Mean-Reversion-System, das in kurzfristige Überverkauftheit hinein skaliert und auf schnelle Gegenbewegungen setzt, wodurch es in volatilen oder seitwärts gerichteten Märkten attraktive, häufige Ertragschancen generieren kann. Gleichzeitig trägt es in starken Abwärtstrends ein erhöhtes Drawdown-Risiko durch aggressives Nachkaufen und kann langfristig nur dann stabil performen, wenn Marktphasen mit Rebounds überwiegen oder durch zusätzliche Filter abgesichert werden.",
-  "symbolUniverse": "",
+  "symbolUniverse": "DOW 30;WealthData",
   "benchmark": "SPY",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-17 12:57:17",
+  "lastUpdate": "2026-04-17 14:08:01",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-18",
   "apr": 11.0772185313025,
