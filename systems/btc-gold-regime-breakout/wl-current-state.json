@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "BTC-Gold Regime Breakout",
-  "strategyDescription": "Ein wochenbasiertes Relative-Strength-Trendmodell, das Bitcoin nur dann long handelt, wenn BTC gegenüber Gold neues positives Momentum aufbaut und dieses durch einen Breakout ueber das Wochenhoch bestätigt wird. Es zielt darauf ab, die grossen Bitcoin-Risk-on-Phasen mitzunehmen, während schwächer werdende Regime über einen gestaffelten Stop-Exit verlassen werden.\n",
+  "strategyDescription": "Ein wochenbasiertes Relative-Strength-Trendmodell, das Bitcoin nur dann long handelt, wenn gegenüber Gold neues positives Momentum aufgebaut und dieses durch einen Breakout über das Wochenhoch bestätigt wird. Es zielt darauf ab, die grossen Bitcoin-Risk-on-Phasen mitzunehmen, während schwächer werdende Regime über einen gestaffelten Stop-Exit verlassen werden.\n",
   "symbolUniverse": "BTC.USD;Cryptocompare",
   "benchmark": "BTC.USD",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-17 10:41:25",
+  "lastUpdate": "2026-04-17 10:42:26",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-17",
   "apr": 65.6647644356858,
