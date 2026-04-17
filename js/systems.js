@@ -27,6 +27,10 @@ const SYSTEMS = [
     id: "bear-market-reversion",
     dataPath: "./systems/bear-market-reversion",
   },
+  {
+    id: "btc-gold-regime-breakout",
+    dataPath: "./systems/btc-gold-regime-breakout",
+  },
 ];
 
 window.SYSTEMS = SYSTEMS;
