@@ -4,7 +4,7 @@
   "symbolUniverse": "NASDAQ 100;WealthData",
   "benchmark": "QQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-17 13:01:46",
+  "lastUpdate": "2026-04-17 14:00:03",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-18",
   "apr": 43.9621537473718,
