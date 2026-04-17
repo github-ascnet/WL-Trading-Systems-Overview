@@ -13,9 +13,17 @@ function formatNumber(value, decimals = 2) {
   }
 
   return new Intl.NumberFormat("en-GB", {
+    useGrouping: false,
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(Number(value));
+}
+
+function getDisplayDivisor(key, fallback = 1) {
+  const configuredValue = Number(window.WL_KPI_CONFIG?.display?.[key]);
+  return Number.isFinite(configuredValue) && configuredValue !== 0
+    ? configuredValue
+    : fallback;
 }
 
 function formatStartingCapital(value, decimals = 0) {
@@ -23,7 +31,8 @@ function formatStartingCapital(value, decimals = 0) {
     return "-";
   }
 
-  return formatNumber(Number(value) / 100, decimals);
+  const divisor = getDisplayDivisor("startingCapitalDivisor", 100);
+  return formatNumber(Number(value) / divisor, decimals);
 }
 
 function formatPercent(value, decimals = 2) {
@@ -584,7 +593,7 @@ function renderEquityChart(equityData) {
 
   const width = 1000;
   const height = 340;
-  const yAxisLabelDivisor = 100;
+  const yAxisLabelDivisor = getDisplayDivisor("equityDivisor", 100);
   const margin = { top: 20, right: 20, bottom: 40, left: 60 };
   const chartWidth = width - margin.left - margin.right;
   const chartHeight = height - margin.top - margin.bottom;
@@ -753,7 +762,10 @@ function renderEquityChart(equityData) {
 
     tooltipValueEl.setAttribute("x", boxX + pad);
     tooltipValueEl.setAttribute("y", boxY + 37);
-    tooltipValueEl.textContent = `USD ${formatNumber(point.equity / 100, 0)}`;
+    tooltipValueEl.textContent = `USD ${formatNumber(
+      point.equity / yAxisLabelDivisor,
+      0
+    )}`;
   });
 
   overlay.addEventListener("mouseleave", () => {

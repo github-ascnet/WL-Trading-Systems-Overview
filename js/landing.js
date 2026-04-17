@@ -26,6 +26,7 @@
       return "-";
     }
     return new Intl.NumberFormat("en-GB", {
+      useGrouping: false,
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     }).format(Number(value));

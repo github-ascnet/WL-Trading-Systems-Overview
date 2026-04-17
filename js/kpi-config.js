@@ -26,6 +26,10 @@
         dashboardClass: "neutral",
       },
     },
+    display: {
+      startingCapitalDivisor: 100,
+      equityDivisor: 100,
+    },
     metrics: {
       apr: {
         label: "APR/CAGR",
