@@ -4,7 +4,7 @@
   "symbolUniverse": "DOW 30;WealthData",
   "benchmark": "TQQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-17 13:05:00",
+  "lastUpdate": "2026-04-17 14:04:06",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-18",
   "apr": 116.653722875208,
