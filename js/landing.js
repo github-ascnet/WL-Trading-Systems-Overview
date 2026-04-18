@@ -222,5 +222,16 @@
     grid.innerHTML = cards.join("");
   }
 
-  renderSystems();
+  async function initLandingPage() {
+    const chartContainer = document.getElementById("portfolioOverviewChart");
+
+    await Promise.allSettled([
+      typeof window.initEquityOverviewChart === "function" && chartContainer
+        ? window.initEquityOverviewChart(chartContainer)
+        : Promise.resolve(),
+      renderSystems(),
+    ]);
+  }
+
+  initLandingPage();
 })();

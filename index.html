@@ -15,11 +15,26 @@
             <h1>Trading Systems Overview</h1>
         </header>
 
+        <section class="portfolio-overview-section" aria-labelledby="portfolioOverviewTitle">
+            <div class="portfolio-overview-card">
+                <div class="portfolio-overview-header">
+                    <div>
+                        <h2 id="portfolioOverviewTitle" class="portfolio-overview-title">Portfolio Equity Overview</h2>
+                    </div>
+                    <div class="portfolio-overview-status" id="portfolioOverviewStatus">Loading...</div>
+                </div>
+                <div class="portfolio-overview-chart-wrap">
+                    <svg id="portfolioOverviewChart" viewBox="0 0 1000 340" preserveAspectRatio="xMidYMid meet" aria-label="Aggregated portfolio equity chart"></svg>
+                </div>
+            </div>
+        </section>
+
         <section class="systems-grid" id="systemsGrid" aria-live="polite"></section>
     </main>
 
     <script src="js/systems.js"></script>
     <script src="js/kpi-config.js"></script>
+    <script src="js/equity-overview-chart.js"></script>
     <script src="js/landing.js"></script>
 </body>
 
