@@ -99,7 +99,7 @@ body {
 .landing {
   width: min(1200px, 94vw);
   margin: 0 auto;
-  padding: 36px 0 56px;
+  padding: 5px 0 56px;
 }
 
 .landing-header h1 {
