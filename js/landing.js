@@ -1,4 +1,23 @@
 (function landingApp() {
+  const LOADER_MIN_VISIBLE_MS = 300;
+
+  function delay(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  function setLoadingState(isLoading, message = "Loading dashboard...") {
+    const loader = document.getElementById("pageLoader");
+    const loaderText = document.getElementById("pageLoaderText");
+
+    if (loaderText) {
+      loaderText.textContent = message;
+    }
+
+    if (loader) {
+      loader.classList.toggle("hidden", !isLoading);
+    }
+  }
+
   function safeGet(obj, keys, fallback = null) {
     for (const key of keys) {
       if (
@@ -99,11 +118,6 @@
       null
     );
     const sharpeRatio = safeGet(currentState, ["sharpeRatio"], null);
-    const riskReturnMetaScore = safeGet(
-      currentState,
-      ["riskReturnMetaScore"],
-      null
-    );
     const maxDrawdown = safeGet(
       currentState,
       ["maxDrawdown", "maxDd", "drawdown"],
@@ -117,10 +131,6 @@
 
     const aprConfig = getKpiConfig("apr", apr);
     const sharpeConfig = getKpiConfig("sharpeRatio", sharpeRatio);
-    const riskReturnConfig = getKpiConfig(
-      "riskReturnMetaScore",
-      riskReturnMetaScore
-    );
     const profitableConfig = getKpiConfig(
       "profitablePercent",
       profitablePercent
@@ -158,11 +168,6 @@
             sharpeConfig.className
           }">${escapeHtml(formatNumber(sharpeRatio))}${
       sharpeConfig.suffix
-    }</dd></div>
-          <div><dt>Risk-Return Score</dt><dd class="${
-            riskReturnConfig.className
-          }">${escapeHtml(formatNumber(riskReturnMetaScore))}${
-      riskReturnConfig.suffix
     }</dd></div>
           <div><dt>Max Drawdown</dt><dd class="${
             maxDrawdownConfig.className
@@ -224,13 +229,23 @@
 
   async function initLandingPage() {
     const chartContainer = document.getElementById("portfolioOverviewChart");
+    const loadingStartedAt = Date.now();
 
-    await Promise.allSettled([
-      typeof window.initEquityOverviewChart === "function" && chartContainer
-        ? window.initEquityOverviewChart(chartContainer)
-        : Promise.resolve(),
-      renderSystems(),
-    ]);
+    setLoadingState(true, "Loading dashboard overview...");
+
+    try {
+      await Promise.allSettled([
+        typeof window.initEquityOverviewChart === "function" && chartContainer
+          ? window.initEquityOverviewChart(chartContainer)
+          : Promise.resolve(),
+        renderSystems(),
+      ]);
+    } finally {
+      const elapsed = Date.now() - loadingStartedAt;
+      const remaining = Math.max(0, LOADER_MIN_VISIBLE_MS - elapsed);
+      await delay(remaining);
+      setLoadingState(false);
+    }
   }
 
   initLandingPage();

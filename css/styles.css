@@ -594,13 +594,15 @@ thead th {
   font-size: var(--font-size-12);
   font-weight: 500;
   text-align: left;
-  padding: var(--space-3) var(--space-4);
+  padding: 10px var(--space-4);
+  line-height: 1.2;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
 
 tbody td {
-  padding: var(--space-3) var(--space-4);
+  padding: 9px var(--space-4);
+  line-height: 1.2;
   border-bottom: 1px solid var(--border-soft);
   color: var(--text);
   white-space: nowrap;
