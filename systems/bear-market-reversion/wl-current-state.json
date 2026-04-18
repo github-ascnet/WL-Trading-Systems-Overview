@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "Bear Market Reversion",
   "strategyDescription": "Ein beidseitiger, trendgefilterter Mean-Reversion-Ansatz mit SOXL, der kurzfristige Überdehnungen innerhalb eines übergeordneten Trends handelt und dabei schnelle Rückläufe zum Mittelwert systematisch ausnutzt. Seine Stärke liegt in der Fähigkeit, in fallenden Märkten durch Short-Setups auf technische Gegenbewegungen eine robuste Edge zu generieren, wodurch es nicht nur von Bullenphasen, sondern auch von strukturellen Abwärtstrends langfristig profitieren kann.",
-  "symbolUniverse": "",
+  "symbolUniverse": "SOXL;WealthData",
   "benchmark": "SMH",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-18 15:22:30",
+  "lastUpdate": "2026-04-18 15:46:32",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-18",
   "apr": 23.5724574131249,
