@@ -328,6 +328,21 @@
     return ((endEquity - startEquity) / startEquity) * 100;
   }
 
+  function calculateRunningProfitPercent(startEquity, currentEquity) {
+    if (
+      !Number.isFinite(Number(startEquity)) ||
+      !Number.isFinite(Number(currentEquity)) ||
+      Number(startEquity) <= 0
+    ) {
+      return null;
+    }
+
+    return (
+      ((Number(currentEquity) - Number(startEquity)) / Number(startEquity)) *
+      100
+    );
+  }
+
   function calculateMaxDrawdown(portfolioSeries) {
     if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
       return null;
@@ -357,6 +372,45 @@
     });
 
     return maxDrawdown;
+  }
+
+  function calculateMaxDrawdownSegment(portfolioSeries) {
+    if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
+      return null;
+    }
+
+    let peak = Number(portfolioSeries[0]?.equity);
+    let peakIndex = 0;
+    let maxDrawdown = 0;
+    let bestSegment = null;
+
+    if (!Number.isFinite(peak) || peak <= 0) {
+      return null;
+    }
+
+    portfolioSeries.forEach((point, index) => {
+      const equity = Number(point?.equity);
+      if (!Number.isFinite(equity) || equity <= 0) {
+        return;
+      }
+
+      if (equity > peak) {
+        peak = equity;
+        peakIndex = index;
+      }
+
+      const drawdown = ((equity - peak) / peak) * 100;
+      if (drawdown < maxDrawdown) {
+        maxDrawdown = drawdown;
+        bestSegment = {
+          startIndex: peakIndex,
+          endIndex: index,
+          drawdown,
+        };
+      }
+    });
+
+    return bestSegment;
   }
 
   function calculatePeriodReturns(portfolioSeries) {
@@ -536,7 +590,6 @@
         y,
         date: item.date,
         equity: item.equity,
-        activeSystems: item.activeSystems,
       };
     });
 
@@ -548,6 +601,19 @@
           )}`
       )
       .join(" ");
+
+    const maxDrawdownSegment = calculateMaxDrawdownSegment(portfolioSeries);
+    const drawdownPath = maxDrawdownSegment
+      ? points
+          .slice(maxDrawdownSegment.startIndex, maxDrawdownSegment.endIndex + 1)
+          .map(
+            (point, index) =>
+              `${index === 0 ? "M" : "L"}${point.x.toFixed(
+                2
+              )} ${point.y.toFixed(2)}`
+          )
+          .join(" ")
+      : "";
 
     const areaPath = `${linePath} L ${points[points.length - 1].x.toFixed(2)} ${
       height - margin.bottom
@@ -600,6 +666,10 @@
           <stop offset="0%" stop-color="#58c4ff" stop-opacity="0.30"></stop>
           <stop offset="100%" stop-color="#58c4ff" stop-opacity="0.03"></stop>
         </linearGradient>
+        <linearGradient id="portfolioOverviewDrawdownStroke" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.45"></stop>
+          <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0.9"></stop>
+        </linearGradient>
       </defs>
       <g opacity="0.28" stroke="#5a5f67" stroke-width="1">
         ${horizontalGrid}
@@ -607,6 +677,11 @@
       </g>
       <path d="${areaPath}" fill="url(#portfolioOverviewFill)"></path>
       <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"></path>
+      ${
+        drawdownPath
+          ? `<path d="${drawdownPath}" fill="none" stroke="url(#portfolioOverviewDrawdownStroke)" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"></path>`
+          : ""
+      }
       ${yLabels}
       ${xLabels}
       <g id="portfolioTooltipGroup" style="display:none;">
@@ -617,7 +692,7 @@
         <rect id="portfolioTooltipBox" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="210" height="66"/>
         <text id="portfolioTooltipDate" fill="#b8bcc4" font-size="12" x="0" y="0"/>
         <text id="portfolioTooltipValue" fill="#e6e6e6" font-size="13" font-weight="600" x="0" y="0"/>
-        <text id="portfolioTooltipSystems" fill="#b8bcc4" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipProfit" fill="#b8bcc4" font-size="12" x="0" y="0"/>
       </g>
       <rect id="portfolioChartOverlay" x="${margin.left}" y="${
       margin.top
@@ -637,9 +712,10 @@
     const tooltipValueEl = containerElement.querySelector(
       "#portfolioTooltipValue"
     );
-    const tooltipSystemsEl = containerElement.querySelector(
-      "#portfolioTooltipSystems"
+    const tooltipProfitEl = containerElement.querySelector(
+      "#portfolioTooltipProfit"
     );
+    const startingEquity = Number(portfolioSeries[0]?.equity);
 
     overlay.addEventListener("mousemove", (event) => {
       const rect = containerElement.getBoundingClientRect();
@@ -683,9 +759,12 @@
         0
       )}`;
 
-      tooltipSystemsEl.setAttribute("x", boxX + pad);
-      tooltipSystemsEl.setAttribute("y", boxY + 54);
-      tooltipSystemsEl.textContent = `Active systems: ${point.activeSystems}`;
+      tooltipProfitEl.setAttribute("x", boxX + pad);
+      tooltipProfitEl.setAttribute("y", boxY + 54);
+      tooltipProfitEl.textContent = `Profit: ${formatPercent(
+        calculateRunningProfitPercent(startingEquity, point.equity),
+        2
+      )}`;
     });
 
     overlay.addEventListener("mouseleave", () => {

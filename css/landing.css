@@ -204,7 +204,7 @@ body::after {
 }
 
 .portfolio-overview-section {
-  margin-top: 28px;
+  margin-top: 16px;
 }
 
 .portfolio-overview-card {
@@ -316,10 +316,10 @@ body::after {
 }
 
 .systems-grid {
-  margin-top: 28px;
+  margin-top: 14px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  gap: 10px;
 }
 
 .system-card {
@@ -420,6 +420,17 @@ body::after {
 
 .system-card-error .system-description {
   color: #ffb6b6;
+}
+
+@media (min-width: 1280px) {
+  .landing,
+  .site-footer-inner {
+    width: min(1360px, 96vw);
+  }
+
+  .systems-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
 }
 
 @media (max-width: 700px) {
