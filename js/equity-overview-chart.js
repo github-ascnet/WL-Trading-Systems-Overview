@@ -297,10 +297,14 @@
       series: carryForwardMissingValues(unifiedDateAxis, entry.series),
     }));
 
+    let normalizedDisplayEquity = 0;
+
     return unifiedDateAxis
       .map((axisPoint, index) => {
         let totalEquity = 0;
         let activeSystems = 0;
+        let stepReturnSum = 0;
+        let stepReturnCount = 0;
 
         filledSeriesCollection.forEach((entry) => {
           const point = entry.series[index];
@@ -308,12 +312,34 @@
             totalEquity += point.equity;
             activeSystems += 1;
           }
+
+          if (index > 0) {
+            const previousPoint = entry.series[index - 1];
+            const previousEquity = Number(previousPoint?.equity);
+            const currentEquity = Number(point?.equity);
+
+            if (
+              Number.isFinite(previousEquity) &&
+              Number.isFinite(currentEquity) &&
+              previousEquity > 0
+            ) {
+              stepReturnSum += currentEquity / previousEquity - 1;
+              stepReturnCount += 1;
+            }
+          }
         });
+
+        if (index === 0) {
+          normalizedDisplayEquity = totalEquity;
+        } else if (stepReturnCount > 0) {
+          normalizedDisplayEquity *= 1 + stepReturnSum / stepReturnCount;
+        }
 
         return {
           date: axisPoint.date,
           timestamp: axisPoint.timestamp,
           equity: totalEquity,
+          displayEquity: normalizedDisplayEquity,
           activeSystems,
         };
       })
@@ -643,17 +669,29 @@
     const margin = CHART_MARGIN;
     const chartWidth = width - margin.left - margin.right;
     const chartHeight = height - margin.top - margin.bottom;
-
-    const values = portfolioSeries.map((item) =>
-      Math.max(Number(item.equity), 1)
+    const minTimestamp = Number(portfolioSeries[0]?.timestamp);
+    const maxTimestamp = Number(
+      portfolioSeries[portfolioSeries.length - 1]?.timestamp
     );
+    const timeRange = Math.max(maxTimestamp - minTimestamp, 1);
+
+    // Render the visual curve as a normalized composite path so the shape
+    // matches the original portfolio behavior, while KPI calculations remain
+    // based on the raw aggregated equity values.
+    const chartSeries = portfolioSeries.map((item) => ({
+      ...item,
+      equity: Number(item.displayEquity ?? item.equity),
+    }));
+
+    const values = chartSeries.map((item) => Math.max(Number(item.equity), 1));
     const logMin = Math.log(Math.min(...values));
     const logMax = Math.log(Math.max(...values));
     const logRange = Math.max(logMax - logMin, 1e-9);
 
-    const points = portfolioSeries.map((item, index) => {
+    const points = chartSeries.map((item) => {
       const x =
-        margin.left + (index / (portfolioSeries.length - 1)) * chartWidth;
+        margin.left +
+        ((Number(item.timestamp) - minTimestamp) / timeRange) * chartWidth;
       const y =
         margin.top +
         ((logMax - Math.log(Math.max(Number(item.equity), 1))) / logRange) *
@@ -663,9 +701,25 @@
         x,
         y,
         date: item.date,
+        timestamp: item.timestamp,
         equity: item.equity,
       };
     });
+
+    function findClosestPointIndex(targetTimestamp) {
+      let closestIndex = 0;
+      let smallestDiff = Infinity;
+
+      points.forEach((point, index) => {
+        const diff = Math.abs(Number(point.timestamp) - targetTimestamp);
+        if (diff < smallestDiff) {
+          smallestDiff = diff;
+          closestIndex = index;
+        }
+      });
+
+      return closestIndex;
+    }
 
     const linePath = points
       .map(
@@ -676,7 +730,7 @@
       )
       .join(" ");
 
-    const maxDrawdownSegment = calculateMaxDrawdownSegment(portfolioSeries);
+    const maxDrawdownSegment = calculateMaxDrawdownSegment(chartSeries);
     const drawdownPath = maxDrawdownSegment
       ? points
           .slice(maxDrawdownSegment.startIndex, maxDrawdownSegment.endIndex + 1)
@@ -719,17 +773,15 @@
 
     const xLabels = [0, 0.25, 0.5, 0.75, 1]
       .map((ratio) => {
-        const index = Math.min(
-          portfolioSeries.length - 1,
-          Math.round((portfolioSeries.length - 1) * ratio)
-        );
+        const targetTimestamp = minTimestamp + ratio * timeRange;
+        const index = findClosestPointIndex(targetTimestamp);
         const x = margin.left + ratio * chartWidth;
         const anchor = ratio === 0 ? "start" : ratio === 1 ? "end" : "middle";
 
         return `<text x="${x}" y="${
           height - 12
         }" text-anchor="${anchor}" fill="#aeb4be" font-size="12">${escapeHtml(
-          formatDateLabel(portfolioSeries[index].date)
+          formatDateLabel(chartSeries[index].date)
         )}</text>`;
       })
       .join("");
@@ -795,7 +847,8 @@
       const rect = containerElement.getBoundingClientRect();
       const svgX = ((event.clientX - rect.left) / rect.width) * width;
       const ratio = Math.max(0, Math.min(1, (svgX - margin.left) / chartWidth));
-      const index = Math.round(ratio * (portfolioSeries.length - 1));
+      const targetTimestamp = minTimestamp + ratio * timeRange;
+      const index = findClosestPointIndex(targetTimestamp);
       const point = points[index];
 
       if (!point) return;
