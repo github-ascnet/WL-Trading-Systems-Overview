@@ -167,6 +167,39 @@
     );
   }
 
+  function calculateTradeStats(rawPositions) {
+    if (!Array.isArray(rawPositions)) {
+      return { profitableTrades: 0, closedTrades: 0 };
+    }
+
+    return rawPositions.reduce(
+      (stats, position) => {
+        const exitDate = String(position?.exitDate ?? "")
+          .trim()
+          .toLowerCase();
+        const isOpen =
+          position?.isOpen === true || !exitDate || exitDate === "open";
+
+        if (isOpen) {
+          return stats;
+        }
+
+        const profitPercent = Number(position?.plPercent);
+        if (!Number.isFinite(profitPercent)) {
+          return stats;
+        }
+
+        stats.closedTrades += 1;
+        if (profitPercent > 0) {
+          stats.profitableTrades += 1;
+        }
+
+        return stats;
+      },
+      { profitableTrades: 0, closedTrades: 0 }
+    );
+  }
+
   async function loadAllSystemEquitySeries() {
     const systems = Array.isArray(global.SYSTEMS) ? global.SYSTEMS : [];
 
@@ -177,8 +210,12 @@
             ? system.dataPath
             : `./systems/${system?.id ?? "unknown-system"}`;
 
-        const rawSeries = await fetchJson(`${basePath}/wl-equity.json`);
+        const [rawSeries, rawPositions] = await Promise.all([
+          fetchJson(`${basePath}/wl-equity.json`),
+          fetchJson(`${basePath}/wl-positions.json`).catch(() => []),
+        ]);
         const normalizedSeries = normalizeEquitySeries(rawSeries, system.id);
+        const tradeStats = calculateTradeStats(rawPositions);
 
         if (normalizedSeries.length === 0) {
           throw new Error(`No valid equity points found for ${system.id}.`);
@@ -187,6 +224,8 @@
         return {
           systemId: system.id,
           series: normalizedSeries,
+          profitableTrades: tradeStats.profitableTrades,
+          closedTrades: tradeStats.closedTrades,
         };
       })
     );
@@ -463,19 +502,39 @@
     );
   }
 
-  function calculateProfitablePeriodsPercent(portfolioSeries) {
+  function calculateProfitablePeriodsPercent(
+    portfolioSeries,
+    seriesCollection = []
+  ) {
+    const closedTrades = seriesCollection.reduce((sum, entry) => {
+      const value = Number(entry?.closedTrades);
+      return sum + (Number.isFinite(value) ? value : 0);
+    }, 0);
+
+    const profitableTrades = seriesCollection.reduce((sum, entry) => {
+      const value = Number(entry?.profitableTrades);
+      return sum + (Number.isFinite(value) ? value : 0);
+    }, 0);
+
+    if (closedTrades > 0) {
+      return (profitableTrades / closedTrades) * 100;
+    }
+
     const returns = calculatePeriodReturns(portfolioSeries);
     if (returns.length === 0) {
       return null;
     }
 
-    // This is the share of profitable periods in the aggregated portfolio curve,
-    // not the share of profitable trades.
     const profitablePeriods = returns.filter((value) => value > 0).length;
     return (profitablePeriods / returns.length) * 100;
   }
 
-  function calculatePortfolioKpis(portfolioSeries) {
+  function calculatePortfolioKpis(portfolioSeries, seriesCollection = []) {
+    const profitablePercent = calculateProfitablePeriodsPercent(
+      portfolioSeries,
+      seriesCollection
+    );
+
     return [
       {
         metricKey: "apr",
@@ -507,11 +566,8 @@
       {
         metricKey: "profitablePercent",
         label: "Profitable %",
-        numericValue: calculateProfitablePeriodsPercent(portfolioSeries),
-        formattedValue: formatPercent(
-          calculateProfitablePeriodsPercent(portfolioSeries),
-          2
-        ),
+        numericValue: profitablePercent,
+        formattedValue: formatPercent(profitablePercent, 2),
       },
     ];
   }
@@ -813,7 +869,7 @@
       renderEquityOverviewChart(chartContainerElement, portfolioSeries);
       renderPortfolioOverviewCards(
         cardsContainerElement,
-        calculatePortfolioKpis(portfolioSeries)
+        calculatePortfolioKpis(portfolioSeries, seriesCollection)
       );
       setStatus(`${systemsLoaded}/${systemsTotal} systems included`);
     } catch (error) {
