@@ -229,6 +229,7 @@
 
   async function initLandingPage() {
     const chartContainer = document.getElementById("portfolioOverviewChart");
+    const cardsContainer = document.getElementById("portfolioOverviewCards");
     const loadingStartedAt = Date.now();
 
     setLoadingState(true, "Loading dashboard overview...");
@@ -236,7 +237,7 @@
     try {
       await Promise.allSettled([
         typeof window.initEquityOverviewChart === "function" && chartContainer
-          ? window.initEquityOverviewChart(chartContainer)
+          ? window.initEquityOverviewChart(chartContainer, cardsContainer)
           : Promise.resolve(),
         renderSystems(),
       ]);

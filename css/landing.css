@@ -175,6 +175,58 @@ body {
   display: block;
 }
 
+.portfolio-kpi-grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.portfolio-kpi-grid .card {
+  background: linear-gradient(
+    180deg,
+    rgba(24, 31, 44, 0.98),
+    rgba(20, 26, 38, 0.98)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.portfolio-kpi-grid .card-label {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.portfolio-kpi-grid .card-value {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.portfolio-kpi-grid .card-value.kpi-positive {
+  color: #6ee7a8;
+}
+
+.portfolio-kpi-grid .card-value.kpi-warning {
+  color: #ffd166;
+}
+
+.portfolio-kpi-grid .card-value.kpi-danger {
+  color: #ff7b7b;
+}
+
+.portfolio-kpi-empty {
+  grid-column: 1 / -1;
+  padding: 12px 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
 .systems-grid {
   margin-top: 28px;
   display: grid;
@@ -295,6 +347,15 @@ body {
 
   .portfolio-overview-status {
     align-self: flex-start;
+  }
+
+  .portfolio-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .portfolio-kpi-grid .card-value {
+    font-size: 20px;
   }
 
   .systems-grid {

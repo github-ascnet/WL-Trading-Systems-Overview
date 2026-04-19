@@ -3,6 +3,7 @@
   const SVG_HEIGHT = 340;
   const CHART_MARGIN = { top: 20, right: 20, bottom: 40, left: 72 };
   const DEFAULT_EQUITY_DIVISOR = 100;
+  const TRADING_PERIODS_PER_YEAR = 252;
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -13,9 +14,9 @@
       .replace(/'/g, "&#039;");
   }
 
-  function formatNumber(value, decimals = 0) {
+  function formatNumber(value, decimals = 0, fallback = "N/A") {
     if (value === null || value === undefined || Number.isNaN(Number(value))) {
-      return "-";
+      return fallback;
     }
 
     return new Intl.NumberFormat("en-GB", {
@@ -23,6 +24,18 @@
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     }).format(Number(value));
+  }
+
+  function formatPercent(value, decimals = 2, fallback = "N/A") {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return fallback;
+    }
+
+    return `${formatNumber(value, decimals, fallback)}%`;
+  }
+
+  function formatRatio(value, decimals = 2, fallback = "N/A") {
+    return formatNumber(value, decimals, fallback);
   }
 
   function formatDateLabel(value) {
@@ -49,12 +62,33 @@
 
   function formatScaledEquityValue(value, decimals = 0) {
     if (value === null || value === undefined || Number.isNaN(Number(value))) {
-      return "-";
+      return "N/A";
     }
 
-    // The portfolio curve is aggregated from raw equity values first.
-    // Only the display layer applies equityDivisor for the axis and tooltip.
-    return formatNumber(Number(value) / getEquityDivisor(), decimals);
+    // The portfolio curve and all derived KPIs are calculated on raw aggregated
+    // equity values. Only displayed equity amounts use equityDivisor. The
+    // startingCapitalDivisor is intentionally not applied here.
+    return formatNumber(Number(value) / getEquityDivisor(), decimals, "N/A");
+  }
+
+  function getKpiPresentationConfig(metricKey, numericValue) {
+    if (
+      typeof global.getKpiPresentation !== "function" ||
+      !Number.isFinite(Number(numericValue))
+    ) {
+      return { className: "", trophy: false };
+    }
+
+    const result = global.getKpiPresentation(
+      metricKey,
+      Number(numericValue),
+      "landing"
+    );
+
+    return {
+      className: result?.className || "",
+      trophy: Boolean(result?.trophy),
+    };
   }
 
   async function fetchJson(path) {
@@ -72,7 +106,7 @@
     }
   }
 
-  function renderEmptyState(containerElement, message) {
+  function renderChartEmptyState(containerElement, message) {
     if (!containerElement) return;
 
     containerElement.innerHTML = `
@@ -80,6 +114,13 @@
         message
       )}</text>
     `;
+  }
+
+  function renderCardsEmptyState(containerElement, message) {
+    if (!containerElement) return;
+    containerElement.innerHTML = `<div class="portfolio-kpi-empty">${escapeHtml(
+      message
+    )}</div>`;
   }
 
   function normalizeEquitySeries(rawSeries, systemId) {
@@ -203,9 +244,6 @@
         lastKnownEquity = valueByDate.get(axisPoint.date);
       }
 
-      // We intentionally seed the period before the first recorded point with the
-      // first known raw equity value. This avoids an artificial jump at the start
-      // when different systems begin reporting on slightly different dates.
       return {
         date: axisPoint.date,
         timestamp: axisPoint.timestamp,
@@ -243,11 +281,232 @@
       .filter((point) => point.activeSystems > 0);
   }
 
+  function calculateApr(portfolioSeries) {
+    if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
+      return null;
+    }
+
+    const firstPoint = portfolioSeries[0];
+    const lastPoint = portfolioSeries[portfolioSeries.length - 1];
+    const startEquity = Number(firstPoint?.equity);
+    const endEquity = Number(lastPoint?.equity);
+    const elapsedDays =
+      (Number(lastPoint?.timestamp) - Number(firstPoint?.timestamp)) /
+      (1000 * 60 * 60 * 24);
+
+    if (
+      !Number.isFinite(startEquity) ||
+      !Number.isFinite(endEquity) ||
+      startEquity <= 0 ||
+      endEquity <= 0 ||
+      elapsedDays <= 0
+    ) {
+      return null;
+    }
+
+    return (Math.pow(endEquity / startEquity, 365.25 / elapsedDays) - 1) * 100;
+  }
+
+  function calculateProfitPercent(portfolioSeries) {
+    if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
+      return null;
+    }
+
+    const startEquity = Number(portfolioSeries[0]?.equity);
+    const endEquity = Number(
+      portfolioSeries[portfolioSeries.length - 1]?.equity
+    );
+
+    if (
+      !Number.isFinite(startEquity) ||
+      !Number.isFinite(endEquity) ||
+      startEquity <= 0
+    ) {
+      return null;
+    }
+
+    return ((endEquity - startEquity) / startEquity) * 100;
+  }
+
+  function calculateMaxDrawdown(portfolioSeries) {
+    if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
+      return null;
+    }
+
+    let peak = Number(portfolioSeries[0]?.equity);
+    let maxDrawdown = 0;
+
+    if (!Number.isFinite(peak) || peak <= 0) {
+      return null;
+    }
+
+    portfolioSeries.forEach((point) => {
+      const equity = Number(point?.equity);
+      if (!Number.isFinite(equity) || equity <= 0) {
+        return;
+      }
+
+      if (equity > peak) {
+        peak = equity;
+      }
+
+      const drawdown = ((equity - peak) / peak) * 100;
+      if (drawdown < maxDrawdown) {
+        maxDrawdown = drawdown;
+      }
+    });
+
+    return maxDrawdown;
+  }
+
+  function calculatePeriodReturns(portfolioSeries) {
+    if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
+      return [];
+    }
+
+    const returns = [];
+
+    for (let index = 1; index < portfolioSeries.length; index += 1) {
+      const previousEquity = Number(portfolioSeries[index - 1]?.equity);
+      const currentEquity = Number(portfolioSeries[index]?.equity);
+
+      if (
+        !Number.isFinite(previousEquity) ||
+        !Number.isFinite(currentEquity) ||
+        previousEquity <= 0
+      ) {
+        continue;
+      }
+
+      returns.push(currentEquity / previousEquity - 1);
+    }
+
+    return returns;
+  }
+
+  function calculateSharpeRatio(portfolioSeries) {
+    const returns = calculatePeriodReturns(portfolioSeries);
+    if (returns.length < 2) {
+      return null;
+    }
+
+    // The synchronized portfolio equity series behaves like an observed trading-day
+    // series. We therefore use step-to-step portfolio returns and annualize with
+    // 252 trading periods per year. The risk-free rate is assumed to be 0.
+    const meanReturn =
+      returns.reduce((sum, value) => sum + value, 0) / returns.length;
+    const variance =
+      returns.reduce((sum, value) => sum + (value - meanReturn) ** 2, 0) /
+      (returns.length - 1);
+    const standardDeviation = Math.sqrt(Math.max(variance, 0));
+
+    if (!Number.isFinite(standardDeviation) || standardDeviation === 0) {
+      return null;
+    }
+
+    return (
+      (meanReturn / standardDeviation) * Math.sqrt(TRADING_PERIODS_PER_YEAR)
+    );
+  }
+
+  function calculateProfitablePeriodsPercent(portfolioSeries) {
+    const returns = calculatePeriodReturns(portfolioSeries);
+    if (returns.length === 0) {
+      return null;
+    }
+
+    // This is the share of profitable periods in the aggregated portfolio curve,
+    // not the share of profitable trades.
+    const profitablePeriods = returns.filter((value) => value > 0).length;
+    return (profitablePeriods / returns.length) * 100;
+  }
+
+  function calculatePortfolioKpis(portfolioSeries) {
+    return [
+      {
+        metricKey: "apr",
+        label: "APR/CAGR",
+        numericValue: calculateApr(portfolioSeries),
+        formattedValue: formatPercent(calculateApr(portfolioSeries), 2),
+      },
+      {
+        metricKey: "profitPercent",
+        label: "Profit %",
+        numericValue: calculateProfitPercent(portfolioSeries),
+        formattedValue: formatPercent(
+          calculateProfitPercent(portfolioSeries),
+          0
+        ),
+      },
+      {
+        metricKey: "maxDrawdown",
+        label: "Max Drawdown",
+        numericValue: calculateMaxDrawdown(portfolioSeries),
+        formattedValue: formatPercent(calculateMaxDrawdown(portfolioSeries), 2),
+      },
+      {
+        metricKey: "sharpeRatio",
+        label: "Sharpe Ratio",
+        numericValue: calculateSharpeRatio(portfolioSeries),
+        formattedValue: formatRatio(calculateSharpeRatio(portfolioSeries), 2),
+      },
+      {
+        metricKey: "profitablePercent",
+        label: "Profitable %",
+        numericValue: calculateProfitablePeriodsPercent(portfolioSeries),
+        formattedValue: formatPercent(
+          calculateProfitablePeriodsPercent(portfolioSeries),
+          2
+        ),
+      },
+    ];
+  }
+
+  function createKpiCard(metricKey, label, formattedValue, numericValue) {
+    const presentation = getKpiPresentationConfig(metricKey, numericValue);
+
+    return `
+      <div class="card">
+        <div class="card-label">${escapeHtml(label)}</div>
+        <div class="card-value ${escapeHtml(
+          presentation.className
+        )}">${escapeHtml(formattedValue)}${
+      presentation.trophy
+        ? ' <span class="kpi-trophy" aria-hidden="true">&#127942;</span>'
+        : ""
+    }</div>
+      </div>
+    `;
+  }
+
+  function renderPortfolioOverviewCards(containerElement, kpis) {
+    if (!containerElement) return;
+
+    if (!Array.isArray(kpis) || kpis.length === 0) {
+      renderCardsEmptyState(containerElement, "No KPI data available.");
+      return;
+    }
+
+    containerElement.innerHTML = kpis
+      .map((kpi) =>
+        createKpiCard(
+          kpi.metricKey,
+          kpi.label,
+          kpi.formattedValue,
+          kpi.numericValue
+        )
+      )
+      .join("");
+  }
+
   function renderEquityOverviewChart(containerElement, portfolioSeries) {
     if (!containerElement) return;
 
     if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
-      renderEmptyState(containerElement, "No portfolio equity data available.");
+      renderChartEmptyState(
+        containerElement,
+        "No portfolio equity data available."
+      );
       return;
     }
 
@@ -434,8 +693,11 @@
     });
   }
 
-  async function initEquityOverviewChart(containerElement) {
-    if (!containerElement) return;
+  async function initEquityOverviewChart(
+    chartContainerElement,
+    cardsContainerElement
+  ) {
+    if (!chartContainerElement) return;
 
     setStatus("Loading portfolio...");
 
@@ -444,10 +706,11 @@
         await loadAllSystemEquitySeries();
 
       if (seriesCollection.length === 0) {
-        renderEmptyState(
-          containerElement,
+        renderChartEmptyState(
+          chartContainerElement,
           "No portfolio equity data available."
         );
+        renderCardsEmptyState(cardsContainerElement, "No KPI data available.");
         setStatus("No valid data");
         return;
       }
@@ -459,22 +722,28 @@
       );
 
       if (portfolioSeries.length < 2) {
-        renderEmptyState(
-          containerElement,
+        renderChartEmptyState(
+          chartContainerElement,
           "Not enough portfolio history available."
         );
+        renderCardsEmptyState(cardsContainerElement, "No KPI data available.");
         setStatus(`${systemsLoaded}/${systemsTotal} systems loaded`);
         return;
       }
 
-      renderEquityOverviewChart(containerElement, portfolioSeries);
+      renderEquityOverviewChart(chartContainerElement, portfolioSeries);
+      renderPortfolioOverviewCards(
+        cardsContainerElement,
+        calculatePortfolioKpis(portfolioSeries)
+      );
       setStatus(`${systemsLoaded}/${systemsTotal} systems included`);
     } catch (error) {
       console.error("[equity-overview-chart]", error);
-      renderEmptyState(
-        containerElement,
+      renderChartEmptyState(
+        chartContainerElement,
         error?.message || "Portfolio chart could not be rendered."
       );
+      renderCardsEmptyState(cardsContainerElement, "No KPI data available.");
       setStatus("Chart unavailable");
     }
   }
