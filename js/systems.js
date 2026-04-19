@@ -28,6 +28,10 @@ const SYSTEMS = [
     dataPath: "./systems/bear-market-reversion",
   },
   {
+    id: "volatility-cycle-catcher",
+    dataPath: "./systems/volatility-cycle-catcher",
+  },
+  {
     id: "btc-gold-regime-breakout",
     dataPath: "./systems/btc-gold-regime-breakout",
   },
