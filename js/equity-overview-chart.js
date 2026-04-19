@@ -3,7 +3,7 @@
   const SVG_HEIGHT = 340;
   const CHART_MARGIN = { top: 20, right: 20, bottom: 40, left: 72 };
   const DEFAULT_EQUITY_DIVISOR = 100;
-  const TRADING_PERIODS_PER_YEAR = 252;
+  const DEFAULT_PERIODS_PER_YEAR = 252;
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -483,9 +483,12 @@
       return null;
     }
 
-    // The synchronized portfolio equity series behaves like an observed trading-day
-    // series. We therefore use step-to-step portfolio returns and annualize with
-    // 252 trading periods per year. The risk-free rate is assumed to be 0.
+    const firstPoint = portfolioSeries[0];
+    const lastPoint = portfolioSeries[portfolioSeries.length - 1];
+    const elapsedDays =
+      (Number(lastPoint?.timestamp) - Number(firstPoint?.timestamp)) /
+      (1000 * 60 * 60 * 24);
+
     const meanReturn =
       returns.reduce((sum, value) => sum + value, 0) / returns.length;
     const variance =
@@ -497,9 +500,24 @@
       return null;
     }
 
-    return (
-      (meanReturn / standardDeviation) * Math.sqrt(TRADING_PERIODS_PER_YEAR)
-    );
+    const periodsPerYear =
+      Number.isFinite(elapsedDays) && elapsedDays > 0
+        ? returns.length / (elapsedDays / 365.25)
+        : DEFAULT_PERIODS_PER_YEAR;
+
+    const annualizedVolatilityPercent =
+      standardDeviation * Math.sqrt(periodsPerYear) * 100;
+    const cagrPercent = calculateApr(portfolioSeries);
+
+    if (
+      !Number.isFinite(annualizedVolatilityPercent) ||
+      annualizedVolatilityPercent === 0 ||
+      !Number.isFinite(cagrPercent)
+    ) {
+      return null;
+    }
+
+    return cagrPercent / annualizedVolatilityPercent;
   }
 
   function calculateProfitablePeriodsPercent(
