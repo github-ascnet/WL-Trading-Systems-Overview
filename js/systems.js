@@ -1,7 +1,7 @@
 const SYSTEMS = [
   {
-    id: "tech-trend-follower",
-    dataPath: "./systems/tech-trend-follower",
+    id: "strong-volume-trend",
+    dataPath: "./systems/strong-volume-trend",
   },
   {
     id: "short-burst-momentum",
