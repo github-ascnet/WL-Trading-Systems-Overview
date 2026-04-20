@@ -309,6 +309,11 @@ function renderOverview(currentState, positions) {
     currentState.sharpeRatio,
     "neutral"
   );
+  const profitFactorConfig = getConfiguredMetric(
+    "profitFactor",
+    currentState.profitFactor,
+    "neutral"
+  );
   const riskScoreConfig = getConfiguredMetric(
     "riskReturnMetaScore",
     currentState.riskReturnMetaScore,
@@ -343,6 +348,12 @@ function renderOverview(currentState, positions) {
       label: "Max Drawdown",
       value: formatPercent(currentState.maxDrawdown),
       cssClass: maxDrawdownConfig.className,
+    },
+    {
+      label: "Profit Factor",
+      value: formatNumber(currentState.profitFactor),
+      cssClass: profitFactorConfig.className,
+      valueSuffix: profitFactorConfig.trophy ? " 🏆" : "",
     },
     {
       label: "Sharpe Ratio",

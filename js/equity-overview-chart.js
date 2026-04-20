@@ -169,7 +169,12 @@
 
   function calculateTradeStats(rawPositions) {
     if (!Array.isArray(rawPositions)) {
-      return { profitableTrades: 0, closedTrades: 0 };
+      return {
+        profitableTrades: 0,
+        closedTrades: 0,
+        grossProfit: 0,
+        grossLoss: 0,
+      };
     }
 
     return rawPositions.reduce(
@@ -184,19 +189,35 @@
           return stats;
         }
 
+        const profitLoss = Number(position?.pl);
         const profitPercent = Number(position?.plPercent);
-        if (!Number.isFinite(profitPercent)) {
+        const tradeResult = Number.isFinite(profitLoss)
+          ? profitLoss
+          : profitPercent;
+
+        if (!Number.isFinite(tradeResult)) {
           return stats;
         }
 
         stats.closedTrades += 1;
-        if (profitPercent > 0) {
+
+        if (tradeResult > 0) {
           stats.profitableTrades += 1;
+          if (Number.isFinite(profitLoss)) {
+            stats.grossProfit += profitLoss;
+          }
+        } else if (tradeResult < 0 && Number.isFinite(profitLoss)) {
+          stats.grossLoss += Math.abs(profitLoss);
         }
 
         return stats;
       },
-      { profitableTrades: 0, closedTrades: 0 }
+      {
+        profitableTrades: 0,
+        closedTrades: 0,
+        grossProfit: 0,
+        grossLoss: 0,
+      }
     );
   }
 
@@ -226,6 +247,8 @@
           series: normalizedSeries,
           profitableTrades: tradeStats.profitableTrades,
           closedTrades: tradeStats.closedTrades,
+          grossProfit: tradeStats.grossProfit,
+          grossLoss: tradeStats.grossLoss,
         };
       })
     );
@@ -573,8 +596,52 @@
     return (profitablePeriods / returns.length) * 100;
   }
 
+  function calculateProfitFactor(portfolioSeries, seriesCollection = []) {
+    const grossProfit = seriesCollection.reduce((sum, entry) => {
+      const value = Number(entry?.grossProfit);
+      return sum + (Number.isFinite(value) ? value : 0);
+    }, 0);
+
+    const grossLoss = seriesCollection.reduce((sum, entry) => {
+      const value = Number(entry?.grossLoss);
+      return sum + (Number.isFinite(value) ? value : 0);
+    }, 0);
+
+    if (grossProfit > 0 && grossLoss > 0) {
+      return grossProfit / grossLoss;
+    }
+
+    const returns = calculatePeriodReturns(portfolioSeries);
+    if (returns.length === 0) {
+      return null;
+    }
+
+    const positiveReturns = returns
+      .filter((value) => value > 0)
+      .reduce((sum, value) => sum + value, 0);
+    const negativeReturns = Math.abs(
+      returns
+        .filter((value) => value < 0)
+        .reduce((sum, value) => sum + value, 0)
+    );
+
+    if (positiveReturns <= 0 || negativeReturns <= 0) {
+      return null;
+    }
+
+    return positiveReturns / negativeReturns;
+  }
+
   function calculatePortfolioKpis(portfolioSeries, seriesCollection = []) {
+    const apr = calculateApr(portfolioSeries);
+    const profitPercent = calculateProfitPercent(portfolioSeries);
+    const maxDrawdown = calculateMaxDrawdown(portfolioSeries);
+    const sharpeRatio = calculateSharpeRatio(portfolioSeries);
     const profitablePercent = calculateProfitablePeriodsPercent(
+      portfolioSeries,
+      seriesCollection
+    );
+    const profitFactor = calculateProfitFactor(
       portfolioSeries,
       seriesCollection
     );
@@ -583,29 +650,32 @@
       {
         metricKey: "apr",
         label: "APR/CAGR",
-        numericValue: calculateApr(portfolioSeries),
-        formattedValue: formatPercent(calculateApr(portfolioSeries), 2),
+        numericValue: apr,
+        formattedValue: formatPercent(apr, 2),
       },
       {
         metricKey: "profitPercent",
         label: "Profit %",
-        numericValue: calculateProfitPercent(portfolioSeries),
-        formattedValue: formatPercent(
-          calculateProfitPercent(portfolioSeries),
-          0
-        ),
+        numericValue: profitPercent,
+        formattedValue: formatPercent(profitPercent, 0),
       },
       {
         metricKey: "maxDrawdown",
         label: "Max Drawdown",
-        numericValue: calculateMaxDrawdown(portfolioSeries),
-        formattedValue: formatPercent(calculateMaxDrawdown(portfolioSeries), 2),
+        numericValue: maxDrawdown,
+        formattedValue: formatPercent(maxDrawdown, 2),
+      },
+      {
+        metricKey: "profitFactor",
+        label: "Profit Factor",
+        numericValue: profitFactor,
+        formattedValue: formatRatio(profitFactor, 2),
       },
       {
         metricKey: "sharpeRatio",
         label: "Sharpe Ratio",
-        numericValue: calculateSharpeRatio(portfolioSeries),
-        formattedValue: formatRatio(calculateSharpeRatio(portfolioSeries), 2),
+        numericValue: sharpeRatio,
+        formattedValue: formatRatio(sharpeRatio, 2),
       },
       {
         metricKey: "profitablePercent",

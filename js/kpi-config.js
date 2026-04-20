@@ -72,6 +72,15 @@
           { color: "positive" },
         ],
       },
+      profitFactor: {
+        label: "Profit Factor",
+        rules: [
+          { op: ">=", value: 2.5, color: "positive", trophy: true },
+          { op: ">=", value: 1.75, color: "positive" },
+          { op: ">=", value: 1, color: "warning" },
+          { color: "danger" },
+        ],
+      },
     },
   };
 
