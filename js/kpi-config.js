@@ -34,8 +34,11 @@
       apr: {
         label: "APR/CAGR",
         rules: [
-          { op: ">=", value: 30, color: "positive" },
-          { color: "warning" },
+          { op: ">=", value: 85, color: "danger" },
+          { op: ">=", value: 50, color: "positive", trophy: true },
+          { op: ">=", value: 25, color: "positive" },
+          { op: ">=", value: 15, color: "warning" },
+          { color: "danger" },
         ],
       },
       sharpeRatio: {
