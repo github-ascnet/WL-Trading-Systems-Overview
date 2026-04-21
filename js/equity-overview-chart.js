@@ -1009,7 +1009,8 @@
 
       renderEquityOverviewChart(chartContainerElement, portfolioSeries);
 
-      const showKpis = global.WL_KPI_CONFIG?.display?.showPortfolioOverviewKpis !== false;
+      const showKpis =
+        global.WL_KPI_CONFIG?.display?.showPortfolioOverviewKpis !== false;
       if (showKpis) {
         renderPortfolioOverviewCards(
           cardsContainerElement,
