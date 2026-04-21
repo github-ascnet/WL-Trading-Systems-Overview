@@ -29,6 +29,7 @@
     display: {
       startingCapitalDivisor: 100,
       equityDivisor: 100,
+      showPortfolioOverviewKpis: false,
     },
     metrics: {
       apr: {

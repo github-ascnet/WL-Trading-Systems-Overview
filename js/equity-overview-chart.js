@@ -1008,10 +1008,17 @@
       }
 
       renderEquityOverviewChart(chartContainerElement, portfolioSeries);
-      renderPortfolioOverviewCards(
-        cardsContainerElement,
-        calculatePortfolioKpis(portfolioSeries, seriesCollection)
-      );
+
+      const showKpis = global.WL_KPI_CONFIG?.display?.showPortfolioOverviewKpis !== false;
+      if (showKpis) {
+        renderPortfolioOverviewCards(
+          cardsContainerElement,
+          calculatePortfolioKpis(portfolioSeries, seriesCollection)
+        );
+      } else if (cardsContainerElement) {
+        cardsContainerElement.innerHTML = "";
+      }
+
       setStatus(`${systemsLoaded}/${systemsTotal} systems included`);
     } catch (error) {
       console.error("[equity-overview-chart]", error);
