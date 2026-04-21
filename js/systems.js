@@ -16,8 +16,8 @@ const SYSTEMS = [
     dataPath: "./systems/dip-snapback",
   },
   {
-    id: "multifactor-edge",
-    dataPath: "./systems/multifactor-edge",
+    id: "multifactor-fusion",
+    dataPath: "./systems/multifactor-fusion",
   },
   {
     id: "capitulation-bounce",
