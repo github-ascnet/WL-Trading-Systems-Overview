@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "Short Burst Momentum",
-  "strategyDescription": "Ein kurzfristiger Momentum-Breakout-Ansatz, der nur dann einsteigt, wenn ein bereits starker Markt zusätzliche Aufwärtsdynamik zeigt, und dadurch in impulsiven Phasen attraktive, aber meist kleine und häufige Gewinne generieren kann. Durch den Fear & Greed Position Sizer wird die Positionsgrösse dynamisch an die Marktstimmung angepasst (aggressiver bei Gier, defensiver bei Angst), was die Ertragschancen in starken Phasen erhöht, aber gleichzeitig das Risiko von Fehlsignalen in extremen Marktphasen verstärken oder dämpfen kann.",
+  "strategyDescription": "A short-term momentum breakout approach that enters only when an already strong market shows additional upside acceleration, capturing attractive but typically small and frequent gains during impulsive phases. A Fear & Greed position sizer dynamically adjusts exposure to sentiment—more aggressive in greed, more defensive in fear—enhancing returns in strong phases while amplifying or dampening false-signal risk in extreme conditions.",
   "symbolUniverse": "Short Burst Momentum ETFs",
   "benchmark": "QQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-22 14:02:02",
+  "lastUpdate": "2026-04-22 16:40:29",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-22",
   "apr": 22.3526447906288,
