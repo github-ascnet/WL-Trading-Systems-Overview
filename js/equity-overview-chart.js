@@ -799,7 +799,7 @@
     const drawdownSeries = calculateDrawdownSeries(chartSeries);
     const rawDrawdownMin = Math.min(...drawdownSeries.map((p) => p.drawdown));
     // Mindestens -5 % Achsenausdehnung, damit die Achse bei sehr kleinen Drawdowns sinnvoll bleibt
-    const drawdownAxisMin = Math.min(rawDrawdownMin, -5);
+    const drawdownAxisMin = -30;
 
     const drawdownPoints = drawdownSeries.map((item, index) => {
       const ddRatio =
@@ -883,9 +883,11 @@
       )}</text>`;
     }).join("");
 
-    const drawdownAxisLabels = Array.from({ length: 5 }, (_, i) => {
-      const ddValue = (i / 4) * drawdownAxisMin;
-      const y = margin.top + (i / 4) * chartHeight + 4;
+    // 5%-Schritte: 0%, -5%, -10%, -15%, -20%, -25%, -30%
+    const drawdownAxisLabels = Array.from({ length: 7 }, (_, i) => {
+      const ddValue = i * (drawdownAxisMin / 6);
+      const ratio = i / 6;
+      const y = margin.top + ratio * chartHeight + 4;
       const x = width - margin.right + 6;
       return `<text x="${x}" y="${y}" fill="#ff8c00" font-size="11" opacity="0.8" text-anchor="start">${escapeHtml(
         formatPercent(ddValue, 0)
@@ -895,7 +897,7 @@
     const drawdownAxisTitle = (() => {
       const x = width - 12;
       const y = margin.top + chartHeight / 2;
-      return `<text x="${x}" y="${y}" fill="#ffffff" font-size="11" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
+      return `<text x="${x}" y="${y}" fill="#ffffff" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
     })();
 
     const xLabels = [0, 0.25, 0.5, 0.75, 1]
@@ -1030,7 +1032,7 @@
 
       tooltipDrawdownEl.setAttribute("x", boxX + pad);
       tooltipDrawdownEl.setAttribute("y", boxY + 71);
-      tooltipDrawdownEl.textContent = `DD: ${formatPercent(
+      tooltipDrawdownEl.textContent = `Max Drawdown: ${formatPercent(
         ddPoint?.drawdown ?? null,
         2
       )}`;
