@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "Tech Trend Follower",
-  "strategyDescription": "Ein trendfolgender, volumengewichteter Long-Only-Ansatz, der über ein Marktregime filtert und damit gezielt nur in starke, bestätigte Aufwärtsphasen investiert, wodurch hohe Ertragschancen bei gleichzeitig reduzierten Fehlsignalen entstehen. Das Risiko liegt primär in leicht verzögerten Ausstiegen und plötzlichen Trendbrüchen, wodurch Drawdowns entstehen können, während die langfristige Wirkung typischerweise eine stabile, trendgetriebene Equity-Kurve mit klaren Regimewechseln und begrenzter Overtrading-Neigung ist.",
+  "strategyDescription": "A trend-following, volume-weighted long-only approach that uses a market regime filter to invest selectively in strong, confirmed uptrends, enabling high return potential while reducing false signals. Risk mainly comes from slightly delayed exits and sudden trend reversals, which can cause drawdowns, while the long-term effect is typically a stable, trend-driven equity curve with clear regime shifts and limited overtrading.",
   "symbolUniverse": "NASDAQ 100;WealthData",
   "benchmark": "QQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-22 14:00:04",
+  "lastUpdate": "2026-04-22 16:32:42",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-22",
   "apr": 43.7675730106008,
