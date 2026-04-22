@@ -1,7 +1,7 @@
 (function equityOverviewChartModule(global) {
   const SVG_WIDTH = 1000;
   const SVG_HEIGHT = 340;
-  const CHART_MARGIN = { top: 20, right: 20, bottom: 40, left: 72 };
+  const CHART_MARGIN = { top: 20, right: 58, bottom: 40, left: 72 };
   const DEFAULT_EQUITY_DIVISOR = 100;
   const DEFAULT_PERIODS_PER_YEAR = 252;
 
@@ -501,6 +501,25 @@
     return bestSegment;
   }
 
+  function calculateDrawdownSeries(chartSeries) {
+    let peak = Number(chartSeries[0]?.equity);
+
+    return chartSeries.map((point) => {
+      const equity = Number(point.equity);
+
+      if (Number.isFinite(equity) && equity > peak) {
+        peak = equity;
+      }
+
+      const drawdown =
+        Number.isFinite(equity) && peak > 0
+          ? ((equity - peak) / peak) * 100
+          : 0;
+
+      return { ...point, drawdown };
+    });
+  }
+
   function calculatePeriodReturns(portfolioSeries) {
     if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
       return [];
@@ -776,6 +795,29 @@
       };
     });
 
+    // --- Drawdown-Serie (eigene Y-Skalierung, rechte Achse) ---
+    const drawdownSeries = calculateDrawdownSeries(chartSeries);
+    const rawDrawdownMin = Math.min(...drawdownSeries.map((p) => p.drawdown));
+    // Mindestens -5 % Achsenausdehnung, damit die Achse bei sehr kleinen Drawdowns sinnvoll bleibt
+    const drawdownAxisMin = Math.min(rawDrawdownMin, -5);
+
+    const drawdownPoints = drawdownSeries.map((item, index) => {
+      const ddRatio =
+        drawdownAxisMin !== 0 ? item.drawdown / drawdownAxisMin : 0;
+      const ddY = margin.top + Math.max(0, Math.min(1, ddRatio)) * chartHeight;
+      return {
+        x: points[index].x,
+        y: ddY,
+        drawdown: item.drawdown,
+      };
+    });
+
+    const drawdownLinePath = drawdownPoints
+      .map(
+        (p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)} ${p.y.toFixed(2)}`
+      )
+      .join(" ");
+
     function findClosestPointIndex(targetTimestamp) {
       let closestIndex = 0;
       let smallestDiff = Infinity;
@@ -841,6 +883,21 @@
       )}</text>`;
     }).join("");
 
+    const drawdownAxisLabels = Array.from({ length: 5 }, (_, i) => {
+      const ddValue = (i / 4) * drawdownAxisMin;
+      const y = margin.top + (i / 4) * chartHeight + 4;
+      const x = width - margin.right + 6;
+      return `<text x="${x}" y="${y}" fill="#ff8c00" font-size="11" opacity="0.8" text-anchor="start">${escapeHtml(
+        formatPercent(ddValue, 0)
+      )}</text>`;
+    }).join("");
+
+    const drawdownAxisTitle = (() => {
+      const x = width - 12;
+      const y = margin.top + chartHeight / 2;
+      return `<text x="${x}" y="${y}" fill="#ffffff" font-size="11" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
+    })();
+
     const xLabels = [0, 0.25, 0.5, 0.75, 1]
       .map((ratio) => {
         const targetTimestamp = minTimestamp + ratio * timeRange;
@@ -863,8 +920,6 @@
           <stop offset="100%" stop-color="#58c4ff" stop-opacity="0.03"></stop>
         </linearGradient>
         <linearGradient id="portfolioOverviewDrawdownStroke" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.45"></stop>
-          <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0.9"></stop>
         </linearGradient>
       </defs>
       <g opacity="0.28" stroke="#5a5f67" stroke-width="1">
@@ -874,21 +929,27 @@
       <path d="${areaPath}" fill="url(#portfolioOverviewFill)"></path>
       <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"></path>
       ${
+        // Max-DD-Segment-Overlay auf der Equity-Kurve — kann entfernt werden,
+        // sobald die vollständige Drawdown-Kurve unten als ausreichend gilt.
         drawdownPath
           ? `<path d="${drawdownPath}" fill="none" stroke="url(#portfolioOverviewDrawdownStroke)" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"></path>`
           : ""
       }
+      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.4"></path>
       ${yLabels}
+      ${drawdownAxisLabels}
+      ${drawdownAxisTitle}
       ${xLabels}
       <g id="portfolioTooltipGroup" style="display:none;">
         <line id="portfolioTooltipLine" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 2" opacity="0.35" x1="0" x2="0" y1="${
           margin.top
         }" y2="${height - margin.bottom}"/>
         <circle id="portfolioTooltipDot" r="5" fill="#58c4ff" stroke="#1e1f22" stroke-width="2" cx="0" cy="0"/>
-        <rect id="portfolioTooltipBox" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="210" height="66"/>
+        <rect id="portfolioTooltipBox" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="210" height="83"/>
         <text id="portfolioTooltipDate" fill="#b8bcc4" font-size="12" x="0" y="0"/>
         <text id="portfolioTooltipValue" fill="#e6e6e6" font-size="13" font-weight="600" x="0" y="0"/>
         <text id="portfolioTooltipProfit" fill="#b8bcc4" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipDrawdown" fill="#ff8c00" font-size="12" x="0" y="0"/>
       </g>
       <rect id="portfolioChartOverlay" x="${margin.left}" y="${
       margin.top
@@ -911,6 +972,9 @@
     const tooltipProfitEl = containerElement.querySelector(
       "#portfolioTooltipProfit"
     );
+    const tooltipDrawdownEl = containerElement.querySelector(
+      "#portfolioTooltipDrawdown"
+    );
     const startingEquity = Number(portfolioSeries[0]?.equity);
 
     overlay.addEventListener("mousemove", (event) => {
@@ -920,6 +984,7 @@
       const targetTimestamp = minTimestamp + ratio * timeRange;
       const index = findClosestPointIndex(targetTimestamp);
       const point = points[index];
+      const ddPoint = drawdownPoints[index];
 
       if (!point) return;
 
@@ -930,7 +995,7 @@
       tooltipDot.setAttribute("cy", point.y);
 
       const boxWidth = 210;
-      const boxHeight = 66;
+      const boxHeight = 83;
       const pad = 10;
       let boxX = point.x + 12;
       if (boxX + boxWidth > width - margin.right) {
@@ -960,6 +1025,13 @@
       tooltipProfitEl.setAttribute("y", boxY + 54);
       tooltipProfitEl.textContent = `Profit: ${formatPercent(
         calculateRunningProfitPercent(startingEquity, point.equity),
+        2
+      )}`;
+
+      tooltipDrawdownEl.setAttribute("x", boxX + pad);
+      tooltipDrawdownEl.setAttribute("y", boxY + 71);
+      tooltipDrawdownEl.textContent = `DD: ${formatPercent(
+        ddPoint?.drawdown ?? null,
         2
       )}`;
     });
