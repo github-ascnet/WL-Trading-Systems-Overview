@@ -764,12 +764,14 @@
     );
     const timeRange = Math.max(maxTimestamp - minTimestamp, 1);
 
-    // Render the visual curve as a normalized composite path so the shape
-    // matches the original portfolio behavior, while KPI calculations remain
-    // based on the raw aggregated equity values.
+    // Kurven-Datenbasis per Config steuerbar: useDisplayEquity = true → Equal-Weight-Kurve, false → Rohsumme
+    const useDisplayEquity =
+      global.WL_KPI_CONFIG?.display?.useDisplayEquity === true;
     const chartSeries = portfolioSeries.map((item) => ({
       ...item,
-      equity: Number(item.displayEquity ?? item.equity),
+      equity: Number(
+        useDisplayEquity ? item.displayEquity ?? item.equity : item.equity
+      ),
     }));
 
     const values = chartSeries.map((item) => Math.max(Number(item.equity), 1));
@@ -889,7 +891,7 @@
       const ratio = i / 6;
       const y = margin.top + ratio * chartHeight + 4;
       const x = width - margin.right + 6;
-      return `<text x="${x}" y="${y}" fill="#ff8c00" font-size="11" opacity="0.8" text-anchor="start">${escapeHtml(
+      return `<text x="${x}" y="${y}" fill="#aeb4be" font-size="11" opacity="0.8" text-anchor="start">${escapeHtml(
         formatPercent(ddValue, 0)
       )}</text>`;
     }).join("");
@@ -897,7 +899,7 @@
     const drawdownAxisTitle = (() => {
       const x = width - 12;
       const y = margin.top + chartHeight / 2;
-      return `<text x="${x}" y="${y}" fill="#ffffff" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
+      return `<text x="${x}" y="${y}" fill="#aeb4be" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
     })();
 
     const xLabels = [0, 0.25, 0.5, 0.75, 1]
@@ -937,7 +939,7 @@
           ? `<path d="${drawdownPath}" fill="none" stroke="url(#portfolioOverviewDrawdownStroke)" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"></path>`
           : ""
       }
-      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.4"></path>
+      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"></path>
       ${yLabels}
       ${drawdownAxisLabels}
       ${drawdownAxisTitle}
@@ -1086,9 +1088,20 @@
       const showKpis =
         global.WL_KPI_CONFIG?.display?.showPortfolioOverviewKpis !== false;
       if (showKpis) {
+        // KPI-Datenbasis per Config steuerbar: useDisplayEquity = true → Equal-Weight-Kurve, false → Rohsumme
+        const useDisplayEquityForKpis =
+          global.WL_KPI_CONFIG?.display?.useDisplayEquity === true;
+        const kpiSeries = portfolioSeries.map((point) => ({
+          ...point,
+          equity: Number(
+            useDisplayEquityForKpis
+              ? point.displayEquity ?? point.equity
+              : point.equity
+          ),
+        }));
         renderPortfolioOverviewCards(
           cardsContainerElement,
-          calculatePortfolioKpis(portfolioSeries, seriesCollection)
+          calculatePortfolioKpis(kpiSeries, seriesCollection)
         );
       } else if (cardsContainerElement) {
         cardsContainerElement.innerHTML = "";
