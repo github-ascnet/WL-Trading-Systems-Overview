@@ -868,13 +868,6 @@
       }" y2="${y}" />`;
     }).join("");
 
-    const verticalGrid = Array.from({ length: 6 }, (_, i) => {
-      const x = margin.left + (i / 5) * chartWidth;
-      return `<line x1="${x}" y1="${margin.top}" x2="${x}" y2="${
-        height - margin.bottom
-      }" />`;
-    }).join("");
-
     const yLabels = Array.from({ length: 5 }, (_, i) => {
       const logValue = logMax - (i / 4) * logRange;
       const value = Math.exp(logValue);
@@ -902,18 +895,22 @@
       return `<text x="${x}" y="${y}" fill="#aeb4be" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
     })();
 
-    const xLabels = [0, 0.25, 0.5, 0.75, 1]
-      .map((ratio) => {
-        const targetTimestamp = minTimestamp + ratio * timeRange;
-        const index = findClosestPointIndex(targetTimestamp);
+    const allYears = [
+      ...new Set(chartSeries.map((p) => new Date(p.date).getFullYear())),
+    ];
+    const xLabels = allYears
+      .map((year) => {
+        const point = chartSeries.find(
+          (p) => new Date(p.date).getFullYear() === year
+        );
+        if (!point) return "";
+        const ts = new Date(point.date).getTime();
+        const ratio = timeRange > 0 ? (ts - minTimestamp) / timeRange : 0;
         const x = margin.left + ratio * chartWidth;
-        const anchor = ratio === 0 ? "start" : ratio === 1 ? "end" : "middle";
-
-        return `<text x="${x}" y="${
+        const anchor = ratio < 0.08 ? "start" : ratio > 0.92 ? "end" : "middle";
+        return `<text x="${x.toFixed(2)}" y="${
           height - 12
-        }" text-anchor="${anchor}" fill="#aeb4be" font-size="12">${escapeHtml(
-          formatDateLabel(chartSeries[index].date)
-        )}</text>`;
+        }" text-anchor="${anchor}" fill="#aeb4be" font-size="12">${year}</text>`;
       })
       .join("");
 
@@ -928,7 +925,6 @@
       </defs>
       <g opacity="0.28" stroke="#5a5f67" stroke-width="1">
         ${horizontalGrid}
-        ${verticalGrid}
       </g>
       <path d="${areaPath}" fill="url(#portfolioOverviewFill)"></path>
       <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"></path>
