@@ -742,16 +742,28 @@
       .join("");
   }
 
-  function renderEquityOverviewChart(containerElement, portfolioSeries) {
+  function renderEquityOverviewChart(
+    containerElement,
+    portfolioSeries,
+    zoomedSeries
+  ) {
     if (!containerElement) return;
 
-    if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
+    const activeSeries =
+      Array.isArray(zoomedSeries) && zoomedSeries.length >= 2
+        ? zoomedSeries
+        : portfolioSeries;
+
+    if (!Array.isArray(activeSeries) || activeSeries.length < 2) {
       renderChartEmptyState(
         containerElement,
         "No portfolio equity data available."
       );
       return;
     }
+
+    // Replace portfolioSeries references inside this function with activeSeries
+    portfolioSeries = activeSeries;
 
     const width = SVG_WIDTH;
     const height = SVG_HEIGHT;
@@ -1080,6 +1092,225 @@
       }
 
       renderEquityOverviewChart(chartContainerElement, portfolioSeries);
+
+      // ── Zoom / Pan State ──────────────────────────────────────────────────
+      const fullMin = portfolioSeries[0].timestamp;
+      const fullMax = portfolioSeries[portfolioSeries.length - 1].timestamp;
+      const zoomState = { min: fullMin, max: fullMax };
+      let isDragging = false;
+      let dragStartX = null;
+      let dragStartMin = null;
+      let dragStartMax = null;
+
+      function getZoomedSeries() {
+        return portfolioSeries.filter(
+          (p) => p.timestamp >= zoomState.min && p.timestamp <= zoomState.max
+        );
+      }
+
+      // AbortController to cleanly remove overlay-level listeners on each re-render
+      let overlayAbortController = new AbortController();
+
+      function applyZoom() {
+        const zoomed = getZoomedSeries();
+        if (zoomed.length >= 2) {
+          overlayAbortController.abort(); // remove previous overlay listeners
+          overlayAbortController = new AbortController();
+          renderEquityOverviewChart(
+            chartContainerElement,
+            portfolioSeries,
+            zoomed
+          );
+          attachOverlayEvents();
+        }
+      }
+
+      function clampZoom() {
+        const MIN_RANGE_MS = 30 * 24 * 3600 * 1000; // min 30 days
+        const range = zoomState.max - zoomState.min;
+        if (range < MIN_RANGE_MS) {
+          const center = (zoomState.min + zoomState.max) / 2;
+          zoomState.min = center - MIN_RANGE_MS / 2;
+          zoomState.max = center + MIN_RANGE_MS / 2;
+        }
+        zoomState.min = Math.max(zoomState.min, fullMin);
+        zoomState.max = Math.min(zoomState.max, fullMax);
+      }
+
+      // window-level handlers attached exactly ONCE
+      window.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        const svgEl = chartContainerElement;
+        const rect = svgEl.getBoundingClientRect();
+        const chartWidth = SVG_WIDTH - CHART_MARGIN.left - CHART_MARGIN.right;
+        const dxPx = (dragStartX - e.clientX) * (SVG_WIDTH / rect.width);
+        const range = dragStartMax - dragStartMin;
+        const dxMs = dxPx / (chartWidth / range);
+        zoomState.min = Math.max(
+          fullMin,
+          Math.min(dragStartMin + dxMs, fullMax - range)
+        );
+        zoomState.max = zoomState.min + range;
+        applyZoom();
+      });
+
+      window.addEventListener("mouseup", () => {
+        if (isDragging) {
+          isDragging = false;
+          const overlayEl = chartContainerElement.querySelector(
+            "#portfolioChartOverlay"
+          );
+          if (overlayEl) overlayEl.style.cursor = "crosshair";
+        }
+      });
+
+      function attachOverlayEvents() {
+        const svgEl = chartContainerElement;
+        const overlayEl = svgEl.querySelector("#portfolioChartOverlay");
+        if (!overlayEl) return;
+        const signal = overlayAbortController.signal;
+        const chartWidth = SVG_WIDTH - CHART_MARGIN.left - CHART_MARGIN.right;
+
+        overlayEl.addEventListener(
+          "wheel",
+          (e) => {
+            e.preventDefault();
+            const rect = svgEl.getBoundingClientRect();
+            const relX = (e.clientX - rect.left) / rect.width;
+            const chartRelX = Math.max(
+              0,
+              Math.min(1, (relX * SVG_WIDTH - CHART_MARGIN.left) / chartWidth)
+            );
+            const pivotTs =
+              zoomState.min + chartRelX * (zoomState.max - zoomState.min);
+            const zoomFactor = e.deltaY > 0 ? 1.25 : 0.8;
+            const newRange = (zoomState.max - zoomState.min) * zoomFactor;
+            zoomState.min = pivotTs - chartRelX * newRange;
+            zoomState.max = pivotTs + (1 - chartRelX) * newRange;
+            clampZoom();
+            applyZoom();
+          },
+          { passive: false, signal }
+        );
+
+        overlayEl.addEventListener(
+          "mousedown",
+          (e) => {
+            isDragging = true;
+            dragStartX = e.clientX;
+            dragStartMin = zoomState.min;
+            dragStartMax = zoomState.max;
+            overlayEl.style.cursor = "grabbing";
+          },
+          { signal }
+        );
+
+        overlayEl.addEventListener(
+          "dblclick",
+          () => {
+            zoomState.min = fullMin;
+            zoomState.max = fullMax;
+            applyZoom();
+          },
+          { signal }
+        );
+
+        // touch: pinch-to-zoom + swipe
+        let lastTouchDist = null;
+        let lastTouchX = null;
+
+        overlayEl.addEventListener(
+          "touchstart",
+          (e) => {
+            if (e.touches.length === 2) {
+              lastTouchDist = Math.abs(
+                e.touches[0].clientX - e.touches[1].clientX
+              );
+              dragStartMin = zoomState.min;
+              dragStartMax = zoomState.max;
+            } else if (e.touches.length === 1) {
+              lastTouchX = e.touches[0].clientX;
+              dragStartMin = zoomState.min;
+              dragStartMax = zoomState.max;
+            }
+          },
+          { passive: true, signal }
+        );
+
+        overlayEl.addEventListener(
+          "touchmove",
+          (e) => {
+            const chartW = SVG_WIDTH - CHART_MARGIN.left - CHART_MARGIN.right;
+            const rect = svgEl.getBoundingClientRect();
+            if (e.touches.length === 2 && lastTouchDist !== null) {
+              e.preventDefault();
+              const dist = Math.abs(
+                e.touches[0].clientX - e.touches[1].clientX
+              );
+              const factor = lastTouchDist / dist;
+              const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+              const pivotRatio = Math.max(
+                0,
+                Math.min(
+                  1,
+                  (((midX - rect.left) / rect.width) * SVG_WIDTH -
+                    CHART_MARGIN.left) /
+                    chartW
+                )
+              );
+              const pivotTs =
+                zoomState.min + pivotRatio * (zoomState.max - zoomState.min);
+              const newRange = (zoomState.max - zoomState.min) * factor;
+              zoomState.min = pivotTs - pivotRatio * newRange;
+              zoomState.max = pivotTs + (1 - pivotRatio) * newRange;
+              clampZoom();
+              lastTouchDist = dist;
+              applyZoom();
+            } else if (e.touches.length === 1 && lastTouchX !== null) {
+              const dxPx =
+                (lastTouchX - e.touches[0].clientX) * (SVG_WIDTH / rect.width);
+              const range = dragStartMax - dragStartMin;
+              const dxMs = dxPx / (chartW / range);
+              zoomState.min = Math.max(
+                fullMin,
+                Math.min(dragStartMin + dxMs, fullMax - range)
+              );
+              zoomState.max = zoomState.min + range;
+              applyZoom();
+            }
+          },
+          { passive: false, signal }
+        );
+
+        overlayEl.addEventListener(
+          "touchend",
+          () => {
+            lastTouchDist = null;
+            lastTouchX = null;
+          },
+          { signal }
+        );
+      }
+
+      attachOverlayEvents();
+
+      // Reset-Button
+      const chartWrap = chartContainerElement.closest(
+        ".portfolio-overview-chart-wrap"
+      );
+      if (chartWrap && !chartWrap.querySelector(".chart-zoom-reset")) {
+        const resetBtn = document.createElement("button");
+        resetBtn.className = "chart-zoom-reset";
+        resetBtn.title = "Reset zoom";
+        resetBtn.textContent = "⊙";
+        resetBtn.addEventListener("click", () => {
+          zoomState.min = fullMin;
+          zoomState.max = fullMax;
+          applyZoom();
+        });
+        chartWrap.appendChild(resetBtn);
+      }
+      // ── End Zoom / Pan ────────────────────────────────────────────────────
 
       const showKpis =
         global.WL_KPI_CONFIG?.display?.showPortfolioOverviewKpis !== false;
