@@ -33,7 +33,9 @@ body {
       rgba(255, 212, 138, 0.08),
       transparent 0 34%
     ),
-    linear-gradient(180deg, #08080b 0%, #120f0c 48%, #0b0d12 100%);
+    /* linear-gradient(180deg, #08080b 0%, #120f0c 48%, #0b0d12 100%); */
+      linear-gradient(180deg, #353534 0%, #417983 48%, #0b0d12 100%);
+
   background-size: 34px 34px, 34px 34px, auto, auto;
   background-attachment: fixed;
 }
