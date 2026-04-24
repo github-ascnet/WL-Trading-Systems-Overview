@@ -4,7 +4,7 @@
   "symbolUniverse": "BTC.USD;Cryptocompare",
   "benchmark": "BTC.USD",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-23 14:14:01",
+  "lastUpdate": "2026-04-24 14:14:01",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-24",
   "apr": 63.2687291793707,
