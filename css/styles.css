@@ -88,7 +88,9 @@ body {
       rgba(255, 212, 138, 0.08),
       transparent 0 34%
     ),
-    linear-gradient(180deg, #07070a 0%, #100d0a 48%, #0a0b10 100%);
+    /* linear-gradient(180deg, #07070a 0%, #100d0a 48%, #0a0b10 100%); */
+      linear-gradient(180deg, #07070a 10%, #7f8283 58%, #0b0d12 100%);
+
   background-size: 34px 34px, 34px 34px, auto, auto;
   background-attachment: fixed;
 }
@@ -250,11 +252,11 @@ body::after {
   position: sticky;
   top: 0;
   z-index: 20;
-  border-bottom: 1px solid var(--border-soft);
+  border-bottom: 0px solid var(--border-soft);
   background: linear-gradient(
     180deg,
-    rgba(18, 23, 34, 0.92),
-    rgba(18, 23, 34, 0.82)
+    rgba(5, 5, 5, 0.92),
+    rgba(10, 10, 10, 0.82)
   );
   backdrop-filter: blur(14px);
 }
