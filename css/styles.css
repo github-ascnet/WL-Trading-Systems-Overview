@@ -763,14 +763,17 @@ select:hover {
 .mr-table-wrap {
   overflow-x: auto;
   padding: var(--space-3) 0;
-  display: flex;
-  justify-content: flex-start;
+  width: 90vw;
+  max-width: 100%;
+  margin-inline: auto;
 }
 
 .mr-table {
-  width: auto;
+  width: 100%;
+  min-width: max-content;
+  margin-inline: auto;
   border-collapse: collapse;
-  font-size: var(--font-size-13);
+  font-size: clamp(11px, 1.2vw, var(--font-size-13));
   white-space: nowrap;
 }
 
