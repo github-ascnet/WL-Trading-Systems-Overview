@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "Dip Snapback",
-  "strategyDescription": "An aggressive short-term mean-reversion approach that buys short-term overextensions in TQQQ, aiming for quick technical rebounds of a few percent and enabling high, frequent gains in volatile uptrends. Risk stems from missing safeguards (no stop, no regime filter), exposing it to losses in sustained downtrends or crashes, resulting in volatile equity curves and periods of underperformance.",
+  "strategyDescription": "An aggressive short-term mean-reversion approach that buys short-term overextensions, aiming for quick technical rebounds of a few percent and enabling high, frequent gains in volatile uptrends. Risk stems from missing safeguards (no stop, no regime filter), exposing it to losses in sustained downtrends or crashes, resulting in volatile equity curves and periods of underperformance.",
   "symbolUniverse": "TQQQ;WealthData",
   "benchmark": "TQQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-23 14:06:00",
+  "lastUpdate": "2026-04-24 14:06:01",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-22",
   "apr": 63.7858577162597,
