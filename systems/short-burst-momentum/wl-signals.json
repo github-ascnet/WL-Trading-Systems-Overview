@@ -1,5 +1,5 @@
 ﻿[
-  {"symbol":"URA","action":"BUY","isEntry":"TRUE","signalDate":"2026-04-21 00:00:00","entryPrice":54.2774,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.452846023048423},
-  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-04-21 00:00:00","entryPrice":469.30660369873,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.246964194848263},
-  {"symbol":"BOTZ","action":"BUY","isEntry":"TRUE","signalDate":"2026-04-21 00:00:00","entryPrice":37.1074016952515,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.233460580591556}
+  {"symbol":"URA","action":"BUY","isEntry":"TRUE","signalDate":"2026-04-21 00:00:00","entryPrice":54.2774,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.885794507054943},
+  {"symbol":"BOTZ","action":"BUY","isEntry":"TRUE","signalDate":"2026-04-21 00:00:00","entryPrice":37.1074016952515,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.065853604402488},
+  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-04-21 00:00:00","entryPrice":469.30660369873,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.028509698114812}
 ]
