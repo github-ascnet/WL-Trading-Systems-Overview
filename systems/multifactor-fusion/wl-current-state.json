@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "Multifactor Fusion",
-  "strategyDescription": "A TQQQ multifactor system that efficiently monetizes both sustained uptrends and explosive post-stress rebounds, enabling above-average return potential with controlled capital exposure. Selective participation, fast exits, and timely re-entry create a robust long-term edge that limits losses in volatile or falling markets while actively exploiting opportunistic counter-moves.",
+  "strategyDescription": "A multifactor system that efficiently monetizes both sustained uptrends and explosive post-stress rebounds, enabling above-average return potential with controlled capital exposure. Selective participation, fast exits, and timely re-entry create a robust long-term edge that limits losses in volatile or falling markets while actively exploiting opportunistic counter-moves.",
   "symbolUniverse": "TQQQ;WealthData",
   "benchmark": "QQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-23 14:08:10",
+  "lastUpdate": "2026-04-24 14:08:02",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-22",
   "apr": 27.918964643478,
