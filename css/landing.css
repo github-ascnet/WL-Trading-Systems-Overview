@@ -564,6 +564,10 @@ body::after {
     align-self: flex-start;
   }
 
+  .chart-zoom-reset {
+    display: none;
+  }
+
   .portfolio-kpi-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
