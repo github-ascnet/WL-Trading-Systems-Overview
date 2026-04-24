@@ -500,6 +500,18 @@ select:focus-visible,
 
 .panel.active {
   display: block;
+  animation: panelFadeIn 800ms ease both;
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .panel-header {
