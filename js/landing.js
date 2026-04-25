@@ -141,6 +141,7 @@
       <a class="system-card" href="./dashboard/index.html?system=${encodeURIComponent(
         systemId
       )}">
+        <div class="system-card-gloss" aria-hidden="true"></div>
         <div class="system-card-head">
           <h2>${escapeHtml(strategyName)}</h2>
         </div>
@@ -225,6 +226,44 @@
     );
 
     grid.innerHTML = cards.join("");
+    attachCardTiltEffects(grid);
+  }
+
+  function attachCardTiltEffects(grid) {
+    let activeCard = null;
+
+    function resetCard(card) {
+      if (!card) return;
+      card.style.transform = "";
+      const gloss = card.querySelector(".system-card-gloss");
+      if (gloss) gloss.style.background = "";
+    }
+
+    grid.addEventListener("mousemove", (e) => {
+      const card = e.target.closest(".system-card");
+      if (card !== activeCard) {
+        resetCard(activeCard);
+        activeCard = card;
+      }
+      if (!card || card.classList.contains("system-card-error")) return;
+      const rect = card.getBoundingClientRect();
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const rx = ((e.clientY - rect.top - cy) / cy) * 7;
+      const ry = ((cx - (e.clientX - rect.left)) / cx) * 7;
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px) scale(1.03)`;
+      const gloss = card.querySelector(".system-card-gloss");
+      if (gloss) {
+        const gx = ((e.clientX - rect.left) / rect.width) * 100;
+        const gy = ((e.clientY - rect.top) / rect.height) * 100;
+        gloss.style.background = `radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.11) 0%, transparent 60%)`;
+      }
+    });
+
+    grid.addEventListener("mouseleave", () => {
+      resetCard(activeCard);
+      activeCard = null;
+    });
   }
 
   async function initLandingPage() {

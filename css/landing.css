@@ -436,6 +436,7 @@ body::after {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 10px;
+  perspective: 1000px;
 }
 
 .system-card {
@@ -449,14 +450,66 @@ body::after {
   border-radius: 14px;
   padding: 16px;
   box-shadow: var(--shadow);
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  transition: transform 0.08s ease-out, border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+/* Rotating gradient border (shown on hover) */
+.system-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 1.5px;
+  background: linear-gradient(var(--sc-angle, 0deg), #58c4ff, #b98a2f, #58c4ff);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 0;
+}
+
+.system-card:hover::before {
+  opacity: 1;
+  animation: sc-rotate-border 4s linear infinite;
+}
+
+@property --sc-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes sc-rotate-border {
+  to {
+    --sc-angle: 360deg;
+  }
 }
 
 .system-card:hover {
-  transform: translateY(-3px);
   border-color: #58c4ff;
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.42),
     0 0 0 1px rgba(185, 138, 47, 0.28), 0 0 18px rgba(185, 138, 47, 0.16);
+}
+
+/* Gloss / light reflection overlay */
+.system-card-gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(255, 255, 255, 0.07) 0%,
+    transparent 60%
+  );
+  transition: background 0.05s linear;
 }
 
 .system-card-head {
