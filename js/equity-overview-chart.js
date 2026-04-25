@@ -762,6 +762,9 @@
       return;
     }
 
+    // Preserve the all-time start equity BEFORE portfolioSeries is replaced by the zoomed slice
+    const allTimeStartEquity = Number(portfolioSeries[0]?.equity);
+
     // Replace portfolioSeries references inside this function with activeSeries
     portfolioSeries = activeSeries;
 
@@ -987,7 +990,7 @@
     const tooltipDrawdownEl = containerElement.querySelector(
       "#portfolioTooltipDrawdown"
     );
-    const startingEquity = Number(portfolioSeries[0]?.equity);
+    const startingEquity = allTimeStartEquity;
 
     overlay.addEventListener("mousemove", (event) => {
       const rect = containerElement.getBoundingClientRect();
