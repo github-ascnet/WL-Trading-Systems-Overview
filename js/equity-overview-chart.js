@@ -245,6 +245,7 @@
         return {
           systemId: system.id,
           series: normalizedSeries,
+          rawPositions: Array.isArray(rawPositions) ? rawPositions : [],
           profitableTrades: tradeStats.profitableTrades,
           closedTrades: tradeStats.closedTrades,
           grossProfit: tradeStats.grossProfit,
@@ -314,11 +315,69 @@
     });
   }
 
+  /**
+   * Counts how many positions of a single system were open on a given date.
+   * A position is considered open on date D when:
+   *   entryDate <= D  AND  (isOpen === true  OR  exitDate > D)
+   */
+  function countOpenPositionsOnDate(rawPositions, targetTimestamp) {
+    if (!Array.isArray(rawPositions)) return 0;
+    let count = 0;
+    for (const pos of rawPositions) {
+      const entryTs = Date.parse(String(pos?.entryDate ?? ""));
+      if (!Number.isFinite(entryTs) || entryTs > targetTimestamp) continue;
+      const isOpen = pos?.isOpen === true;
+      const exitRaw = String(pos?.exitDate ?? "")
+        .trim()
+        .toLowerCase();
+      if (isOpen || !exitRaw || exitRaw === "open") {
+        count += 1;
+        continue;
+      }
+      const exitTs = Date.parse(exitRaw);
+      if (Number.isFinite(exitTs) && exitTs > targetTimestamp) {
+        count += 1;
+      }
+    }
+    return count;
+  }
+
   function aggregatePortfolioSeries(seriesCollection, unifiedDateAxis) {
     const filledSeriesCollection = seriesCollection.map((entry) => ({
       systemId: entry.systemId,
       series: carryForwardMissingValues(unifiedDateAxis, entry.series),
+      rawPositions: entry.rawPositions ?? [],
     }));
+
+    // Pre-sort closed positions per system by exitDate for O(n+m) profit factor accumulation
+    const sortedClosedPositions = filledSeriesCollection.map((entry) =>
+      entry.rawPositions
+        .filter((pos) => {
+          const exitRaw = String(pos?.exitDate ?? "")
+            .trim()
+            .toLowerCase();
+          return pos?.isOpen !== true && exitRaw && exitRaw !== "open";
+        })
+        .map((pos) => ({
+          exitTs: Date.parse(String(pos.exitDate)),
+          pl: Number(pos.pl),
+        }))
+        .filter((p) => Number.isFinite(p.exitTs) && Number.isFinite(p.pl))
+        .sort((a, b) => a.exitTs - b.exitTs)
+    );
+    const posPointers = sortedClosedPositions.map(() => 0);
+    let cumulativeGrossProfit = 0;
+    let cumulativeGrossLoss = 0;
+    let cumulativeClosedTrades = 0;
+    let cumulativeProfitableTrades = 0;
+
+    // Running Sharpe accumulators (O(1) per point via online variance)
+    let firstPortfolioEquity = null;
+    let firstPortfolioTimestamp = null;
+    let prevPortfolioEquity = null;
+    let sharpeN = 0;
+    let sharpeSumR = 0;
+    let sharpeSumR2 = 0;
 
     let normalizedDisplayEquity = 0;
 
@@ -328,6 +387,31 @@
         let activeSystems = 0;
         let stepReturnSum = 0;
         let stepReturnCount = 0;
+        let totalOpenPositions = 0;
+
+        // Advance profit factor accumulators for trades closed up to this date
+        sortedClosedPositions.forEach((positions, sysIdx) => {
+          while (
+            posPointers[sysIdx] < positions.length &&
+            positions[posPointers[sysIdx]].exitTs <= axisPoint.timestamp
+          ) {
+            const pl = positions[posPointers[sysIdx]].pl;
+            if (pl > 0) {
+              cumulativeGrossProfit += pl;
+              cumulativeProfitableTrades++;
+            } else if (pl < 0) cumulativeGrossLoss += Math.abs(pl);
+            cumulativeClosedTrades++;
+            posPointers[sysIdx]++;
+          }
+        });
+        const pointProfitFactor =
+          cumulativeGrossProfit > 0 && cumulativeGrossLoss > 0
+            ? cumulativeGrossProfit / cumulativeGrossLoss
+            : null;
+        const pointProfitablePercent =
+          cumulativeClosedTrades > 0
+            ? (cumulativeProfitableTrades / cumulativeClosedTrades) * 100
+            : null;
 
         filledSeriesCollection.forEach((entry) => {
           const point = entry.series[index];
@@ -335,6 +419,11 @@
             totalEquity += point.equity;
             activeSystems += 1;
           }
+
+          totalOpenPositions += countOpenPositionsOnDate(
+            entry.rawPositions,
+            axisPoint.timestamp
+          );
 
           if (index > 0) {
             const previousPoint = entry.series[index - 1];
@@ -354,8 +443,55 @@
 
         if (index === 0) {
           normalizedDisplayEquity = totalEquity;
+          firstPortfolioEquity = totalEquity;
+          firstPortfolioTimestamp = axisPoint.timestamp;
         } else if (stepReturnCount > 0) {
           normalizedDisplayEquity *= 1 + stepReturnSum / stepReturnCount;
+        }
+
+        // Accumulate portfolio-level step return for running Sharpe
+        if (
+          prevPortfolioEquity !== null &&
+          prevPortfolioEquity > 0 &&
+          totalEquity > 0
+        ) {
+          const r = totalEquity / prevPortfolioEquity - 1;
+          sharpeN++;
+          sharpeSumR += r;
+          sharpeSumR2 += r * r;
+        }
+        prevPortfolioEquity = totalEquity;
+
+        let pointSharpe = null;
+        if (
+          sharpeN >= 2 &&
+          firstPortfolioEquity > 0 &&
+          firstPortfolioTimestamp !== null
+        ) {
+          const mean = sharpeSumR / sharpeN;
+          const variance =
+            (sharpeSumR2 - sharpeN * mean * mean) / (sharpeN - 1);
+          const std = Math.sqrt(Math.max(variance, 0));
+          if (std > 0) {
+            const elapsedDays =
+              (axisPoint.timestamp - firstPortfolioTimestamp) /
+              (1000 * 60 * 60 * 24);
+            const periodsPerYear =
+              elapsedDays > 0 ? sharpeN / (elapsedDays / 365.25) : 252;
+            const annualizedVol = std * Math.sqrt(periodsPerYear) * 100;
+            const runningCagr =
+              elapsedDays > 1 && totalEquity > 0
+                ? (Math.pow(
+                    totalEquity / firstPortfolioEquity,
+                    365.25 / elapsedDays
+                  ) -
+                    1) *
+                  100
+                : null;
+            if (annualizedVol > 0 && runningCagr !== null) {
+              pointSharpe = runningCagr / annualizedVol;
+            }
+          }
         }
 
         return {
@@ -364,6 +500,10 @@
           equity: totalEquity,
           displayEquity: normalizedDisplayEquity,
           activeSystems,
+          openPositions: totalOpenPositions,
+          profitFactor: pointProfitFactor,
+          sharpeRatio: pointSharpe,
+          profitablePercent: pointProfitablePercent,
         };
       })
       .filter((point) => point.activeSystems > 0);
@@ -764,6 +904,7 @@
 
     // Preserve the all-time start equity BEFORE portfolioSeries is replaced by the zoomed slice
     const allTimeStartEquity = Number(portfolioSeries[0]?.equity);
+    const allTimeStartTimestamp = Number(portfolioSeries[0]?.timestamp);
 
     // Replace portfolioSeries references inside this function with activeSeries
     portfolioSeries = activeSeries;
@@ -809,6 +950,10 @@
         date: item.date,
         timestamp: item.timestamp,
         equity: item.equity,
+        openPositions: item.openPositions ?? 0,
+        profitFactor: item.profitFactor ?? null,
+        sharpeRatio: item.sharpeRatio ?? null,
+        profitablePercent: item.profitablePercent ?? null,
       };
     });
 
@@ -960,11 +1105,16 @@
           margin.top
         }" y2="${height - margin.bottom}"/>
         <circle id="portfolioTooltipDot" r="5" fill="#58c4ff" stroke="#1e1f22" stroke-width="2" cx="0" cy="0"/>
-        <rect id="portfolioTooltipBox" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="210" height="83"/>
+        <rect id="portfolioTooltipBox" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="210" height="168"/>
         <text id="portfolioTooltipDate" fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipValue" fill="#e6e6e6" font-size="13" font-weight="600" x="0" y="0"/>
+        <text id="portfolioTooltipValue" fill="#e6e6e6" font-size="13" x="0" y="0"/>
         <text id="portfolioTooltipProfit" fill="#b8bcc4" font-size="12" x="0" y="0"/>
         <text id="portfolioTooltipDrawdown" fill="#ff8c00" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipOpenPos" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipApr" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipPF" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipSharpe" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipProfitable" fill="#9aa7bf" font-size="12" x="0" y="0"/>
       </g>
       <rect id="portfolioChartOverlay" x="${margin.left}" y="${
       margin.top
@@ -990,6 +1140,17 @@
     const tooltipDrawdownEl = containerElement.querySelector(
       "#portfolioTooltipDrawdown"
     );
+    const tooltipOpenPosEl = containerElement.querySelector(
+      "#portfolioTooltipOpenPos"
+    );
+    const tooltipAprEl = containerElement.querySelector("#portfolioTooltipApr");
+    const tooltipPFEl = containerElement.querySelector("#portfolioTooltipPF");
+    const tooltipSharpeEl = containerElement.querySelector(
+      "#portfolioTooltipSharpe"
+    );
+    const tooltipProfitableEl = containerElement.querySelector(
+      "#portfolioTooltipProfitable"
+    );
     const startingEquity = allTimeStartEquity;
 
     overlay.addEventListener("mousemove", (event) => {
@@ -1010,7 +1171,7 @@
       tooltipDot.setAttribute("cy", point.y);
 
       const boxWidth = 210;
-      const boxHeight = 83;
+      const boxHeight = 168;
       const pad = 10;
       let boxX = point.x + 12;
       if (boxX + boxWidth > width - margin.right) {
@@ -1031,23 +1192,63 @@
 
       tooltipValueEl.setAttribute("x", boxX + pad);
       tooltipValueEl.setAttribute("y", boxY + 37);
-      tooltipValueEl.textContent = `Portfolio: ${formatScaledEquityValue(
+      tooltipValueEl.textContent = `Portfolio Value: ${formatScaledEquityValue(
         point.equity,
         0
       )}`;
 
+      tooltipOpenPosEl.setAttribute("x", boxX + pad);
+      tooltipOpenPosEl.setAttribute("y", boxY + 54);
+      tooltipOpenPosEl.textContent = `Open Positions: ${
+        point.openPositions ?? 0
+      }`;
+
+      const elapsedDays =
+        (Number(point.timestamp) - allTimeStartTimestamp) /
+        (1000 * 60 * 60 * 24);
+      const runningApr =
+        elapsedDays > 1 && startingEquity > 0 && point.equity > 0
+          ? (Math.pow(point.equity / startingEquity, 365.25 / elapsedDays) -
+              1) *
+            100
+          : null;
+      tooltipAprEl.setAttribute("x", boxX + pad);
+      tooltipAprEl.setAttribute("y", boxY + 71);
+      tooltipAprEl.textContent = `APR/CAGR: ${formatPercent(runningApr, 2)}`;
+
       tooltipProfitEl.setAttribute("x", boxX + pad);
-      tooltipProfitEl.setAttribute("y", boxY + 54);
+      tooltipProfitEl.setAttribute("y", boxY + 88);
       tooltipProfitEl.textContent = `Profit: ${formatPercent(
         calculateRunningProfitPercent(startingEquity, point.equity),
-        2
+        0
       )}`;
 
       tooltipDrawdownEl.setAttribute("x", boxX + pad);
-      tooltipDrawdownEl.setAttribute("y", boxY + 71);
+      tooltipDrawdownEl.setAttribute("y", boxY + 105);
       tooltipDrawdownEl.textContent = `Max Drawdown: ${formatPercent(
         ddPoint?.drawdown ?? null,
         2
+      )}`;
+
+      tooltipPFEl.setAttribute("x", boxX + pad);
+      tooltipPFEl.setAttribute("y", boxY + 122);
+      tooltipPFEl.textContent = `Profit Factor: ${formatRatio(
+        point.profitFactor ?? null,
+        2
+      )}`;
+
+      tooltipSharpeEl.setAttribute("x", boxX + pad);
+      tooltipSharpeEl.setAttribute("y", boxY + 139);
+      tooltipSharpeEl.textContent = `Sharpe Ratio: ${formatRatio(
+        point.sharpeRatio ?? null,
+        2
+      )}`;
+
+      tooltipProfitableEl.setAttribute("x", boxX + pad);
+      tooltipProfitableEl.setAttribute("y", boxY + 156);
+      tooltipProfitableEl.textContent = `Profitable: ${formatPercent(
+        point.profitablePercent ?? null,
+        1
       )}`;
     });
 
