@@ -226,7 +226,9 @@
     );
 
     grid.innerHTML = cards.join("");
-    attachCardTiltEffects(grid);
+    if (window.matchMedia("(min-width: 701px)").matches) {
+      attachCardTiltEffects(grid);
+    }
   }
 
   function attachCardTiltEffects(grid) {
