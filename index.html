@@ -57,6 +57,33 @@
                     <svg id="portfolioOverviewChart" viewBox="0 0 1000 340" preserveAspectRatio="xMidYMid meet" aria-label="Aggregated portfolio equity chart"></svg>
                 </div>
                 <div class="portfolio-kpi-grid grid-cards" id="portfolioOverviewCards" aria-live="polite"></div>
+
+                <div class="regime-engine-wrap">
+                    <div class="regime-engine-header">
+                        <span class="regime-engine-title-row">
+                            <span class="regime-engine-title">Risk-Regime Composite Score</span>
+                            <span class="regime-info-tooltip">
+                                <span class="regime-info-icon" aria-label="Info" role="img">!</span>
+                                <span class="regime-info-box" role="tooltip">
+                                    The Risk-Regime Composite Score is a normalized 0–100 indicator that captures the overall market environment by combining trend strength and momentum 
+                                    across multiple time horizons, enriched by a forward-looking volatility component providing an external view of market stress and implied volatility dynamics
+                                    <br><br>
+                                    It integrates a slow (structural), medium (confirmation), and fast (timing) component, along with their directional changes (slopes), into a single regime signal.
+                                    Higher values indicate a stable, risk-on environment with strong and aligned trends, while lower values reflect deteriorating conditions, increased fragility, and a transition toward risk-off.
+                                    <br><br>
+                                    The score is designed for portfolio-level exposure control, helping to determine when risk should be increased, reduced, or avoided, rather than for precise trade entry timing.
+                                </span>
+                            </span>
+                        </span>
+                        <span class="regime-engine-legend">
+                            <span id="regimeLegendStretch" class="regime-legend-item regime-legend-stretch">&#9679; Risk-Regime Stretch Score</span>
+                        </span>
+                    </div>
+                    <div class="regime-engine-chart-wrap">
+                        <svg id="regimeEngineChart" viewBox="0 0 1000 210" preserveAspectRatio="xMidYMid meet"
+                             aria-label="Market regime composite and stretch score chart"></svg>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -73,6 +100,7 @@
     <script src="js/systems.js"></script>
     <script src="js/kpi-config.js"></script>
     <script src="js/equity-overview-chart.js"></script>
+    <script src="js/regime-engine-chart.js"></script>
     <script src="js/landing.js"></script>
 </body>
 

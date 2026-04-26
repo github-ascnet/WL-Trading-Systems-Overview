@@ -282,6 +282,22 @@
           : Promise.resolve(),
         renderSystems(),
       ]);
+
+      // Regime engine panel — loads its own data, X-axis synced via _wlPortfolioTimeRange
+      const regimeContainer = document.getElementById("regimeEngineChart");
+      if (
+        regimeContainer &&
+        typeof window.initRegimeEnginePanel === "function"
+      ) {
+        const tr = window._wlPortfolioTimeRange;
+        window
+          .initRegimeEnginePanel(
+            regimeContainer,
+            tr?.min ?? null,
+            tr?.max ?? null
+          )
+          .catch((err) => console.warn("[landing] Regime panel:", err));
+      }
     } finally {
       const elapsed = Date.now() - loadingStartedAt;
       const remaining = Math.max(0, LOADER_MIN_VISIBLE_MS - elapsed);

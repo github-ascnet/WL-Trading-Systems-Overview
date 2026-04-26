@@ -33,6 +33,8 @@
       // true  → Kurven und KPIs basieren auf der normalisierten Equal-Weight-Kurve (displayEquity)
       // false → Kurven und KPIs basieren auf der rohen Dollarsumme (equity)
       useDisplayEquity: false,
+      // false → Stretch Score im Risk-Regime-Panel ausblenden
+      showRegimeStretchScore: false,
     },
     metrics: {
       apr: {

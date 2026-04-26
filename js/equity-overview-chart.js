@@ -1300,6 +1300,8 @@
       // ── Zoom / Pan State ──────────────────────────────────────────────────
       const fullMin = portfolioSeries[0].timestamp;
       const fullMax = portfolioSeries[portfolioSeries.length - 1].timestamp;
+      // Expose time range so the regime engine panel can synchronise its X-axis
+      global._wlPortfolioTimeRange = { min: fullMin, max: fullMax };
       const zoomState = { min: fullMin, max: fullMax };
       let isDragging = false;
       let dragStartX = null;

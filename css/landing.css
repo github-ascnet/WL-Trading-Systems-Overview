@@ -150,7 +150,7 @@ body::after {
   flex: 1;
   width: min(1200px, 94vw);
   margin: 0 auto;
-  padding: 5px 0 56px;
+  padding: 1px 0 56px;
 }
 
 .site-footer {
@@ -394,13 +394,13 @@ body::after {
   );
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
-  padding: 12px 14px;
+  padding: 8px 14px;
 }
 
 .portfolio-kpi-grid .card-label {
   color: var(--muted);
   font-size: 12px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .portfolio-kpi-grid .card-value {
@@ -651,4 +651,130 @@ body::after {
   .site-footer-right {
     text-align: center;
   }
+}
+
+/* ── Market Regime Engine Panel ─────────────────────────────────── */
+.regime-engine-wrap {
+  margin-top: 20px;
+}
+
+.regime-engine-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.regime-engine-title-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+.regime-engine-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+
+.regime-info-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 9px;
+  top: 1px;
+}
+
+.regime-info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(88, 196, 255, 0.15);
+  border: 1px solid rgba(88, 196, 255, 0.35);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  font-style: normal;
+  font-family: "Segoe UI", sans-serif;
+  cursor: default;
+  line-height: 1;
+  user-select: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.regime-info-tooltip:hover .regime-info-icon {
+  background: rgba(88, 196, 255, 0.28);
+  border-color: var(--accent);
+}
+
+.regime-info-box {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  z-index: 200;
+  width: 400px;
+  max-width: min(400px, 90vw);
+  background: #1a2235;
+  border: 1px solid rgba(88, 196, 255, 0.22);
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: var(--text);
+  font-size: 12.5px;
+  line-height: 1.6;
+  font-weight: 400;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+  white-space: normal;
+  word-wrap: break-word;
+  pointer-events: none;
+}
+
+.regime-info-tooltip:hover .regime-info-box {
+  display: block;
+}
+
+.regime-engine-legend {
+  display: flex;
+  gap: 26px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.regime-legend-item {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.regime-legend-composite {
+  color: #58c4ff;
+}
+
+.regime-legend-stretch {
+  color: #f5d97a;
+}
+
+.regime-engine-chart-wrap {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 25, 40, 0.7),
+    rgba(10, 18, 30, 0.5)
+  );
+}
+
+.regime-engine-chart-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
