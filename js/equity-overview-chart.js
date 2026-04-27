@@ -1225,7 +1225,7 @@
 
       tooltipDrawdownEl.setAttribute("x", boxX + pad);
       tooltipDrawdownEl.setAttribute("y", boxY + 105);
-      tooltipDrawdownEl.textContent = `Max Drawdown: ${formatPercent(
+      tooltipDrawdownEl.textContent = `Drawdown: ${formatPercent(
         ddPoint?.drawdown ?? null,
         2
       )}`;

@@ -2,9 +2,9 @@
   "use strict";
 
   const W = 1000;
-  const H = 210;
+  const H = 160;
   // left: enough for 3-digit Y labels at font-size 9.5; right: space for state labels outside plot
-  const M = { top: 22, right: 58, bottom: 26, left: 46 };
+  const M = { top: 22, right: 58, bottom: 26, left: 30 };
   const CHART_W = W - M.left - M.right;
   const CHART_H = H - M.top - M.bottom;
 

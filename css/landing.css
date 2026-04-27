@@ -213,7 +213,7 @@ body::after {
   background: linear-gradient(180deg, var(--panel) 0%, #1a202b 100%);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 16px;
+  padding: 16px 16px 8px;
   box-shadow: var(--shadow);
 }
 
@@ -655,7 +655,7 @@ body::after {
 
 /* ── Market Regime Engine Panel ─────────────────────────────────── */
 .regime-engine-wrap {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .regime-engine-header {
