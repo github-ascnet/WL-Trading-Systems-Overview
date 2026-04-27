@@ -1,10 +1,10 @@
 ﻿{
-  "strategyName": "SqqqHybridMomentumReversion",
+  "strategyName": "Volatility Cycle Catcher",
   "strategyDescription": "Two complementary trading logics are combined: early momentum entries capture emerging stress phases, then switch to a countertrend approach on overextended moves to exploit rebounds. This aims to cover the full volatility cycle of a selloff—from initial impulse to short-term exhaustion—but remains prone to false signals in calm or clearly bullish markets.",
   "symbolUniverse": "SQQQ;WealthData",
   "benchmark": "SPY",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-27 14:16:12",
+  "lastUpdate": "2026-04-27 15:05:16",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-26",
   "apr": 21.5415441179164,
