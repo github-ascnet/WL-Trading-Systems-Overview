@@ -1,10 +1,10 @@
 ﻿{
-  "strategyName": "MyStrategy",
+  "strategyName": "Bear Market Reversion",
   "strategyDescription": "A bidirectional, trend-filtered mean-reversion approach that trades short-term overextensions within a broader trend, systematically exploiting quick moves back to the mean. Its strength lies in generating a robust edge in falling markets through short setups capturing technical rebounds, allowing it to benefit not only from bull phases but also from structural downtrends over the long term.",
   "symbolUniverse": "SOXL;WealthData",
   "benchmark": "SMH",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-27 14:12:13",
+  "lastUpdate": "2026-04-27 15:05:07",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-26",
   "apr": 23.5796233844904,
