@@ -1,10 +1,10 @@
 ﻿{
-  "strategyName": "OnePercentCadillacStop",
+  "strategyName": "Monday Anchor Reversion",
   "strategyDescription": "Uses short-term overextensions, combining a volatility filter with a fixed weekly anchor to monetize quick mean-reversion moves. It achieves high returns through aggressive profit-taking but is highly dependent on stable market regimes and vulnerable to strong downtrends and shifts in volatility regimes.",
   "symbolUniverse": "TQQQ;WealthData",
   "benchmark": "TQQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-27 14:04:02",
+  "lastUpdate": "2026-04-27 15:03:32",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-26",
   "apr": 118.030393373754,
