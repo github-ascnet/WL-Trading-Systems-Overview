@@ -1,10 +1,10 @@
 ﻿{
-  "strategyName": "StrongVolumeTrendStrategy",
+  "strategyName": "Tech Trend-Follower",
   "strategyDescription": "A trend-following, volume-weighted long-only approach that uses a market regime filter to invest selectively in strong, confirmed uptrends, enabling high return potential while reducing false signals. Risk mainly comes from slightly delayed exits and sudden trend reversals, which can cause drawdowns, while the long-term effect is typically a stable, trend-driven equity curve with clear regime shifts and limited overtrading.",
   "symbolUniverse": "NASDAQ 100;WealthData",
   "benchmark": "QQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-04-27 14:04:13",
+  "lastUpdate": "2026-04-27 15:03:42",
   "startingCapital": 100000,
   "backtestStartDate": "2016-04-26",
   "apr": 45.0520187919146,
