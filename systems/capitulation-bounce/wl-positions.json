@@ -206,7 +206,7 @@
   {"symbol":"XEL","entryDate":"2023-08-21","exitDate":"2023-08-28","entryPrice":58.13,"exitPrice":58.13,"qty":912,"pl":-4,"plPercent":-0.007545097045038,"isOpen":false },
   {"symbol":"KHC","entryDate":"2023-08-21","exitDate":"2023-08-23","entryPrice":33.62,"exitPrice":33.62,"qty":1576,"pl":-4,"plPercent":-0.007549289309904,"isOpen":false },
   {"symbol":"PEP","entryDate":"2023-08-21","exitDate":"2023-08-23","entryPrice":177.73,"exitPrice":177.73,"qty":297,"pl":-4,"plPercent":-0.007577794107924,"isOpen":false },
-  {"symbol":"QCOM","entryDate":"2023-08-21","exitDate":"2023-08-22","entryPrice":109.9,"exitPrice":111.53,"qty":482,"pl":781.659999999998,"plPercent":1.47561532740061,"isOpen":false },
+  {"symbol":"QCOM","entryDate":"2023-08-21","exitDate":"2023-08-22","entryPrice":109.9,"exitPrice":111.47,"qty":482,"pl":752.739999999997,"plPercent":1.42102024095839,"isOpen":false },
   {"symbol":"AAPL","entryDate":"2023-08-18","exitDate":"2023-08-21","entryPrice":172,"exitPrice":175.09,"qty":306,"pl":941.540000000001,"plPercent":1.78891168870649,"isOpen":false },
   {"symbol":"TSLA","entryDate":"2023-08-18","exitDate":"2023-08-21","entryPrice":213.83,"exitPrice":221.55,"qty":243,"pl":1871.96,"plPercent":3.60264653914334,"isOpen":false },
   {"symbol":"CSX","entryDate":"2023-08-18","exitDate":"2023-08-21","entryPrice":30.14,"exitPrice":30.73,"qty":1760,"pl":1034.4,"plPercent":1.94999095131809,"isOpen":false },
@@ -531,7 +531,7 @@
   {"symbol":"BKNG","entryDate":"2018-12-21","exitDate":"2018-12-26","entryPrice":68.1848018854258,"exitPrice":68.1848018854258,"qty":451,"pl":-4,"plPercent":-0.013007560857609,"isOpen":false },
   {"symbol":"GILD","entryDate":"2018-12-21","exitDate":"2019-01-03","entryPrice":64.3,"exitPrice":66.29,"qty":478,"pl":947.220000000004,"plPercent":3.08185349792098,"isOpen":false },
   {"symbol":"PAYX","entryDate":"2018-12-21","exitDate":"2018-12-27","entryPrice":64.96,"exitPrice":64.96,"qty":473,"pl":-4,"plPercent":-0.013018256803341,"isOpen":false },
-  {"symbol":"STX","entryDate":"2018-12-20","exitDate":"2018-12-21","entryPrice":36,"exitPrice":36.59,"qty":851,"pl":498.090000000003,"plPercent":1.62583235409323,"isOpen":false },
+  {"symbol":"STX","entryDate":"2018-12-20","exitDate":"2018-12-21","entryPrice":36.0000018020221,"exitPrice":36.5900006142124,"qty":851,"pl":498.088989173959,"plPercent":1.62582897323911,"isOpen":false },
   {"symbol":"ADP","entryDate":"2018-12-20","exitDate":"2018-12-21","entryPrice":129.73,"exitPrice":129.75,"qty":236,"pl":0.720000000002415,"plPercent":0.002351690015908,"isOpen":false },
   {"symbol":"MNST","entryDate":"2018-12-20","exitDate":"2018-12-21","entryPrice":24.72,"exitPrice":24.72,"qty":1246,"pl":-4,"plPercent":-0.012986540749168,"isOpen":false },
   {"symbol":"MU","entryDate":"2018-12-20","exitDate":"2018-12-21","entryPrice":31.41,"exitPrice":31.52,"qty":980,"pl":103.799999999999,"plPercent":0.337212248796365,"isOpen":false },
@@ -539,7 +539,7 @@
   {"symbol":"FAST","entryDate":"2018-12-19","exitDate":"2018-12-28","entryPrice":12.87361894,"exitPrice":12.88101191,"qty":2443,"pl":14.0610257099993,"plPercent":0.044708786834532,"isOpen":false },
   {"symbol":"CMCSA","entryDate":"2018-12-19","exitDate":"2018-12-21","entryPrice":35.65,"exitPrice":35.65,"qty":882,"pl":-4,"plPercent":-0.012721311058318,"isOpen":false },
   {"symbol":"MAR","entryDate":"2018-12-19","exitDate":"2018-12-28","entryPrice":108.24,"exitPrice":108.24,"qty":290,"pl":-4,"plPercent":-0.012743074139205,"isOpen":false },
-  {"symbol":"STX","entryDate":"2018-12-18","exitDate":"2018-12-19","entryPrice":37.17,"exitPrice":37.41,"qty":837,"pl":196.879999999996,"plPercent":0.632824932685195,"isOpen":false },
+  {"symbol":"STX","entryDate":"2018-12-18","exitDate":"2018-12-19","entryPrice":37.1700018232066,"exitPrice":37.4100003155507,"qty":837,"pl":196.878738092035,"plPercent":0.632820845535616,"isOpen":false },
   {"symbol":"ADP","entryDate":"2018-12-18","exitDate":"2018-12-19","entryPrice":132.47,"exitPrice":132.47,"qty":236,"pl":-4,"plPercent":-0.012794710155034,"isOpen":false },
   {"symbol":"MNST","entryDate":"2018-12-18","exitDate":"2018-12-19","entryPrice":25.625,"exitPrice":25.64,"qty":1223,"pl":14.3450000000007,"plPercent":0.045773088965561,"isOpen":false },
   {"symbol":"PAYX","entryDate":"2018-12-18","exitDate":"2018-12-19","entryPrice":64.95,"exitPrice":64.95,"qty":482,"pl":-4,"plPercent":-0.012777144244376,"isOpen":false },
@@ -650,6 +650,6 @@
   {"symbol":"MSFT","entryDate":"2016-06-16","exitDate":"2016-06-17","entryPrice":49.52,"exitPrice":50.41,"qty":502,"pl":442.779999999997,"plPercent":1.78116290894579,"isOpen":false },
   {"symbol":"NXPI","entryDate":"2016-06-16","exitDate":"2016-06-17","entryPrice":85.17,"exitPrice":86.23,"qty":290,"pl":303.400000000001,"plPercent":1.2283748932156,"isOpen":false },
   {"symbol":"ADBE","entryDate":"2016-06-16","exitDate":"2016-06-17","entryPrice":96.5,"exitPrice":97.25,"qty":257,"pl":188.75,"plPercent":0.761073365456342,"isOpen":false },
-  {"symbol":"ADI","entryDate":"2016-06-15","exitDate":"2016-06-20","entryPrice":57.07,"exitPrice":57.07,"qty":438,"pl":-4,"plPercent":-0.016002137885622,"isOpen":false },
-  {"symbol":"NFLX","entryDate":"2016-06-15","exitDate":"2016-06-16","entryPrice":9.41200065612793,"exitPrice":9.41800061735104,"qty":2656,"pl":11.9358970085733,"plPercent":0.047746884970689,"isOpen":false }
+  {"symbol":"NFLX","entryDate":"2016-06-15","exitDate":"2016-06-16","entryPrice":9.41200065612793,"exitPrice":9.41800061735104,"qty":2656,"pl":11.9358970085733,"plPercent":0.047746884970689,"isOpen":false },
+  {"symbol":"ADI","entryDate":"2016-06-15","exitDate":"2016-06-20","entryPrice":57.07,"exitPrice":57.07,"qty":438,"pl":-4,"plPercent":-0.016002137885622,"isOpen":false }
 ]
