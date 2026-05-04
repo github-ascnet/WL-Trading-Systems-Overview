@@ -1,5 +1,5 @@
 ﻿[
-  {"symbol":"SOXL","entryDate":"2026-04-29","exitDate":null,"entryPrice":114.78,"exitPrice":null,"qty":7929,"pl":96731.8,"plPercent":10.6288096893032,"isOpen":true },
+  {"symbol":"SOXL","entryDate":"2026-04-29","exitDate":"2026-05-01","entryPrice":114.78,"exitPrice":124.21,"qty":7929,"pl":74766.4699999999,"plPercent":8.21527750720032,"isOpen":false },
   {"symbol":"SOXL","entryDate":"2026-03-04","exitDate":"2026-03-10","entryPrice":55.95,"exitPrice":53.36,"qty":17092,"pl":-44272.2800000001,"plPercent":-4.62955143452236,"isOpen":false },
   {"symbol":"SOXL","entryDate":"2026-02-05","exitDate":"2026-02-09","entryPrice":51.26,"exitPrice":59.99,"qty":14746,"pl":128728.58,"plPercent":17.0302940694446,"isOpen":false },
   {"symbol":"SOXL","entryDate":"2026-01-02","exitDate":"2026-01-05","entryPrice":45.08,"exitPrice":50.39,"qty":16569,"pl":87977.39,"plPercent":11.7785239248224,"isOpen":false },

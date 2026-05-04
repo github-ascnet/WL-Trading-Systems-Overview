@@ -1,4 +1,3 @@
 ﻿[
-  {"symbol":"SOXL","action":"SELL","isEntry":"FALSE","signalDate":"2026-04-30 00:00:00","entryPrice":103.302,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Stop loss Based Exit","orderType":"Stop","signalStatus":"Staged","weight":0.963392342674349},
-  {"symbol":"SOXL","action":"SELL","isEntry":"FALSE","signalDate":"2026-04-30 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Exit Long","orderType":"Market","signalStatus":"Staged","weight":0.952185282892415}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-05-04 14:12:09"}
 ]
