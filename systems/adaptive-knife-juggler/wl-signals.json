@@ -1,0 +1,6 @@
+﻿[
+  {"symbol":"INTC","action":"BUY","isEntry":"TRUE","signalDate":"2026-05-07 00:00:00","entryPrice":107.894240265691,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.876820319496376},
+  {"symbol":"DDOG","action":"BUY","isEntry":"TRUE","signalDate":"2026-05-07 00:00:00","entryPrice":177.166065766849,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.825111023907317},
+  {"symbol":"STX","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-07 00:00:00","entryPrice":796.212771238464,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.746148954818105},
+  {"symbol":"QCOM","action":"BUY","isEntry":"TRUE","signalDate":"2026-05-07 00:00:00","entryPrice":185.355943979466,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.403883019515159}
+]
