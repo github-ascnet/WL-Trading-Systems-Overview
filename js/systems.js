@@ -4,6 +4,14 @@ const SYSTEMS = [
     dataPath: "./systems/strong-volume-trend",
   },
   {
+    id: "adaptive-knife-juggler",
+    dataPath: "./systems/adaptive-knife-juggler",
+  },
+  {
+    id: "capitulation-bounce",
+    dataPath: "./systems/capitulation-bounce",
+  },
+  {
     id: "short-burst-momentum",
     dataPath: "./systems/short-burst-momentum",
   },
@@ -18,10 +26,6 @@ const SYSTEMS = [
   {
     id: "multifactor-fusion",
     dataPath: "./systems/multifactor-fusion",
-  },
-  {
-    id: "capitulation-bounce",
-    dataPath: "./systems/capitulation-bounce",
   },
   {
     id: "bear-market-reversion",
