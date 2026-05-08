@@ -1,6 +1,6 @@
 ﻿{
   "strategyName": "Adaptive Knife Juggler",
-  "strategyDescription": "Enter a description for the Strategy here.",
+  "strategyDescription": "An adaptive multi-symbol pullback rotation system that ranks high-momentum instruments and executes volatility-adjusted limit entries during short-term retracements. It combines momentum continuation with volatility-aware execution and portfolio-level position constraints, aiming to capture aggressive upside movements while controlling exposure across multiple concurrent positions.",
   "symbolUniverse": "NASDAQ 100;WealthData",
   "benchmark": "QQQ",
   "mode": "Long Only",
