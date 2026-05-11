@@ -4,7 +4,7 @@
   "symbolUniverse": "SQQQ;WealthData",
   "benchmark": "SPY",
   "mode": "Long Only",
-  "lastUpdate": "2026-05-11 10:58:39",
+  "lastUpdate": "2026-05-11 17:31:55",
   "startingCapital": 100000,
   "backtestStartDate": "2016-05-11",
   "apr": 21.5480422491475,
