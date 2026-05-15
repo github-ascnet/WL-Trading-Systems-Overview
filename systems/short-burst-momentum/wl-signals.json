@@ -1,5 +1,5 @@
 ﻿[
-  {"symbol":"COPX","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-13 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.64535525970739},
-  {"symbol":"SMH","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-13 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.392304778666914},
-  {"symbol":"BOTZ","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-13 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.157496434857737}
+  {"symbol":"COPX","action":"BUY","isEntry":"TRUE","signalDate":"2026-05-14 00:00:00","entryPrice":90.2737972259522,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.342340634431608},
+  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-05-14 00:00:00","entryPrice":584.123427124023,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.246406015135883},
+  {"symbol":"BOTZ","action":"BUY","isEntry":"TRUE","signalDate":"2026-05-14 00:00:00","entryPrice":41.5311989212036,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.233185608325015}
 ]
