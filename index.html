@@ -97,11 +97,38 @@
         </div>
     </footer>
 
-    <script src="js/systems.js"></script>
-    <script src="js/kpi-config.js"></script>
-    <script src="js/equity-overview-chart.js"></script>
-    <script src="js/regime-engine-chart.js"></script>
-    <script src="js/landing.js"></script>
+    <script>
+    (function loadScriptsWithoutCache() {
+        const cacheBuster = Date.now();
+        const scripts = [
+            "js/systems.js",
+            "js/kpi-config.js",
+            "js/equity-overview-chart.js",
+            "js/regime-engine-chart.js",
+            "js/landing.js"
+        ];
+
+        let index = 0;
+
+        function loadNext() {
+            if (index >= scripts.length) return;
+
+            const script = document.createElement("script");
+            script.src = scripts[index] + "?v=" + cacheBuster;
+            script.onload = function () {
+                index += 1;
+                loadNext();
+            };
+            script.onerror = function () {
+                console.error("Failed to load script:", scripts[index]);
+            };
+
+            document.body.appendChild(script);
+        }
+
+        loadNext();
+    })();
+    </script>
 </body>
 
 </html>
