@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"MAGX","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-19 00:00:00","entryPrice":60.0751516532898,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L","orderType":"Limit","signalStatus":"Staged","weight":0.548180523759208}
+  {"symbol":"FNGG","action":"BUY","isEntry":"TRUE","signalDate":"2026-05-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Market","signalStatus":"Staged","weight":0.991633773520701},
+  {"symbol":"CHAU","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L+","orderType":"Market","signalStatus":"Staged","weight":0.986391487598002},
+  {"symbol":"UBOT","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-20 00:00:00","entryPrice":29.2446505260468,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L","orderType":"Limit","signalStatus":"Staged","weight":0.982682751478099},
+  {"symbol":"FNGO","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L+","orderType":"Market","signalStatus":"Staged","weight":0.963132338695545}
 ]
