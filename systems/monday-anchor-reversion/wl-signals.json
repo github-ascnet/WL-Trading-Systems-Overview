@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-27 00:00:00","entryPrice":87.2122974,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Aa","orderType":"Limit","signalStatus":"Staged","weight":0.480454632327539}
+  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-27 00:00:00","entryPrice":87.2122974,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Aa","orderType":"Limit","signalStatus":"Staged","weight":0.373406243725835}
 ]
