@@ -1,3 +1,3 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-05-22 14:14:01"}
+  {"symbol":"BTC.USD","action":"SELL","isEntry":"FALSE","signalDate":"2026-05-31 00:00:00","entryPrice":72412.83,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Stop","signalStatus":"Staged","weight":0.035339675531936}
 ]
