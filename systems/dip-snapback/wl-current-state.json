@@ -4,7 +4,7 @@
   "symbolUniverse": "TQQQ;WealthData",
   "benchmark": "TQQQ",
   "mode": "Long Only",
-  "lastUpdate": "2026-06-08 09:41:34",
+  "lastUpdate": "2026-06-09 09:06:02",
   "startingCapital": 100000,
   "backtestStartDate": "2016-06-08",
   "apr": 64.0869458440786,
