@@ -1,4 +1,6 @@
 ﻿[
+  {"symbol":"NFLX","entryDate":"2026-06-08","exitDate":"2026-06-09","entryPrice":81.57,"exitPrice":82.14,"qty":849,"pl":479.930000000006,"plPercent":0.693010389596522,"isOpen":false },
+  {"symbol":"SBUX","entryDate":"2026-06-08","exitDate":"2026-06-09","entryPrice":94.84,"exitPrice":95.15,"qty":732,"pl":222.920000000002,"plPercent":0.321104511941887,"isOpen":false },
   {"symbol":"CTAS","entryDate":"2026-03-31","exitDate":"2026-04-01","entryPrice":168.66,"exitPrice":169,"qty":409,"pl":135.060000000001,"plPercent":0.195790376437661,"isOpen":false },
   {"symbol":"MNST","entryDate":"2026-03-31","exitDate":"2026-04-01","entryPrice":71.32,"exitPrice":72.42,"qty":968,"pl":1060.80000000001,"plPercent":1.53655043269076,"isOpen":false },
   {"symbol":"CSGP","entryDate":"2026-03-31","exitDate":"2026-04-06","entryPrice":40.88,"exitPrice":40.88,"qty":1690,"pl":-4,"plPercent":-0.005789784504221,"isOpen":false },
