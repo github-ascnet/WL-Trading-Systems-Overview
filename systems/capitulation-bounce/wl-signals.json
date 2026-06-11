@@ -1,5 +1,6 @@
 ﻿[
-  {"symbol":"NFLX","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-09 00:00:00","entryPrice":81.41,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-29.9752621445276},
-  {"symbol":"MSTR","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-09 00:00:00","entryPrice":117.02,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-31.0123426677507},
-  {"symbol":"TMUS","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-09 00:00:00","entryPrice":179.46,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.9328905159842}
+  {"symbol":"MSTR","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-10 00:00:00","entryPrice":116.26,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.965230694008518},
+  {"symbol":"TMUS","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-10 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.841037566065016},
+  {"symbol":"NFLX","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-10 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.387500750465097},
+  {"symbol":"CEG","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-10 00:00:00","entryPrice":242.3,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-32.1800742952165}
 ]
