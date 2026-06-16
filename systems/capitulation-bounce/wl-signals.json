@@ -1,5 +1,3 @@
 ﻿[
-  {"symbol":"MSTR","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-11 00:00:00","entryPrice":120.15,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-34.2567214470755},
-  {"symbol":"META","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-11 00:00:00","entryPrice":568.43,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.0451832806564},
-  {"symbol":"CEG","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-11 00:00:00","entryPrice":246.71,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.2292967532175}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-06-16 09:10:03"}
 ]
