@@ -1,3 +1,4 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-06-11 09:03:56"}
+  {"symbol":"COPX","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-15 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.238134069802171},
+  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-15 00:00:00","entryPrice":653.571,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.066608691898099}
 ]
