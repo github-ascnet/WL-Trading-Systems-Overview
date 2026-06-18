@@ -1,4 +1,4 @@
 ﻿[
-  {"symbol":"COPX","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-16 00:00:00","entryPrice":90.6879,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.309792072104287},
-  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-16 00:00:00","entryPrice":622.16,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.117622951878924}
+  {"symbol":"COPX","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-17 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.926606627752431},
+  {"symbol":"SMH","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-17 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.895204451218407}
 ]
