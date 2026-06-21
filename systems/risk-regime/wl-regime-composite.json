@@ -2399,9 +2399,10 @@
   {"date":"2026-06-05","value":60.35164968,"state":"RiskOn"},
   {"date":"2026-06-08","value":56.13073635,"state":"RiskOn"},
   {"date":"2026-06-09","value":52.28815023,"state":"RiskOn"},
-  {"date":"2026-06-10","value":50.19443221,"state":"RiskOn"},
-  {"date":"2026-06-11","value":46.48500029,"state":"RiskOn"},
-  {"date":"2026-06-12","value":51.3184908,"state":"RiskOn"},
+  {"date":"2026-06-10","value":48.83591705,"state":"RiskOn"},
+  {"date":"2026-06-11","value":45.91895231,"state":"RiskOn"},
+  {"date":"2026-06-12","value":50.75244282,"state":"RiskOn"},
   {"date":"2026-06-15","value":51.1614817,"state":"RiskOn"},
-  {"date":"2026-06-16","value":52.40319334,"state":"RiskOn"}
+  {"date":"2026-06-16","value":51.17106466,"state":"RiskOn"},
+  {"date":"2026-06-17","value":53.92223043,"state":"RiskOn"}
 ]

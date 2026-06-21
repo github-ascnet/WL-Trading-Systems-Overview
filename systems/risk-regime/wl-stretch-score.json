@@ -2460,6 +2460,7 @@
   {"date":"2026-06-10","value":0,"state":"ExtremeDown"},
   {"date":"2026-06-11","value":0,"state":"ExtremeDown"},
   {"date":"2026-06-12","value":14.77763506,"state":"ExtremeDown"},
-  {"date":"2026-06-15","value":75.3850568,"state":"Up"},
-  {"date":"2026-06-16","value":79.59311048,"state":"Up"}
+  {"date":"2026-06-15","value":88.40416041,"state":"ExtremeUp"},
+  {"date":"2026-06-16","value":23.20983717,"state":"Down"},
+  {"date":"2026-06-17","value":23.78687053,"state":"Down"}
 ]
