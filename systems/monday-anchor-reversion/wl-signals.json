@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-22 00:00:00","entryPrice":89.0718,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L-RSI=46.76","orderType":"Limit","signalStatus":"Staged","weight":0.128644316169793}
+  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-29 00:00:00","entryPrice":80.1375216,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Aa","orderType":"Limit","signalStatus":"Staged","weight":0.602765738974477}
 ]
