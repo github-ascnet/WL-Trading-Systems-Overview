@@ -1,3 +1,3 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-06-29 09:03:53"}
+  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-29 00:00:00","entryPrice":638.2998,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.504798087191526}
 ]
