@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"AMAT","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-30 00:00:00","entryPrice":686.842141766558,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.986734859545398},
-  {"symbol":"KDP","action":"SELL","isEntry":"FALSE","signalDate":"2026-06-30 00:00:00","entryPrice":34.0227728035922,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.842110137802325},
-  {"symbol":"PANW","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-30 00:00:00","entryPrice":324.196085316611,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.840493047564744},
-  {"symbol":"ALAB","action":"BUY","isEntry":"TRUE","signalDate":"2026-06-30 00:00:00","entryPrice":448.864199045893,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.781921041037054}
+  {"symbol":"CCEP","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-01 00:00:00","entryPrice":103.187227158074,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.890896586952915},
+  {"symbol":"AEP","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-01 00:00:00","entryPrice":138.648978264789,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.851389063502924},
+  {"symbol":"AMAT","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-01 00:00:00","entryPrice":749.41921532177,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.844607103841591},
+  {"symbol":"FTNT","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-01 00:00:00","entryPrice":151.128569269479,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.822511196216384}
 ]
