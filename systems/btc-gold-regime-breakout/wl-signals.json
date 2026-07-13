@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"BTC.USD","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-05 00:00:00","entryPrice":63943.16,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Stop","signalStatus":"Staged","weight":0.938599754583614}
+  {"symbol":"BTC.USD","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-12 00:00:00","entryPrice":61264.19,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Stop","signalStatus":"Staged","weight":0.889231362550597}
 ]

@@ -1,4 +1,5 @@
 ﻿[
+  {"symbol":"BTC.USD","entryDate":"2026-07-12","exitDate":null,"entryPrice":63943.16,"exitPrice":null,"qty":198.70371865,"pl":-39073.1121981504,"plPercent":-0.307523220993299,"isOpen":true },
   {"symbol":"BTC.USD","entryDate":"2026-03-22","exitDate":"2026-06-07","entryPrice":73942.21,"exitPrice":72412.83,"qty":175.46265915,"pl":-268353.081650825,"plPercent":-2.06837582603122,"isOpen":false },
   {"symbol":"BTC.USD","entryDate":"2025-10-12","exitDate":"2025-10-19","entryPrice":125748.82,"exitPrice":105833.74,"qty":122.5894577,"pl":-2441382.85725211,"plPercent":-15.8372163088554,"isOpen":false },
   {"symbol":"BTC.USD","entryDate":"2025-07-06","exitDate":"2025-08-24","entryPrice":108538.37,"exitPrice":116865.91,"qty":131.90744565,"pl":1098460.5299482,"plPercent":7.67241084946019,"isOpen":false },
