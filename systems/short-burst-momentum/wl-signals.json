@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"COPX","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-14 00:00:00","entryPrice":79.5072,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.577342160978724}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-07-16 09:04:04"}
 ]
