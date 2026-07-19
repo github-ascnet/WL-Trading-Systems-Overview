@@ -1,3 +1,6 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-07-16 09:10:04"}
+  {"symbol":"RKLB","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-17 00:00:00","entryPrice":67.62,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-31.2127473104125},
+  {"symbol":"SPCX","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-17 00:00:00","entryPrice":123.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-34.1105426586422},
+  {"symbol":"FER","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-17 00:00:00","entryPrice":63.59,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.4250105817586},
+  {"symbol":"MRVL","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-17 00:00:00","entryPrice":188.68,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.7170909774659}
 ]
