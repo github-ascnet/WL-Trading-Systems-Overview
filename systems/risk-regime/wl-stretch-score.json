@@ -2461,5 +2461,6 @@
   {"date":"2026-07-14","value":77.14503244,"state":"Up"},
   {"date":"2026-07-15","value":17.15746824,"state":"Down"},
   {"date":"2026-07-16","value":10.23135904,"state":"ExtremeDown"},
-  {"date":"2026-07-17","value":0,"state":"ExtremeDown"}
+  {"date":"2026-07-17","value":0,"state":"ExtremeDown"},
+  {"date":"2026-07-20","value":0,"state":"ExtremeDown"}
 ]

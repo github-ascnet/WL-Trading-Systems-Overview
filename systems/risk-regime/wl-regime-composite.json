@@ -2400,5 +2400,6 @@
   {"date":"2026-07-14","value":60.07721445,"state":"RiskOn"},
   {"date":"2026-07-15","value":59.9492702,"state":"RiskOn"},
   {"date":"2026-07-16","value":59.21602597,"state":"RiskOn"},
-  {"date":"2026-07-17","value":48.65899074,"state":"RiskOn"}
+  {"date":"2026-07-17","value":48.65899074,"state":"RiskOn"},
+  {"date":"2026-07-20","value":47.52134213,"state":"RiskOn"}
 ]
