@@ -1,4 +1,5 @@
 ﻿[
+  {"symbol":"TQQQ","entryDate":"2026-07-27","exitDate":null,"entryPrice":66,"exitPrice":null,"qty":24717,"pl":-64266.2,"plPercent":-3.93951653934662,"isOpen":true },
   {"symbol":"TQQQ","entryDate":"2026-07-20","exitDate":"2026-07-24","entryPrice":69.34,"exitPrice":64,"qty":24190,"pl":-129178.6,"plPercent":-7.70142105218601,"isOpen":false },
   {"symbol":"TQQQ","entryDate":"2026-07-10","exitDate":"2026-07-17","entryPrice":77.03,"exitPrice":67.53,"qty":22519,"pl":-213934.5,"plPercent":-12.3330879239011,"isOpen":false },
   {"symbol":"TQQQ","entryDate":"2026-07-06","exitDate":"2026-07-09","entryPrice":75.51,"exitPrice":74.37735,"qty":23583,"pl":-26715.28495,"plPercent":-1.50022462416208,"isOpen":false },
