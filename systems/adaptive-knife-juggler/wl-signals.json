@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"EA","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":209.612074420487,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.693232361804474},
-  {"symbol":"CTAS","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-28 00:00:00","entryPrice":212.240333062927,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.633758598943306},
-  {"symbol":"PCAR","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-28 00:00:00","entryPrice":130.536539184355,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.511469450862614},
-  {"symbol":"AMGN","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-28 00:00:00","entryPrice":380.955763714194,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.502363249522014}
+  {"symbol":"ALAB","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":308.009099188893,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.337074914018234}
 ]
