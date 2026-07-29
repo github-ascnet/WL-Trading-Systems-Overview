@@ -1,6 +1,9 @@
 ﻿[
+  {"symbol":"TSLA","entryDate":"2026-07-28","exitDate":null,"entryPrice":305.5,"exitPrice":null,"qty":191,"pl":368.54,"plPercent":0.631596987172346,"isOpen":true },
+  {"symbol":"SNPS","entryDate":"2026-07-28","exitDate":null,"entryPrice":388.99,"exitPrice":null,"qty":152,"pl":-787.840000000002,"plPercent":-1.33246558902205,"isOpen":true },
+  {"symbol":"APP","entryDate":"2026-07-28","exitDate":null,"entryPrice":412.73,"exitPrice":null,"qty":143,"pl":783.070000000001,"plPercent":1.32677876239042,"isOpen":true },
   {"symbol":"APP","entryDate":"2026-07-24","exitDate":"2026-07-27","entryPrice":397.7,"exitPrice":404,"qty":147,"pl":922.100000000002,"plPercent":1.577266561641,"isOpen":false },
-  {"symbol":"SPCX","entryDate":"2026-07-24","exitDate":null,"entryPrice":115.84,"exitPrice":null,"qty":497,"pl":-1164.98,"plPercent":-2.02350150627522,"isOpen":true },
+  {"symbol":"SPCX","entryDate":"2026-07-24","exitDate":"2026-07-28","entryPrice":115.84,"exitPrice":115.84,"qty":497,"pl":-4,"plPercent":-0.006947763931656,"isOpen":false },
   {"symbol":"SNPS","entryDate":"2026-07-24","exitDate":"2026-07-27","entryPrice":373.52,"exitPrice":385.24,"qty":157,"pl":1836.04,"plPercent":3.13089588054017,"isOpen":false },
   {"symbol":"APP","entryDate":"2026-07-21","exitDate":"2026-07-22","entryPrice":420.06,"exitPrice":424.64,"qty":135,"pl":614.299999999998,"plPercent":1.08326676435994,"isOpen":false },
   {"symbol":"LIN","entryDate":"2026-07-21","exitDate":"2026-07-24","entryPrice":512.05,"exitPrice":512.05,"qty":112,"pl":-4,"plPercent":-0.006974765299148,"isOpen":false },

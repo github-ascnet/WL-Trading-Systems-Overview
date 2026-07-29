@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"SPCX","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-27 00:00:00","entryPrice":115.84,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.924407397973317},
-  {"symbol":"TSLA","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-27 00:00:00","entryPrice":309.22,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-27.3412335523836},
-  {"symbol":"SNPS","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-27 00:00:00","entryPrice":388.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.461004569625},
-  {"symbol":"APP","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-27 00:00:00","entryPrice":412.73,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-37.9986434662055}
+  {"symbol":"TSLA","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.449220991623577},
+  {"symbol":"SNPS","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":388.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.144872139335589},
+  {"symbol":"APP","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.1014372634671},
+  {"symbol":"GOOGL","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-28 00:00:00","entryPrice":333.71,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-41.7149261220927}
 ]
