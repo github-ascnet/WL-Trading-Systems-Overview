@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"ALAB","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":308.009099188893,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.337074914018234}
+  {"symbol":"PYPL","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-29 00:00:00","entryPrice":57.56910928582,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.884582784187498},
+  {"symbol":"CSX","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-29 00:00:00","entryPrice":52.5333031276669,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.842395088419773},
+  {"symbol":"CTAS","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-29 00:00:00","entryPrice":212.201753909781,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.836079430137783},
+  {"symbol":"EA","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-29 00:00:00","entryPrice":209.609970699462,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.536759623055548}
 ]
