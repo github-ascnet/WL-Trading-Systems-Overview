@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"TSLA","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.449220991623577},
-  {"symbol":"SNPS","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":388.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.144872139335589},
-  {"symbol":"APP","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-28 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.1014372634671},
-  {"symbol":"GOOGL","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-28 00:00:00","entryPrice":333.71,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-41.7149261220927}
+  {"symbol":"META","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-29 00:00:00","entryPrice":593.41,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.538740462694918},
+  {"symbol":"GOOGL","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-29 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.452111518334615},
+  {"symbol":"SNPS","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-29 00:00:00","entryPrice":388.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.11346807040419},
+  {"symbol":"TSLA","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-29 00:00:00","entryPrice":298.32,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-25.4173499805872}
 ]
