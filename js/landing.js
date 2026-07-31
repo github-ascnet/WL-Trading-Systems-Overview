@@ -37,7 +37,31 @@
     if (!response.ok) {
       throw new Error(`Could not load file: ${path} (${response.status})`);
     }
-    return response.json();
+    const rawText = await response.text();
+
+    try {
+      return JSON.parse(rawText);
+    } catch (parseError) {
+      // Some upstream exports may contain bare NaN values, which are invalid JSON.
+      const sanitizedText = rawText.replace(
+        /(:\s*)NaN(?=\s*[,}\]])/g,
+        "$1null"
+      );
+
+      if (sanitizedText !== rawText) {
+        try {
+          return JSON.parse(sanitizedText);
+        } catch {
+          // Fall through to a friendly message below.
+        }
+      }
+
+      const error = new Error(
+        "Data file is invalid or contains unsupported values."
+      );
+      error.cause = parseError;
+      throw error;
+    }
   }
 
   function formatNumber(value, decimals = 2) {
@@ -217,9 +241,10 @@
           const currentState = await loadCardData(system);
           return createCardHtml(system.id, currentState);
         } catch (error) {
+          console.error(`Failed to render system card '${system.id}':`, error);
           return createErrorCardHtml(
             system.id,
-            error.message || "Unknown error"
+            "Data currently unavailable. Please check the system export."
           );
         }
       })
