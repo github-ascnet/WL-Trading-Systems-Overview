@@ -2400,5 +2400,9 @@
   {"date":"2026-07-21","value":46.47468294,"state":"RiskOn"},
   {"date":"2026-07-22","value":45.16163133,"state":"RiskOn"},
   {"date":"2026-07-23","value":44.58206239,"state":"Neutral"},
-  {"date":"2026-07-24","value":40.59546718,"state":"Neutral"}
+  {"date":"2026-07-24","value":41.73947004,"state":"Neutral"},
+  {"date":"2026-07-27","value":41.19139838,"state":"Neutral"},
+  {"date":"2026-07-28","value":40.96153141,"state":"Neutral"},
+  {"date":"2026-07-29","value":41.71964398,"state":"Neutral"},
+  {"date":"2026-07-30","value":41.1226834,"state":"Neutral"}
 ]

@@ -2461,5 +2461,9 @@
   {"date":"2026-07-21","value":1.36406195,"state":"ExtremeDown"},
   {"date":"2026-07-22","value":9.51271163,"state":"ExtremeDown"},
   {"date":"2026-07-23","value":14.68306643,"state":"ExtremeDown"},
-  {"date":"2026-07-24","value":14.90003631,"state":"ExtremeDown"}
+  {"date":"2026-07-24","value":17.89004377,"state":"Down"},
+  {"date":"2026-07-27","value":17.39323158,"state":"Down"},
+  {"date":"2026-07-28","value":12.25196754,"state":"ExtremeDown"},
+  {"date":"2026-07-29","value":17.7106072,"state":"Down"},
+  {"date":"2026-07-30","value":12.51781141,"state":"ExtremeDown"}
 ]
