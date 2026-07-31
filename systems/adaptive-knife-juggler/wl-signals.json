@@ -1,4 +1,6 @@
 ﻿[
-  {"symbol":"BKR","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-30 00:00:00","entryPrice":60.9680321277057,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.203100201537306},
-  {"symbol":"ARM","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-30 00:00:00","entryPrice":225.858686093007,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.184224192287564}
+  {"symbol":"ROST","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-30 00:00:00","entryPrice":247.068554648963,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.664592476927433},
+  {"symbol":"MSFT","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-30 00:00:00","entryPrice":428.797441912281,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.63844431070652},
+  {"symbol":"CSX","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-30 00:00:00","entryPrice":51.3356379712835,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.566534848056253},
+  {"symbol":"REGN","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-30 00:00:00","entryPrice":690.441980786994,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.538306225607373}
 ]
