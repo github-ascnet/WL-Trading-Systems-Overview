@@ -1,6 +1,5 @@
 ﻿[
-  {"symbol":"META","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-29 00:00:00","entryPrice":593.41,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.538740462694918},
-  {"symbol":"GOOGL","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-29 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.452111518334615},
-  {"symbol":"SNPS","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-29 00:00:00","entryPrice":388.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.11346807040419},
-  {"symbol":"TSLA","action":"BUY","isEntry":"TRUE","signalDate":"2026-07-29 00:00:00","entryPrice":298.32,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-25.4173499805872}
+  {"symbol":"META","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-30 00:00:00","entryPrice":593.41,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.788702531801754},
+  {"symbol":"SNPS","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-30 00:00:00","entryPrice":388.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.360303132300152},
+  {"symbol":"WBD","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-30 00:00:00","entryPrice":25.55,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.032819363118277}
 ]
