@@ -1,5 +1,3 @@
 ﻿[
-  {"symbol":"META","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-30 00:00:00","entryPrice":593.41,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.788702531801754},
-  {"symbol":"SNPS","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-30 00:00:00","entryPrice":388.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.360303132300152},
-  {"symbol":"WBD","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-30 00:00:00","entryPrice":25.55,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.032819363118277}
+  {"symbol":"META","action":"SELL","isEntry":"FALSE","signalDate":"2026-07-31 00:00:00","entryPrice":593.41,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.204322403806636}
 ]
