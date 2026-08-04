@@ -1,3 +1,3 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-08-03 15:30:02"}
+  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-03 00:00:00","entryPrice":69.990519,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Aa","orderType":"Limit","signalStatus":"Staged","weight":0.819192545596359}
 ]
