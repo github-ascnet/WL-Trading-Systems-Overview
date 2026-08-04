@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"MSFT","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-03 00:00:00","entryPrice":471.159966325834,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.893622176635936},
-  {"symbol":"AMZN","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-03 00:00:00","entryPrice":275.927421136523,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.764196840847826},
-  {"symbol":"PYPL","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-03 00:00:00","entryPrice":58.6643816448201,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.695570991686374},
-  {"symbol":"CSX","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-03 00:00:00","entryPrice":51.0115632690834,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.353990159543742}
+  {"symbol":"SBUX","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-03 00:00:00","entryPrice":109.08796766451,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.305981440623516}
 ]
