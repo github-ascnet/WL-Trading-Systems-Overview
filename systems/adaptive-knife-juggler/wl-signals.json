@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"DASH","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-05 00:00:00","entryPrice":201.087771369873,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.917674618463472}
+  {"symbol":"AMGN","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-06 00:00:00","entryPrice":398.463370557898,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.960428533109335},
+  {"symbol":"DXCM","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-06 00:00:00","entryPrice":86.5271156720165,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.838657510178433},
+  {"symbol":"CTAS","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-06 00:00:00","entryPrice":205.3754935353,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.719229256395994},
+  {"symbol":"ROST","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-06 00:00:00","entryPrice":249.477984624935,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.666015469079767}
 ]
