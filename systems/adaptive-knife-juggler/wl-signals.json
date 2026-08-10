@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"SNDK","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-06 00:00:00","entryPrice":1488.05579680148,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.225657025052934}
+  {"symbol":"MSFT","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-07 00:00:00","entryPrice":494.995675065775,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.934608818504317},
+  {"symbol":"PLTR","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-07 00:00:00","entryPrice":157.878472386278,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.684004633560981},
+  {"symbol":"AMZN","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-07 00:00:00","entryPrice":280.52528071917,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.613689672139627},
+  {"symbol":"CTAS","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-07 00:00:00","entryPrice":205.325343858535,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.455828691366878}
 ]
