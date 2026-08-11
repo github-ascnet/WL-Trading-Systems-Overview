@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"AMZN","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-10 00:00:00","entryPrice":282.326265433211,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.922633910639544},
-  {"symbol":"AMGN","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-10 00:00:00","entryPrice":403.690060678503,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.846118292679503},
-  {"symbol":"ABNB","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-10 00:00:00","entryPrice":176.016937057519,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.759846200618767},
-  {"symbol":"FAST","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-10 00:00:00","entryPrice":50.9674925060841,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.737384911759473}
+  {"symbol":"NFLX","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-10 00:00:00","entryPrice":72.9619508153511,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.726728654020529}
 ]
