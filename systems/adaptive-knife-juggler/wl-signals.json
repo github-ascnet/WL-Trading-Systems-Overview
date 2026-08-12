@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"NFLX","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-10 00:00:00","entryPrice":72.9619508153511,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.726728654020529}
+  {"symbol":"VRTX","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-11 00:00:00","entryPrice":518.245999848437,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.831445528920049},
+  {"symbol":"PLTR","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-11 00:00:00","entryPrice":170.672502578616,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.747238855579691},
+  {"symbol":"MSFT","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-11 00:00:00","entryPrice":495.935234246862,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.726909739862524},
+  {"symbol":"FAST","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-11 00:00:00","entryPrice":51.8030553807799,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.691691185122674}
 ]
