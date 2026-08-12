@@ -1,5 +1,5 @@
 ﻿[
-  {"symbol":"BOTZ","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-10 00:00:00","entryPrice":37.7942,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.856159035029741},
-  {"symbol":"COPX","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-10 00:00:00","entryPrice":90.4051,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.849719675821531},
-  {"symbol":"URA","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-10 00:00:00","entryPrice":44.8238,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.768662931179573}
+  {"symbol":"BOTZ","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-11 00:00:00","entryPrice":37.8548,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.249792269604257},
+  {"symbol":"COPX","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-11 00:00:00","entryPrice":89.4759,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.19297105939034},
+  {"symbol":"URA","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-11 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.179213030419555}
 ]
