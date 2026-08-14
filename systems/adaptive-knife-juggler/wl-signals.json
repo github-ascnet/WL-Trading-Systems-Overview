@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"PYPL","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-13 00:00:00","entryPrice":58.6225662810453,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.939643965458629},
-  {"symbol":"WDAY","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-13 00:00:00","entryPrice":171.813540136975,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.792047611871373},
-  {"symbol":"PLTR","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-13 00:00:00","entryPrice":181.948897672799,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.744591636424946},
-  {"symbol":"FAST","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-13 00:00:00","entryPrice":53.1268550188462,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.714338609737926}
+  {"symbol":"ROP","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-13 00:00:00","entryPrice":403.117479610848,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.770899366706036}
 ]
