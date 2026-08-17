@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-13 00:00:00","entryPrice":79.59315,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Burst Exit - Profit Target","orderType":"Limit","signalStatus":"Staged","weight":0.672437751132044}
+  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-14 00:00:00","entryPrice":79.59315,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Burst Exit - Profit Target","orderType":"Limit","signalStatus":"Staged","weight":0.69701187032775}
 ]
