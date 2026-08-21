@@ -1,3 +1,4 @@
 ﻿[
-  {"symbol":"URA","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-19 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.619131382263195}
+  {"symbol":"URA","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-20 00:00:00","entryPrice":44.2784,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.365887653449486},
+  {"symbol":"COPX","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-20 00:00:00","entryPrice":90.8293,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.168165459011138}
 ]
