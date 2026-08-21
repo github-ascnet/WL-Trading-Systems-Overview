@@ -1,3 +1,5 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-08-20 09:10:06"}
+  {"symbol":"CDNS","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-20 00:00:00","entryPrice":313.5899,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-31.3944518626297},
+  {"symbol":"HON","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-20 00:00:00","entryPrice":218.32,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.5602113078418},
+  {"symbol":"PCAR","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-20 00:00:00","entryPrice":128.94,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-48.6836368573952}
 ]
