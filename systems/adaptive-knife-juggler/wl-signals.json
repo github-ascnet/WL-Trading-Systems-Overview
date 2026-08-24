@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"ROP","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-13 00:00:00","entryPrice":403.117479610848,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.770899366706036}
+  {"symbol":"WBD","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-21 00:00:00","entryPrice":28.7430918784001,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.870630881440112},
+  {"symbol":"AMGN","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-21 00:00:00","entryPrice":427.805909497837,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.864908721483255},
+  {"symbol":"DXCM","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-21 00:00:00","entryPrice":93.2635018876698,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.800022654132792},
+  {"symbol":"FAST","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-21 00:00:00","entryPrice":51.7401268290299,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.547729041197488}
 ]
