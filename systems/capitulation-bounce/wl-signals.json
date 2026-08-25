@@ -1,4 +1,6 @@
 ﻿[
-  {"symbol":"CDNS","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-21 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.741690419572856},
-  {"symbol":"HON","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-21 00:00:00","entryPrice":218.32,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.7386420939958}
+  {"symbol":"HON","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-24 00:00:00","entryPrice":218.32,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.39172497018736},
+  {"symbol":"CDNS","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-24 00:00:00","entryPrice":315.92,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.3804257196812},
+  {"symbol":"AVGO","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-24 00:00:00","entryPrice":358.76,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-35.4125985348165},
+  {"symbol":"ORLY","action":"BUY","isEntry":"TRUE","signalDate":"2026-08-24 00:00:00","entryPrice":90.68,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-51.6192798677943}
 ]
