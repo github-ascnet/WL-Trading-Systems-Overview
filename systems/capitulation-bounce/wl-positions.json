@@ -1,6 +1,8 @@
 ﻿[
+  {"symbol":"ORLY","entryDate":"2026-08-25","exitDate":null,"entryPrice":90.47,"exitPrice":null,"qty":652,"pl":-99.8000000000037,"plPercent":-0.169191427724751,"isOpen":true },
+  {"symbol":"AVGO","entryDate":"2026-08-25","exitDate":null,"entryPrice":358.76,"exitPrice":null,"qty":164,"pl":-333.279999999997,"plPercent":-0.566449749679786,"isOpen":true },
   {"symbol":"CDNS","entryDate":"2026-08-21","exitDate":"2026-08-24","entryPrice":313.5899,"exitPrice":314.5,"qty":189,"pl":168.0089,"plPercent":0.283470857586924,"isOpen":false },
-  {"symbol":"HON","entryDate":"2026-08-21","exitDate":null,"entryPrice":218.32,"exitPrice":null,"qty":271,"pl":-964.049999999995,"plPercent":-1.62943389236017,"isOpen":true },
+  {"symbol":"HON","entryDate":"2026-08-21","exitDate":null,"entryPrice":218.32,"exitPrice":null,"qty":271,"pl":-717.439999999996,"plPercent":-1.21261454461374,"isOpen":true },
   {"symbol":"WBD","entryDate":"2026-07-30","exitDate":"2026-07-31","entryPrice":25.55,"exitPrice":25.55,"qty":2288,"pl":-4,"plPercent":-0.006842472595897,"isOpen":false },
   {"symbol":"GOOGL","entryDate":"2026-07-29","exitDate":"2026-07-30","entryPrice":333.71,"exitPrice":334.7,"qty":177,"pl":171.230000000002,"plPercent":0.289892760164068,"isOpen":false },
   {"symbol":"META","entryDate":"2026-07-29","exitDate":"2026-08-03","entryPrice":593.41,"exitPrice":593.41,"qty":99,"pl":-4,"plPercent":-0.006808789943553,"isOpen":false },
