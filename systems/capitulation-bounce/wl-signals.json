@@ -1,5 +1,3 @@
 ﻿[
-  {"symbol":"HON","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-25 00:00:00","entryPrice":218.32,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.516346761655573},
-  {"symbol":"AVGO","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-25 00:00:00","entryPrice":358.76,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.090277820250627},
-  {"symbol":"ORLY","action":"SELL","isEntry":"FALSE","signalDate":"2026-08-25 00:00:00","entryPrice":90.47,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.027659130364276}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-08-27 09:10:06"}
 ]
