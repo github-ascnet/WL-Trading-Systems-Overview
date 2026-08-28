@@ -1,3 +1,3 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-08-27 09:12:04"}
+  {"symbol":"SOXL","action":"SHORT","isEntry":"TRUE","signalDate":"2026-08-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Short At Market","orderType":"Market","signalStatus":"Staged","weight":0.305439162123545}
 ]
