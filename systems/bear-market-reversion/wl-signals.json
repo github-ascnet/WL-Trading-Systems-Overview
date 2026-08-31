@@ -1,3 +1,4 @@
 ﻿[
-  {"symbol":"SOXL","action":"SHORT","isEntry":"TRUE","signalDate":"2026-08-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Short At Market","orderType":"Market","signalStatus":"Staged","weight":0.305439162123545}
+  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-08-28 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Exit Short","orderType":"Market","signalStatus":"Staged","weight":0.904464175734477},
+  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-08-28 00:00:00","entryPrice":133.555555555556,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Stop loss Based Exit","orderType":"Stop","signalStatus":"Staged","weight":0.374667269506828}
 ]
