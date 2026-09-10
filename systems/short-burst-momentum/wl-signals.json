@@ -1,5 +1,5 @@
 ﻿[
-  {"symbol":"SMH","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-08 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.586174880370584},
-  {"symbol":"URA","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-08 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.443021438415523},
-  {"symbol":"COPX","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-08 00:00:00","entryPrice":95.3238,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.098166140802097}
+  {"symbol":"URA","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-09 00:00:00","entryPrice":47.3286,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.436468781917912},
+  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-09 00:00:00","entryPrice":580.0329,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.390639794433583},
+  {"symbol":"COPX","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-09 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell at Market","orderType":"Market","signalStatus":"Staged","weight":0.023421573253027}
 ]
