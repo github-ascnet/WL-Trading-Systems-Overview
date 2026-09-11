@@ -1,3 +1,6 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-09-10 09:10:07"}
+  {"symbol":"GEHC","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-10 00:00:00","entryPrice":64.24,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-28.9328619839578},
+  {"symbol":"BKNG","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-10 00:00:00","entryPrice":174.33,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-30.2704952469478},
+  {"symbol":"PDD","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-10 00:00:00","entryPrice":77.84,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-30.3256053492097},
+  {"symbol":"MAR","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-10 00:00:00","entryPrice":329.07,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-31.0804979583334}
 ]
