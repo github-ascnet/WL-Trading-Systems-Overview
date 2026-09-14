@@ -1,6 +1,5 @@
 ﻿[
-  {"symbol":"GEHC","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-10 00:00:00","entryPrice":64.24,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-28.9328619839578},
-  {"symbol":"BKNG","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-10 00:00:00","entryPrice":174.33,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-30.2704952469478},
-  {"symbol":"PDD","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-10 00:00:00","entryPrice":77.84,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-30.3256053492097},
-  {"symbol":"MAR","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-10 00:00:00","entryPrice":329.07,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-31.0804979583334}
+  {"symbol":"PDD","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-11 00:00:00","entryPrice":77.84,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.528800483941068},
+  {"symbol":"BKNG","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-11 00:00:00","entryPrice":174.33,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.477989757140304},
+  {"symbol":"GEHC","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-11 00:00:00","entryPrice":64.24,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.150122710521128}
 ]
