@@ -1,5 +1,3 @@
 ﻿[
-  {"symbol":"PDD","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-11 00:00:00","entryPrice":77.84,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.528800483941068},
-  {"symbol":"BKNG","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-11 00:00:00","entryPrice":174.33,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.477989757140304},
-  {"symbol":"GEHC","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-11 00:00:00","entryPrice":64.24,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.150122710521128}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-09-15 09:10:07"}
 ]
