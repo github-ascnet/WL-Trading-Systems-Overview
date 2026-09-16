@@ -1,3 +1,6 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-09-15 09:10:07"}
+  {"symbol":"CDNS","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-15 00:00:00","entryPrice":273.96,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-27.2316732952456},
+  {"symbol":"SBUX","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-15 00:00:00","entryPrice":96.58,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-28.477113727348},
+  {"symbol":"BKNG","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-15 00:00:00","entryPrice":171.32,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-29.5105557429813},
+  {"symbol":"GEHC","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-15 00:00:00","entryPrice":64.07,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-29.6230939656334}
 ]
