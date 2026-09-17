@@ -1,4 +1,7 @@
 ﻿[
+  {"symbol":"BKNG","entryDate":"2026-09-16","exitDate":null,"entryPrice":170.88,"exitPrice":null,"qty":348,"pl":178.960000000004,"plPercent":0.300943863274361,"isOpen":true },
+  {"symbol":"SBUX","entryDate":"2026-09-16","exitDate":null,"entryPrice":96.58,"exitPrice":null,"qty":617,"pl":466.920000000003,"plPercent":0.783556128509117,"isOpen":true },
+  {"symbol":"GEHC","entryDate":"2026-09-16","exitDate":null,"entryPrice":64.07,"exitPrice":null,"qty":931,"pl":-541.979999999992,"plPercent":-0.908612810538674,"isOpen":true },
   {"symbol":"GEHC","entryDate":"2026-09-11","exitDate":"2026-09-14","entryPrice":64.24,"exitPrice":64.48,"qty":924,"pl":217.760000000008,"plPercent":0.366860204967318,"isOpen":false },
   {"symbol":"BKNG","entryDate":"2026-09-11","exitDate":"2026-09-14","entryPrice":174.33,"exitPrice":176.98,"qty":340,"pl":896.999999999992,"plPercent":1.5133570206606,"isOpen":false },
   {"symbol":"PDD","entryDate":"2026-09-11","exitDate":"2026-09-14","entryPrice":77.84,"exitPrice":77.84,"qty":763,"pl":-4,"plPercent":-0.006734922864928,"isOpen":false },

@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"CDNS","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-15 00:00:00","entryPrice":273.96,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-27.2316732952456},
-  {"symbol":"SBUX","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-15 00:00:00","entryPrice":96.58,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-28.477113727348},
-  {"symbol":"BKNG","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-15 00:00:00","entryPrice":171.32,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-29.5105557429813},
-  {"symbol":"GEHC","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-15 00:00:00","entryPrice":64.07,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-29.6230939656334}
+  {"symbol":"GEHC","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-16 00:00:00","entryPrice":64.07,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.959695575228944},
+  {"symbol":"SBUX","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-16 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.82332217135142},
+  {"symbol":"BKNG","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-16 00:00:00","entryPrice":170.88,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.766898710678617},
+  {"symbol":"CDNS","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-16 00:00:00","entryPrice":279.9,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-32.2085607775715}
 ]
