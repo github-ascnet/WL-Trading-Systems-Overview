@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"GEHC","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-16 00:00:00","entryPrice":64.07,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.959695575228944},
-  {"symbol":"SBUX","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-16 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.82332217135142},
-  {"symbol":"BKNG","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-16 00:00:00","entryPrice":170.88,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.766898710678617},
-  {"symbol":"CDNS","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-16 00:00:00","entryPrice":279.9,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-32.2085607775715}
+  {"symbol":"CDNS","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-17 00:00:00","entryPrice":279.9,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.78325813697534},
+  {"symbol":"ROP","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-17 00:00:00","entryPrice":374.93,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.343550426037099},
+  {"symbol":"PEP","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-17 00:00:00","entryPrice":134.34,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.334662918173682},
+  {"symbol":"AXON","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-17 00:00:00","entryPrice":468.42,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.203634265272198}
 ]
