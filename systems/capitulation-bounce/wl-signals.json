@@ -1,6 +1,4 @@
 ﻿[
-  {"symbol":"CDNS","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-17 00:00:00","entryPrice":279.9,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.78325813697534},
-  {"symbol":"ROP","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-17 00:00:00","entryPrice":374.93,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.343550426037099},
-  {"symbol":"PEP","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-17 00:00:00","entryPrice":134.34,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.334662918173682},
-  {"symbol":"AXON","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-17 00:00:00","entryPrice":468.42,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.203634265272198}
+  {"symbol":"AXON","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-18 00:00:00","entryPrice":468.42,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.985260721490646},
+  {"symbol":"PEP","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-18 00:00:00","entryPrice":134.34,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.907648260257102}
 ]
