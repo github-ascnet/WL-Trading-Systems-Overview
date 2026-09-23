@@ -1,8 +1,8 @@
 ﻿[
   {"symbol":"ROP","entryDate":"2026-09-17","exitDate":"2026-09-18","entryPrice":374.93,"exitPrice":374.93,"qty":158,"pl":-4,"plPercent":-0.006752315284507,"isOpen":false },
   {"symbol":"CDNS","entryDate":"2026-09-17","exitDate":"2026-09-18","entryPrice":279.9,"exitPrice":283.55,"qty":213,"pl":773.450000000007,"plPercent":1.29732785183174,"isOpen":false },
-  {"symbol":"PEP","entryDate":"2026-09-17","exitDate":null,"entryPrice":134.34,"exitPrice":null,"qty":444,"pl":-2111,"plPercent":-3.53915773746055,"isOpen":true },
-  {"symbol":"AXON","entryDate":"2026-09-17","exitDate":null,"entryPrice":468.42,"exitPrice":null,"qty":127,"pl":-2079.72,"plPercent":-3.49595406504762,"isOpen":true },
+  {"symbol":"PEP","entryDate":"2026-09-17","exitDate":null,"entryPrice":134.34,"exitPrice":null,"qty":444,"pl":-1400.6,"plPercent":-2.34814984703328,"isOpen":true },
+  {"symbol":"AXON","entryDate":"2026-09-17","exitDate":null,"entryPrice":468.42,"exitPrice":null,"qty":127,"pl":-1157.7,"plPercent":-1.94606294169679,"isOpen":true },
   {"symbol":"BKNG","entryDate":"2026-09-16","exitDate":"2026-09-17","entryPrice":170.88,"exitPrice":173,"qty":348,"pl":733.760000000002,"plPercent":1.23391019845883,"isOpen":false },
   {"symbol":"SBUX","entryDate":"2026-09-16","exitDate":"2026-09-17","entryPrice":96.58,"exitPrice":98.11,"qty":617,"pl":940.010000000001,"plPercent":1.57746636760013,"isOpen":false },
   {"symbol":"GEHC","entryDate":"2026-09-16","exitDate":"2026-09-17","entryPrice":64.07,"exitPrice":64.07,"qty":931,"pl":-4,"plPercent":-0.006705877047409,"isOpen":false },
