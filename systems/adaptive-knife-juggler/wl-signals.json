@@ -1,6 +1,4 @@
 ﻿[
-  {"symbol":"AMD","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-23 00:00:00","entryPrice":601.606264441975,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.889440660713202},
-  {"symbol":"INTC","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-23 00:00:00","entryPrice":117.850320367859,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.798606675063807},
-  {"symbol":"CRWD","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-23 00:00:00","entryPrice":245.464611852405,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.56017041278672},
-  {"symbol":"AAPL","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-23 00:00:00","entryPrice":347.165298920234,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.514262491739436}
+  {"symbol":"APP","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-23 00:00:00","entryPrice":338.172387310631,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.660923058648365},
+  {"symbol":"VRTX","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-23 00:00:00","entryPrice":506.349316343812,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.47124699874955}
 ]
