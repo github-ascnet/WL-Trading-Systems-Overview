@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"FTNT","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-24 00:00:00","entryPrice":175.0779270372,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.998925120221997},
-  {"symbol":"PLTR","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-24 00:00:00","entryPrice":186.446490719482,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.778083124931228},
-  {"symbol":"CRWD","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-24 00:00:00","entryPrice":255.522125009784,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.619501329993306},
-  {"symbol":"AMD","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-24 00:00:00","entryPrice":637.344548780124,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.557867338596447}
+  {"symbol":"META","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-24 00:00:00","entryPrice":736.673607461259,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.72475375687773}
 ]
