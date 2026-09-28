@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"DDOG","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-25 00:00:00","entryPrice":257.809608823578,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.97702723667799},
-  {"symbol":"FTNT","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-25 00:00:00","entryPrice":183.04096931466,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.958153660838484},
-  {"symbol":"CPRT","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-25 00:00:00","entryPrice":29.1343712681296,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.875548472852843},
-  {"symbol":"AAPL","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-25 00:00:00","entryPrice":343.461416275511,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.831701561232335}
+  {"symbol":"ALNY","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-25 00:00:00","entryPrice":244.904592076373,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.733190085708439}
 ]
