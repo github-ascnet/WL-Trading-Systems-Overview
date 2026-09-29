@@ -1,4 +1,4 @@
 ﻿[
-  {"symbol":"PEP","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-25 00:00:00","entryPrice":134.34,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.386780029617798},
-  {"symbol":"AXON","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-25 00:00:00","entryPrice":468.42,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.252425396896031}
+  {"symbol":"PEP","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-28 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"TimeBased","orderType":"Market","signalStatus":"Staged","weight":0.663621976420778},
+  {"symbol":"AXON","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-28 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"TimeBased","orderType":"Market","signalStatus":"Staged","weight":0.383223464287577}
 ]
