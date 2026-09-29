@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"ALNY","action":"BUY","isEntry":"TRUE","signalDate":"2026-09-25 00:00:00","entryPrice":244.904592076373,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.733190085708439}
+  {"symbol":"DDOG","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-28 00:00:00","entryPrice":283.946996617601,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.862752667171003},
+  {"symbol":"INTC","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-28 00:00:00","entryPrice":128.539679387107,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.84178921182138},
+  {"symbol":"AMD","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-28 00:00:00","entryPrice":645.498530274062,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.759969339484755},
+  {"symbol":"CRWD","action":"SELL","isEntry":"FALSE","signalDate":"2026-09-28 00:00:00","entryPrice":263.67483967867,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.705314787569954}
 ]
