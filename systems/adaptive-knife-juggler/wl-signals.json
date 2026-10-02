@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"DDOG","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-01 00:00:00","entryPrice":268.013701899984,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.99584101063566},
-  {"symbol":"ADI","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-01 00:00:00","entryPrice":391.113253944522,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.84072471974768},
-  {"symbol":"QCOM","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-01 00:00:00","entryPrice":190.453713610268,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.809717338976866},
-  {"symbol":"CRWD","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-01 00:00:00","entryPrice":256.443567899251,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.806775055755572}
+  {"symbol":"ALAB","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-01 00:00:00","entryPrice":370.653320995279,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.401839799787643}
 ]
