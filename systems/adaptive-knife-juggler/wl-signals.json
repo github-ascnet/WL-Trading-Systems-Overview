@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"ALAB","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-01 00:00:00","entryPrice":370.653320995279,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.401839799787643}
+  {"symbol":"AAPL","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-02 00:00:00","entryPrice":336.33280707043,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.994018552798364},
+  {"symbol":"TXN","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-02 00:00:00","entryPrice":286.062900719419,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.904493772687709},
+  {"symbol":"WBD","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-02 00:00:00","entryPrice":30.8389031669416,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.872145213647338},
+  {"symbol":"ADI","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-02 00:00:00","entryPrice":411.569842497296,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.811331374808866}
 ]
