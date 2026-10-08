@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"SHOP","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-07 00:00:00","entryPrice":159.712032478673,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.987727372206398},
-  {"symbol":"FTNT","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-07 00:00:00","entryPrice":186.47509912582,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.901569346006135},
-  {"symbol":"CRWD","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-07 00:00:00","entryPrice":289.812380518917,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.89169840231522},
-  {"symbol":"QCOM","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-07 00:00:00","entryPrice":185.059220415024,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.857078030623911}
+  {"symbol":"ODFL","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-07 00:00:00","entryPrice":182.307169772028,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.37355441647508}
 ]
