@@ -1,4 +1,3 @@
 ﻿[
-  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-07 00:00:00","entryPrice":631.2803,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.761017645330408},
-  {"symbol":"BOTZ","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-07 00:00:00","entryPrice":36.0267,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.309734573181183}
+  {"symbol":"SMH","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-08 00:00:00","entryPrice":613.3427,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Buy 1.00% above Close","orderType":"Stop","signalStatus":"Staged","weight":0.284025373138821}
 ]
