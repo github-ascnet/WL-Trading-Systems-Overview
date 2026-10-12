@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-08 00:00:00","entryPrice":83.03525,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"C","orderType":"Limit","signalStatus":"Staged","weight":0.44777056079513}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-10-12 15:30:01"}
 ]
