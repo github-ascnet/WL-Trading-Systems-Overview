@@ -1,3 +1,6 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-10-14 09:10:06"}
+  {"symbol":"FER","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-14 00:00:00","entryPrice":50.19,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-25.4277994564376},
+  {"symbol":"CMCSA","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-14 00:00:00","entryPrice":21.05,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-31.7142415748871},
+  {"symbol":"WDC","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-14 00:00:00","entryPrice":364.1,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-32.1289393308843},
+  {"symbol":"STX","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-14 00:00:00","entryPrice":713.54,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-33.6157612270689}
 ]
