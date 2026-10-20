@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"TQQQ","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-16 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Market","signalStatus":"Staged","weight":0.534752873950048}
+  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-19 00:00:00","entryPrice":72.7545,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"C","orderType":"Limit","signalStatus":"Staged","weight":0.603712733613079}
 ]
