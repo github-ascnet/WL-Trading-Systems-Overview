@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"FER","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-19 00:00:00","entryPrice":50.19,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.158362262984761}
+  {"symbol":"FER","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-20 00:00:00","entryPrice":50.19,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.348322513991162},
+  {"symbol":"RKLB","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-20 00:00:00","entryPrice":50.9,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-26.2142187781658},
+  {"symbol":"KLAC","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-20 00:00:00","entryPrice":161.74,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-29.2660458538484},
+  {"symbol":"AMAT","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-20 00:00:00","entryPrice":404.98,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-29.2788617513611}
 ]

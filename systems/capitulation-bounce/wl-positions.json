@@ -3,7 +3,7 @@
   {"symbol":"MU","entryDate":"2026-10-16","exitDate":"2026-10-19","entryPrice":904.23,"exitPrice":914.29,"qty":65,"pl":649.899999999996,"plPercent":1.10574317800355,"isOpen":false },
   {"symbol":"WDC","entryDate":"2026-10-15","exitDate":"2026-10-16","entryPrice":345.17,"exitPrice":347.73,"qty":166,"pl":420.96,"plPercent":0.734682508461869,"isOpen":false },
   {"symbol":"STX","entryDate":"2026-10-15","exitDate":"2026-10-16","entryPrice":680,"exitPrice":682.63,"qty":85,"pl":219.55,"plPercent":0.379844290657439,"isOpen":false },
-  {"symbol":"FER","entryDate":"2026-10-15","exitDate":null,"entryPrice":50.19,"exitPrice":null,"qty":1209,"pl":-1138.46,"plPercent":-1.87617903908901,"isOpen":true },
+  {"symbol":"FER","entryDate":"2026-10-15","exitDate":null,"entryPrice":50.19,"exitPrice":null,"qty":1209,"pl":-1162.64,"plPercent":-1.91602761450244,"isOpen":true },
   {"symbol":"ROP","entryDate":"2026-09-17","exitDate":"2026-09-18","entryPrice":374.93,"exitPrice":374.93,"qty":159,"pl":-4,"plPercent":-0.006709847892781,"isOpen":false },
   {"symbol":"CDNS","entryDate":"2026-09-17","exitDate":"2026-09-18","entryPrice":279.9,"exitPrice":283.55,"qty":214,"pl":777.100000000007,"plPercent":1.29735920372097,"isOpen":false },
   {"symbol":"PEP","entryDate":"2026-09-17","exitDate":"2026-09-29","entryPrice":134.34,"exitPrice":126.51,"qty":447,"pl":-3504.01,"plPercent":-5.83515598173388,"isOpen":false },
