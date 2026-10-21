@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"CPRT","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-19 00:00:00","entryPrice":28.5106271478348,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.106859369808907}
+  {"symbol":"TXN","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-20 00:00:00","entryPrice":285.336448486855,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.891035958078344},
+  {"symbol":"SHOP","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-20 00:00:00","entryPrice":178.064689200886,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.779578697510742},
+  {"symbol":"AMD","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-20 00:00:00","entryPrice":561.06673831276,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.731719294591975},
+  {"symbol":"CDNS","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-20 00:00:00","entryPrice":332.623478937291,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.72613180147691}
 ]
