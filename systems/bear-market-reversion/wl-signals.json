@@ -1,3 +1,4 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-10-21 09:12:04"}
+  {"symbol":"SOXL","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-21 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Exit Long","orderType":"Market","signalStatus":"Staged","weight":0.964010962569845},
+  {"symbol":"SOXL","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-21 00:00:00","entryPrice":133.2,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Stop loss Based Exit","orderType":"Stop","signalStatus":"Staged","weight":0.220781358377424}
 ]
