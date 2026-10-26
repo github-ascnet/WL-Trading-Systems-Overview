@@ -319,6 +319,7 @@ Struktur: `{ date, value (0–100), state }`. [DATEN] Dieser Ordner ist kein Han
 | FR-L-11 | Ist `SYSTEMS` leer, erscheint "No systems defined in js/systems.js.". | [CODE] |
 | FR-L-12 | Auf Viewports ab 701 px reagieren die Kacheln mit 3D-Tilt und Glanzeffekt; Fehlerkacheln ausgenommen. | [CODE] |
 | FR-L-13 | Die Landing-Seite enthält SEO-Metadaten (title, description, robots, canonical, Open Graph, JSON-LD `WebSite`). | [CODE] |
+| FR-L-14 | Das Risk-Regime-Panel (FR-L-08) ist über `display.showRiskRegimePanel` in `kpi-config.js` ein- oder ausblendbar, Standard ausgeblendet. Ausgeblendet wird es nicht gerendert; die Regime-Färbung des Hintergrunds bleibt (D-034, BP-022). | Auftrag 2026-10-26 |
 
 ### 6.1 Systemkachel
 
@@ -450,6 +451,7 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 | `showPortfolioOverviewKpis` | `true` | Portfolio-KPI-Karten ein/aus |
 | `useDisplayEquity` | `false` | Chart und KPIs auf Equal-Weight-Kurve (`true`) oder Rohsumme (`false`) |
 | `showRegimeStretchScore` | `false` | Stretch Score und Legende ein/aus |
+| `showRiskRegimePanel` | `false` | Risk-Regime-Panel der Landing-Seite ein/aus; die Regime-Färbung bleibt (D-034) |
 
 ---
 
@@ -622,7 +624,7 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | INC-02 | D | README-Strukturbaum listet `kpi-config.js`, `equity-overview-chart.js`, `equity-system-chart.js`, `regime-engine-chart.js` und `systems/risk-regime/` nicht. | `README.md` |
 | INC-03 | D | README-Beispiel `?system=alpha-picks` verweist auf ein nicht vorhandenes System. | `README.md` |
 | INC-04 | D | Meta-Description der Landing-Seite nennt "9 independent trading systems"; registriert sind 10. | `index.html`, `js/systems.js` |
-| INC-05 | D | Footer: Landing "©2025", Dashboard "©2026". | `index.html`, `dashboard/index.html` |
+| INC-05 | D | **Behoben (2026-10-26, BP-022):** Footer war uneinheitlich (Landing "©2025", Dashboard "©2026"; "Designed by GitHub Copilot"). Jetzt beide Seiten "©2026 ASCNET Solutions GmbH" und "Designed by Opus 5.5". | `index.html`, `dashboard/index.html` |
 | INC-06 | D | Zwei Systemordner (`monday-anchor-reversion-500k-cap`, `multifactor-edge`) sind nicht registriert; ihre Daten sind veraltet (2026-10-07 bzw. 2026-04-20). | `systems/`, `js/systems.js` |
 | INC-07 | T | Das Dashboard prüft nur das Slug-Muster, nicht das Register: unregistrierte Systeme sind per URL aufrufbar. README beschreibt `systems.js` als Eintragspunkt, nicht als Zugriffsschutz. | `dashboard-loader.js` |
 | INC-08 | T | `fetchJson` existiert dreifach: `landing.js` und `dashboard-loader.js` mit NaN-Bereinigung, `equity-overview-chart.js` und `regime-engine-chart.js` mit `response.json()` ohne Bereinigung. Eine Equity- oder Positionsdatei mit `NaN` lässt das System im Portfolio-Chart entfallen, obwohl Kachel und Dashboard laden würden. | vier JS-Dateien |
@@ -637,7 +639,11 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | INC-17 | T | Die Standardwerte im Code (`showRegimeStretchScore ?? true`) widersprechen dem konfigurierten Wert `false`; massgeblich ist die Konfiguration. Die CSS-Klasse `regime-legend-composite` hat keinen HTML-Gegenpart. | `regime-engine-chart.js`, `kpi-config.js` |
 | INC-18 | T | `lastUpdate` ist `"YYYY-MM-DD HH:mm:ss"` (nicht ISO-8601). Ob `new Date()` dies in allen Browsern parst, ist nicht belegt; bei Fehlschlag wird der Rohstring angezeigt. | `landing.js`, `main.js` |
 | INC-19 | T | Hilfsfunktionen (`escapeHtml`, `formatNumber`, `formatPercent`, `safeGet`, `fetchJson`) sind in mehreren Dateien dupliziert, teils mit abweichenden Fallbacks ("-" gegenüber "N/A"). | `main.js`, `landing.js`, Chart-Module |
-| INC-21 | T | Die Portfolio-Aggregation blockiert den Main-Thread beim Laden der Landing-Seite: `countOpenPositionsOnDate` durchläuft für jedes Datum der gemeinsamen Achse alle Positionen jedes Systems (Aufwand Datumswerte × Positionen). Gemessen 2026-10-26: 1 081 ms Eigenzeit (normale CPU), Gesamttask 1,26 bis 1,48 s; bei 4-fach gedrosselter CPU 19,8 bis 24,9 s Loader-Zeit. Auf langsamen Geräten lädt die Landing-Seite entsprechend lange. | `js/equity-overview-chart.js` (`countOpenPositionsOnDate`, `aggregatePortfolioSeries`) |
+| INC-22 | T | **Behoben mit BP-024:** `.app` ist ein Grid mit impliziter `auto`-Spalte; breite Tabellen (Positions, Monthly Returns) liessen die Spalte und damit die Seite auf Smartphones breiter werden als das Gerät (bis 422 px bei 390 px), Header-Buttons wurden abgeschnitten. Bestand vor BP-013. | `css/styles.css` |
+| INC-23 | T | **Behoben mit BP-024:** Portfolio- und System-Chart werden auf Smartphones nur verkleinert; Achsentexte 2,7 bis 4 px, Tooltip-Texte der Landing-Seite 3,5 bis 4,5 px (unlesbar). | `js/equity-overview-chart.js`, `js/equity-system-chart.js` |
+| INC-24 | T | Offen (nicht beauftragt): Wischen über die Charts scrollt auf Touch-Geräten die Seite, statt den Tooltip mitzuführen; Tippen zeigt den Tooltip. | Chart-Overlays |
+| INC-25 | T | Offen (nicht beauftragt): Kleine Tippflächen auf Smartphones: Info-Symbol 18 × 18 px, Hamburger 26 × 18 px, Zoom-Reset 26 × 26 px. | `css/styles.css`, `css/landing.css` |
+| INC-21 | T | **Behoben mit BP-023 (D-035).** Die Portfolio-Aggregation blockiert den Main-Thread beim Laden der Landing-Seite: `countOpenPositionsOnDate` durchläuft für jedes Datum der gemeinsamen Achse alle Positionen jedes Systems (Aufwand Datumswerte × Positionen). Gemessen 2026-10-26: 1 081 ms Eigenzeit (normale CPU), Gesamttask 1,26 bis 1,48 s; bei 4-fach gedrosselter CPU 19,8 bis 24,9 s Loader-Zeit. Auf langsamen Geräten lädt die Landing-Seite entsprechend lange. | `js/equity-overview-chart.js` (`countOpenPositionsOnDate`, `aggregatePortfolioSeries`) |
 | INC-20 | T | `landing.css` enthält keine `prefers-reduced-motion`-Regel; `styles.css` schaltet alle Animationen global ab. Auf der Landing-Seite laufen die bestehenden Animationen (Loader, Kachel-Hover) bei Reduced-Motion weiter. BP-013 deckt nur die neue Motion ab (FR-M-07) und ändert dies nicht. | `css/landing.css`, `css/styles.css` |
 
 ### 14.2 Offene Entscheidungen und fehlende Information
@@ -652,11 +658,11 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | OP-06 | I | Fachlicher Grund der Skalierung der Anzeigewerte durch 100 (`equityDivisor`, `startingCapitalDivisor`). | Nur Code-Kommentar zur Rohsumme |
 | OP-07 | I | Begründung der Regel `apr ≥ 100 → rot` und der Schwellen insgesamt. | Konfiguration ohne Kommentar |
 | OP-08 | I | Wie wird das Projekt lokal gestartet und validiert (HTTP-Server, Testvorgehen)? | Weder README noch Skripte |
-| OP-09 | I | Zielgruppe und Freigabestatus der öffentlichen Seite (SEO-Metadaten, "Designed by GitHub Copilot"-Footer). | |
+| OP-09 | I | Zielgruppe und Freigabestatus der öffentlichen Seite (SEO-Metadaten, Footer "Designed by Opus 5.5"). | |
 | OP-10 | E | Soll das Dashboard auf registrierte Systeme beschränkt werden? | INC-07 |
 | OP-11 | E | Soll die Strategiename-Bereinigung auch auf der Landing-Seite gelten? | INC-11 |
 | OP-12 | E | Welche Berechnungsvariante gilt für das Portfolio verbindlich: Rohsumme oder Equal-Weight (`useDisplayEquity`)? | derzeit `false` |
-| OP-13 | E | Soll die Zählung offener Positionen je Datum (INC-21) optimiert werden (z. B. einmal sortieren und fortlaufend zählen statt je Datum alle Positionen zu durchlaufen), bei identischem Ergebnis? | Performance-Änderung, nicht beauftragt |
+| OP-13 | E | **Entschieden 2026-10-26: ja (D-035, BP-023).** Soll die Zählung offener Positionen je Datum (INC-21) optimiert werden (z. B. einmal sortieren und fortlaufend zählen statt je Datum alle Positionen zu durchlaufen), bei identischem Ergebnis? | Performance-Änderung, nicht beauftragt |
 
 ---
 
@@ -700,3 +706,4 @@ Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt n
 | FR-T-04, FR-T-05 (10.6) | BP-018 |
 | FR-T-06, FR-T-07 (10.6) | BP-019 |
 | FR-T-09 bis FR-T-11 (10.6) | BP-021 |
+| FR-L-14 | BP-022 |

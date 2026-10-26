@@ -143,6 +143,8 @@ body::after {
   min-height: 0;
   display: grid;
   grid-template-rows: auto 1fr;
+  /* Spalte nicht auf die Mindestbreite breiter Tabellen wachsen lassen (Mobile, D-036) */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .site-footer {
@@ -1054,10 +1056,6 @@ select:hover {
   .mr-table .mr-year,
   .mr-table .mr-cell {
     padding: 4px 6px;
-  }
-
-  #equityChart text {
-    font-size: 11px;
   }
 
   .site-footer-inner {

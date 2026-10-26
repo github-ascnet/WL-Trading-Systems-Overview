@@ -62,6 +62,9 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-031 | Visuelles Theme "Aurora" (Future State), umschaltbar | Darstellung / Architektur | Verbindlich (Auftrag 2026-10-26) |
 | D-032 | Loader-Animation nur mit Compositor-Eigenschaften | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-033 | Aurora auf den System-Detailseiten (Regime-Färbung, Hero-Kurve, lebendige Flächen) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-034 | Risk-Regime-Panel der Landing-Seite per Schalter ausblendbar | Darstellung / Konfiguration | Verbindlich (Auftrag 2026-10-26) |
+| D-035 | Offene Positionen je Datum fortlaufend zählen (Ladezeit) | Berechnung / Leistung | Verbindlich (Auftrag 2026-10-26) |
+| D-036 | Mobile Darstellung: Grid-Spalte begrenzen, Charts mit eigenem schmalen Koordinatenraum | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 
 ---
 
@@ -403,3 +406,35 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Begründung** | Auftrag. Das Laden gehört nach D-006 in den Loader, das Rendern nach `main.js`. |
 | **Quelle** | Auftrag und Rückfrage 2026-10-26 |
 | **Konsequenz** | Zusätzlicher Abruf von ca. 150 KB je Detailseiten-Aufruf im Theme `aurora`. Das Tabellen-Einblenden wiederholt sich beim erneuten Öffnen eines Tabs (wie BP-014 bei den Positionen). |
+
+## D-034 – Risk-Regime-Panel der Landing-Seite per Schalter ausblendbar
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26: "hide im Dashboard den Risk-Regime Composite Score Chart, steuerbar über die kpi-config.js"; Arbeitspaket BP-022) |
+| **Entscheidung** | Neuer Schalter `WL_KPI_CONFIG.display.showRiskRegimePanel` in `js/kpi-config.js`, Standard `false`. Bei `false` blendet `landing.js` den Bereich `.regime-engine-wrap` aus (`hidden`) und rendert das Panel nicht. Die Regime-Färbung des Hintergrunds (D-027) bleibt: Dafür lädt `initRegimeTint` in `regime-engine-chart.js` nur die Composite-Datei und übergibt den letzten Zustand an `WL_MOTION.setRegime`. Bei `true` verhält sich die Seite wie bisher. |
+| **Begründung** | Auftrag. Die Regime-Färbung ist ein eigenständiger Effekt und wurde nicht abgewählt. |
+| **Quelle** | Auftrag 2026-10-26 |
+| **Konsequenz** | Ergänzt D-018 (das Panel ist jetzt optional) und D-016/9.1 (neuer Anzeigeschalter). Die Referenzbilder `landing_top` ändern sich mit dem Standardwert `false` gewollt; für den Pixelvergleich von `classic` gilt `showRiskRegimePanel: true`. |
+
+## D-035 – Offene Positionen je Datum fortlaufend zählen
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26 nach Mobile-Prüfung; beantwortet OP-13; Arbeitspaket BP-023) |
+| **Entscheidung** | `countOpenPositionsOnDate` (je Datum alle Positionen aller Systeme) wird durch `createOpenPositionCounter` ersetzt: Einstiegs- und Ausstiegszeitpunkte aller Systeme werden einmal sortiert; für die aufsteigende Datumsachse zählen zwei Zeiger fortlaufend `Einstiege ≤ D` minus `Ausstiege ≤ D`. |
+| **Regeln** | Das Ergebnis ist identisch zur bisherigen Definition: offen am Datum D, wenn `entryDate ≤ D` und (`isOpen` oder kein `exitDate` oder `"open"` oder `exitDate > D`). Positionen mit ungültigem Einstieg, ungültigem Ausstieg oder Ausstieg nicht nach dem Einstieg zählen wie bisher nie. |
+| **Begründung** | INC-21: auf Smartphone-ähnlicher CPU 10 bis 23 s Ladezeit der Landing-Seite. Aufwand sinkt von Datumswerte × Positionen auf Sortieren plus einmaliges Durchlaufen. |
+| **Quelle** | Mobile-Prüfung 2026-10-26, Auftrag |
+| **Konsequenz** | Keine sichtbare Änderung; Nachweis über identische Tooltip-Werte und KPIs. |
+
+## D-036 – Mobile Darstellung: Grid-Spalte begrenzen, Charts mit schmalem Koordinatenraum
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26 nach Mobile-Prüfung; Arbeitspaket BP-024) |
+| **Entscheidung** | 1. `.app` erhält `grid-template-columns: minmax(0, 1fr)`, damit die Grid-Spalte nicht auf die Mindestbreite breiter Tabellen wächst (INC-22). 2. Portfolio-Chart und System-Chart verwenden bei schmalem Container einen eigenen, höheren Koordinatenraum (statt `1000 × 340` zu verkleinern) mit grösserer Achsen- und Tooltip-Schrift, angepassten Rändern und weniger Jahreslabels (INC-23). Die Geometrie wird bei jedem Rendern aus der aktuellen Containerbreite bestimmt; Zoom- und Touch-Umrechnung nutzen dieselbe Geometrie. |
+| **Regeln** | Auf Desktop-Breiten bleibt die Darstellung unverändert (Referenzbilder pixelgleich). Werte und Interaktion unverändert. |
+| **Begründung** | Mobile-Prüfung: Seite bis 422 px breit bei 390-px-Gerät (Header-Buttons abgeschnitten); Achsentexte 2,7 bis 4 px, Tooltip-Texte 3,5 bis 4,5 px. |
+| **Quelle** | Mobile-Prüfung 2026-10-26, Auftrag |
+| **Konsequenz** | Das Portfolio-Chart setzt seine `viewBox` selbst; die Angabe in `index.html` gilt nur bis zum ersten Rendern. Die bestehende Mobile-Regel `#equityChart text { font-size: 11px; }` in `styles.css` (sie überschrieb die Schriftgrössen des System-Charts) entfällt. Das System-Chart zeichnet beim `ResizeObserver` nur noch bei geänderter Breite neu; sonst würde der Wechsel vom schmalen Raum (versteckter Tab, Breite 0) in den breiten Raum über die Höhenänderung ein zweites Rendern auslösen und die Einlaufanimation abbrechen. Touch-Wischen über Charts (INC-24) und kleine Tippflächen (INC-25) sind nicht Teil dieser Entscheidung. |

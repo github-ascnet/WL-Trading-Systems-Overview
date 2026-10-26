@@ -14,12 +14,58 @@
   "use strict";
 
   // ── Virtual SVG coordinate space ─────────────────────────────────────────
-  const SVG_W = 1000;
-  const SVG_H = 340;
+  // Wide (>= 480 px): 1000 × 340. Narrow (< 480 px, smartphones): own taller
+  // space with larger type instead of a scaled-down desktop chart (D-036).
+  const SVG_W_WIDE = 1000;
+  const SVG_H_WIDE = 340;
+  const SVG_W_NARROW = 600;
+  const SVG_H_NARROW = 420;
 
   // Two margin presets: wide (>= 480 px) and narrow (< 480 px)
   const M_WIDE = { top: 20, right: 58, bottom: 40, left: 72 };
-  const M_NARROW = { top: 16, right: 48, bottom: 36, left: 52 };
+  const M_NARROW = { top: 24, right: 64, bottom: 46, left: 86 };
+
+  // Type, stroke and tooltip sizes per coordinate space
+  const SIZES_WIDE = {
+    axisFont: 12,
+    ddFont: 11,
+    labelDy: 4,
+    xLabelInset: 12,
+    lineWidth: 3.2,
+    glowWide: 12,
+    glowMid: 6,
+    ddWidth: 1.8,
+    ddGlow: 5,
+    dotRadius: 5,
+    orbitRadius: 9,
+    tipWidth: 210,
+    tipFont: 12,
+    tipValueFont: 13,
+    tipFirstY: 18,
+    tipValueGap: 19,
+    tipLine: 17,
+    tipPad: 10,
+  };
+  const SIZES_NARROW = {
+    axisFont: 19,
+    ddFont: 18,
+    labelDy: 7,
+    xLabelInset: 14,
+    lineWidth: 5,
+    glowWide: 18,
+    glowMid: 9,
+    ddWidth: 2.6,
+    ddGlow: 7,
+    dotRadius: 8,
+    orbitRadius: 14,
+    tipWidth: 300,
+    tipFont: 19,
+    tipValueFont: 20,
+    tipFirstY: 28,
+    tipValueGap: 28,
+    tipLine: 26,
+    tipPad: 14,
+  };
 
   // ── Utility helpers ───────────────────────────────────────────────────────
 
@@ -178,12 +224,15 @@
           } style="--wl-delay:${delayMs}ms"`
         : ` class="${themeClass}"`;
     }
+    const SVG_W = isNarrow ? SVG_W_NARROW : SVG_W_WIDE;
+    const SVG_H = isNarrow ? SVG_H_NARROW : SVG_H_WIDE;
+    const sz = isNarrow ? SIZES_NARROW : SIZES_WIDE;
     const M = isNarrow ? M_NARROW : M_WIDE;
     const CW = SVG_W - M.left - M.right;
     const CH = SVG_H - M.top - M.bottom;
     const maxXLabels = isNarrow ? 4 : 12;
-    const axisFontSz = isNarrow ? 10 : 12;
-    const ddFontSz = isNarrow ? 9 : 11;
+    const axisFontSz = sz.axisFont;
+    const ddFontSz = sz.ddFont;
 
     // ── Ensure SVG scales with its container ─────────────────────────────
     svgEl.setAttribute("viewBox", `0 0 ${SVG_W} ${SVG_H}`);
@@ -267,7 +316,7 @@
     const yLabelCnt = isNarrow ? 4 : 5;
     const yLabels = Array.from({ length: yLabelCnt }, (_, i) => {
       const val = Math.exp(logMax - (i / (yLabelCnt - 1)) * logRange);
-      const y = M.top + (i / (yLabelCnt - 1)) * CH + 4;
+      const y = M.top + (i / (yLabelCnt - 1)) * CH + sz.labelDy;
       return `<text x="12" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="${axisFontSz}">${esc(
         fmtEquity(val)
       )}</text>`;
@@ -276,7 +325,7 @@
     // ── Right Y-axis: dynamic drawdown labels ────────────────────────────
     const ddAxisLabels = Array.from({ length: ddLabelCnt }, (_, i) => {
       const ddVal = -i * ddStep; // 0, -5, -10, ...
-      const y = M.top + (i / (ddLabelCnt - 1)) * CH + 4;
+      const y = M.top + (i / (ddLabelCnt - 1)) * CH + sz.labelDy;
       return `<text x="${
         SVG_W - M.right + 6
       }" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="${ddFontSz}" opacity="0.8" text-anchor="start">${esc(
@@ -284,7 +333,9 @@
       )}</text>`;
     }).join("");
 
+    // Schmaler Raum: kein Platz für den gedrehten Achsentitel
     const ddAxisTitle = (() => {
+      if (isNarrow) return "";
       const x = SVG_W - 12,
         y = M.top + CH / 2;
       return `<text x="${x}" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
@@ -316,14 +367,14 @@
         const x = M.left + ratio * CW;
         const anchor = ratio < 0.08 ? "start" : ratio > 0.92 ? "end" : "middle";
         return `<text x="${x.toFixed(2)}" y="${
-          SVG_H - 12
+          SVG_H - sz.xLabelInset
         }" text-anchor="${anchor}" class="wl-c-axis" fill="#aeb4be" font-size="${axisFontSz}">${year}</text>`;
       })
       .join("");
 
     // ── Tooltip sizing ───────────────────────────────────────────────────
-    const TIP_W = 210,
-      TIP_H = 83;
+    const TIP_W = sz.tipWidth,
+      TIP_H = sz.tipFirstY + sz.tipValueGap + sz.tipLine * 2 + 12;
 
     // ── Build SVG markup ─────────────────────────────────────────────────
     svgEl.innerHTML = `
@@ -366,32 +417,32 @@
       "wl-fade-in",
       900
     )}/>
-      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="12" stroke-opacity="0.07"
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="${sz.glowWide}" stroke-opacity="0.07"
             stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
               "wl-c-glow",
               "wl-fade-in",
               900
             )}/>
-      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="6" stroke-opacity="0.16"
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="${sz.glowMid}" stroke-opacity="0.16"
             stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
               "wl-c-glow",
               "wl-fade-in",
               900
             )}/>
-      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2"
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="${sz.lineWidth}"
             stroke-linejoin="round" stroke-linecap="round"${classAttrs(
               "wl-c-equity",
               "wl-draw-line",
               200,
               ' pathLength="1"'
             )}/>
-      <path d="${ddPath}" fill="none" stroke="#ff8c00" stroke-width="5" stroke-opacity="0.1"
+      <path d="${ddPath}" fill="none" stroke="#ff8c00" stroke-width="${sz.ddGlow}" stroke-opacity="0.1"
             stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
               "wl-c-drawdown-glow",
               "wl-fade-in",
               700
             )}/>
-      <path d="${ddPath}" fill="none" stroke="#ff8c00" stroke-width="1.8"
+      <path d="${ddPath}" fill="none" stroke="#ff8c00" stroke-width="${sz.ddWidth}"
             stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${classAttrs(
               "wl-c-drawdown",
               "wl-fade-in",
@@ -406,18 +457,18 @@
               opacity="0.35" x1="0" x2="0" y1="${M.top}" y2="${
       SVG_H - M.bottom
     }"/>
-        <circle id="sysTipOrbit" class="wl-c-orbit" r="9" fill="none" stroke="#2de2c4" stroke-width="1.2"
+        <circle id="sysTipOrbit" class="wl-c-orbit" r="${sz.orbitRadius}" fill="none" stroke="#2de2c4" stroke-width="1.2"
                 visibility="hidden" cx="0" cy="0"/>
-        <circle id="sysTipDot" class="wl-c-dot" r="5" fill="#58c4ff" stroke="#1e1f22" stroke-width="2"
+        <circle id="sysTipDot" class="wl-c-dot" r="${sz.dotRadius}" fill="#58c4ff" stroke="#1e1f22" stroke-width="2"
                 cx="0" cy="0"/>
         <rect id="sysTipBox" class="wl-c-tip-box" rx="8" ry="8" fill="#2c2f34" stroke="#42464d"
               stroke-width="1" x="0" y="0" width="${TIP_W}" height="${TIP_H}"/>
         <path id="sysTipCorners" class="wl-c-tip-corners" fill="none" stroke="#2de2c4" stroke-width="1.5"
               visibility="hidden" d=""/>
-        <text id="sysTipDate"   class="wl-c-tip-date" fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="sysTipValue"  class="wl-c-tip-value" fill="#e6e6e6" font-size="13" font-weight="600" x="0" y="0"/>
-        <text id="sysTipProfit" class="wl-c-tip-text" fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="sysTipDD"     class="wl-c-tip-dd" fill="#ff8c00" font-size="12" x="0" y="0"/>
+        <text id="sysTipDate"   class="wl-c-tip-date" fill="#b8bcc4" font-size="${sz.tipFont}" x="0" y="0"/>
+        <text id="sysTipValue"  class="wl-c-tip-value" fill="#e6e6e6" font-size="${sz.tipValueFont}" font-weight="600" x="0" y="0"/>
+        <text id="sysTipProfit" class="wl-c-tip-text" fill="#b8bcc4" font-size="${sz.tipFont}" x="0" y="0"/>
+        <text id="sysTipDD"     class="wl-c-tip-dd" fill="#ff8c00" font-size="${sz.tipFont}" x="0" y="0"/>
       </g>
       <rect id="sysChartOverlay" x="${M.left}" y="${
       M.top
@@ -474,9 +525,11 @@
       tipOrbit.setAttribute("cx", pt.x);
       tipOrbit.setAttribute("cy", pt.y);
 
-      const pad = 10;
+      const pad = sz.tipPad;
       let bx = pt.x + 12;
       if (bx + TIP_W > SVG_W - M.right) bx = pt.x - TIP_W - 12;
+      bx = Math.max(4, bx); // schmaler Raum: nicht über den linken Rand hinaus
+      const valueY = by0 => by0 + sz.tipFirstY + sz.tipValueGap;
       const by = Math.max(
         M.top,
         Math.min(pt.y - TIP_H / 2, SVG_H - M.bottom - TIP_H)
@@ -492,22 +545,22 @@
       }
 
       tipDate.setAttribute("x", bx + pad);
-      tipDate.setAttribute("y", by + 18);
+      tipDate.setAttribute("y", by + sz.tipFirstY);
       tipDate.textContent = fmtDate(pt.date);
 
       tipVal.setAttribute("x", bx + pad);
-      tipVal.setAttribute("y", by + 37);
+      tipVal.setAttribute("y", valueY(by));
       tipVal.textContent = `Portfolio: ${fmtEquity(pt.equity)}`;
 
       tipProfit.setAttribute("x", bx + pad);
-      tipProfit.setAttribute("y", by + 54);
+      tipProfit.setAttribute("y", valueY(by) + sz.tipLine);
       tipProfit.textContent = `Profit: ${fmtPct(
         calcRunningProfit(startEq, pt.equity),
         2
       )}`;
 
       tipDD.setAttribute("x", bx + pad);
-      tipDD.setAttribute("y", by + 71);
+      tipDD.setAttribute("y", valueY(by) + sz.tipLine * 2);
       tipDD.textContent = `Max Drawdown: ${fmtPct(ddPt?.drawdown ?? null, 2)}`;
     }
 
@@ -554,12 +607,18 @@
     // Der Tab "Equity Curve" ist beim Mount versteckt (Breite 0): animiert wird
     // erst das erste Rendern mit sichtbarem Container, danach nie wieder.
     let hasAnimated = false;
+    let lastWidth = null;
 
     function render() {
       const containerWidth =
         svgEl.parentElement?.offsetWidth ??
         svgEl.getBoundingClientRect().width ??
         600;
+      // Nur bei geänderter Breite neu zeichnen: Die Höhe folgt der viewBox, und ein
+      // Wechsel zwischen schmalem und breitem Raum (D-036) darf kein zweites Rendern
+      // auslösen, das die Einlaufanimation abbricht.
+      if (containerWidth === lastWidth) return;
+      lastWidth = containerWidth;
       const animate = !hasAnimated && containerWidth > 0;
       if (animate) hasAnimated = true;
       renderSystemEquityChart(svgEl, rawData, { containerWidth, animate });

@@ -64,6 +64,9 @@ flowchart TD
     BP019["BP-019<br/>Aurora: Regime, Loader"]
     BP020["BP-020<br/>Loader flüssig (Compositor)"]
     BP021["BP-021<br/>Aurora auf Detailseiten"]
+    BP022["BP-022<br/>Regime-Panel per Schalter, Footer"]
+    BP023["BP-023<br/>Ladezeit: offene Positionen"]
+    BP024["BP-024<br/>Mobile: Grid, Chart-Texte"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -101,6 +104,12 @@ flowchart TD
     BP019 --> BP020
     BP018 --> BP021
     BP014 --> BP021
+    BP005 --> BP022
+    BP002 --> BP022
+    BP004 --> BP023
+    BP004 --> BP024
+    BP008 --> BP024
+    BP011 --> BP024
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -401,6 +410,48 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Abschlusskriterien** | a) Detailseite färbt sich nach dem Regime-Zustand (Aurora, ab 701 px). b) Hero-Kurve zeichnet sich ein, Profit-% und Startdatum korrekt, kein erneutes Einzeichnen beim Tab-Wechsel. c) Lichtbänder laufen, Karten und Zeilen blenden gestaffelt ein. d) `classic`: Referenzbilder pixelgleich, kein Regime-Abruf, kein `#systemHero`. e) Reduced-Motion statisch; Bildrate mit GPU unverändert; Seitenübergang 6 von 6; keine Konsolenfehler. |
 | **Prüfung (2026-10-26)** | **Erfüllt:** a) `data-wl-regime="Caution"`, genau 1 Abruf von `wl-regime-composite.json`. b) Hero zeigt "4120%" und "EQUITY SINCE 17 OCT 2016" (entspricht `profitPercent` und `backtestStartDate`); die Linie trägt zuerst `wl-draw-line`, nach dem Einzeichnen keine Motion-Klasse mehr, auch nach Wechsel zu Metrics und zurück; Puls `wl-orbit`. c) Lichtband `wl-aurora-band` im Kopf und in den Panel-Köpfen; Karten `wl-rise-in` mit 45-ms-Versatz, Zeilen `wl-fade-in` ab 200 ms mit 25-ms-Versatz (Overview und Metrics); Positionen behalten ihre Verzögerungen aus BP-014 (Zeile 3: 0,056 s). d) `classic`: kein `#systemHero`, 0 Regime-Abrufe, keine Bänder oder Staffelung, sechs Referenzbilder 0 abweichende Pixel. e) Reduced-Motion: keine Motion-Klassen, keine Bänder, kein Puls, 0 Regime-Abrufe, Hero statisch sichtbar; Bildrate 61 (aurora, classic, reduced); Seitenübergang 6 von 6; KPI-Endwerte unverändert; keine Konsolenfehler oder Warnungen. **Während der Prüfung behoben:** Das Lichtband im Kopfbereich liess die Seite horizontal überlaufen (390 px); behoben mit `overflow-x: clip`, danach kein Überlaufen bei 1280 px und 390 px, Mobile-Menü vollständig bedienbar. Die Hero-Kurve war auf 390 px mit 59 px Höhe zu klein; behoben mit dem schmalen Koordinatenraum (jetzt 118 px Höhe). **Nicht geprüft:** Firefox, Safari, echte Mobilgeräte. |
 
+### BP-022 – Risk-Regime-Panel per Schalter, Footer vereinheitlichen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless, siehe "Prüfung") |
+| **Ziel** | Das Risk-Regime-Panel der Landing-Seite lässt sich über `kpi-config.js` ein- und ausblenden (Standard: aus); einheitlicher Footer. |
+| **Scope** | Schalter `display.showRiskRegimePanel`; Ausblenden und Nicht-Rendern in `landing.js`; `initRegimeTint` in `regime-engine-chart.js`; Footer der Detailseite "Designed by Opus 5.5". |
+| **Nicht im Scope** | Regime-Färbung abschalten; Regime-Daten oder -Berechnung ändern. |
+| **Voraussetzungen** | BP-002, BP-005 |
+| **Betroffene Dateien** | `js/kpi-config.js`, `js/landing.js`, `js/regime-engine-chart.js`, `dashboard/index.html` |
+| **Anforderungen / Decisions** | FR-L-14; D-034; D-018, D-027 |
+| **Abschlusskriterien** | a) `false`: Panel nicht sichtbar, kein Regime-SVG gerendert, Regime-Färbung aktiv. b) `true`: Panel wie bisher (Referenzbild `landing_top` pixelgleich). c) Footer beider Seiten "Designed by Opus 5.5". d) Keine Konsolenfehler. |
+| **Prüfung (2026-10-26)** | **Erfüllt:** a) Standard `false`: `.regime-engine-wrap` mit `hidden` (`display: none`), `#regimeEngineChart` ohne Kindelemente, `data-wl-regime="Caution"`, 1 Abruf Composite, 0 Abrufe Stretch Score. b) `true`: Panel sichtbar und gerendert (22 Elemente); `classic` mit `true` auf der Landing-Seite 0 abweichende Pixel zu den Referenzbildern. c) Footer Landing und Detailseite "Designed by Opus 5.5"; auf den Dashboard-Referenzbildern weicht nur der Footer-Text ab (898 Pixel im Bereich 1051–1227 × 968–978); die Dashboard-Referenzbilder wurden danach auf den neuen Footer aktualisiert. d) Keine Konsolenfehler oder Warnungen. |
+
+### BP-023 – Ladezeit: offene Positionen fortlaufend zählen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und geprüft (Vollvergleich Node, Chrome headless, siehe "Prüfung") |
+| **Ziel** | Die Landing-Seite blockiert den Main-Thread nicht mehr sekundenlang (INC-21). |
+| **Scope** | `createOpenPositionCounter` statt `countOpenPositionsOnDate` in `aggregatePortfolioSeries`. |
+| **Nicht im Scope** | Andere Berechnungen, Datenformat, Darstellung. |
+| **Voraussetzungen** | BP-004 |
+| **Betroffene Dateien** | `js/equity-overview-chart.js` |
+| **Anforderungen / Decisions** | D-035; FR-L-06 (Tooltip "Open Positions"), FR-L-07 |
+| **Abschlusskriterien** | a) Für alle Datumswerte aller registrierten Systeme liefert die neue Zählung denselben Wert wie die bisherige (Vollvergleich mit den Exportdaten). b) Tooltip-Texte an 80 Positionen und KPI-Karten identisch zu vorher. c) Längster Main-Thread-Task und Loader-Zeit deutlich kürzer (normal, CPU 2× und 4×). d) Keine Konsolenfehler. |
+| **Prüfung (2026-10-26)** | **Erfüllt:** a) Vollvergleich in Node mit den Exportdaten (Stand `6d18955`), alte Funktion wörtlich übernommen, neue direkt aus dem Quellcode extrahiert: 10 Systeme, 5 576 Positionen, 3 041 Datumswerte, **0 Abweichungen**; Rechenzeit 1 561 ms → 3,8 ms. b) Browser vorher/nachher: KPI-Karten, Statuszeile, Tooltip-Texte an 80 Positionen des Portfolio-Charts und je 40 Positionen der System-Charts zweier Systeme identisch (auch nach BP-024). c) Loader-Zeit der Landing-Seite (Chrome headless mit GPU): normale CPU ~1,2 s → 0,18 s (längster Task 0,09 s); CPU 2× 9,8 s → 0,41 s; CPU 4× 23,4 s → 2,8 s (längster Task 21,8 s → 0,72 s). d) Keine Konsolenfehler. |
+
+### BP-024 – Mobile: Grid-Spalte, Chart-Texte
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und geprüft (Chrome headless, Mobil-Emulation mit Touch, siehe "Prüfung") |
+| **Ziel** | Auf Smartphones keine Seitenverbreiterung und lesbare Chart-Texte (INC-22, INC-23). |
+| **Scope** | `.app { grid-template-columns: minmax(0, 1fr) }`; schmaler Koordinatenraum mit grösserer Schrift für Portfolio-Chart und System-Chart (inkl. Tooltip, Zoom-/Touch-Umrechnung). |
+| **Nicht im Scope** | Touch-Wischen (INC-24), Tippflächen (INC-25), Hero-Kurve (bereits in BP-021). |
+| **Voraussetzungen** | BP-004, BP-008, BP-011 |
+| **Betroffene Dateien** | `css/styles.css`, `js/equity-overview-chart.js`, `js/equity-system-chart.js` |
+| **Anforderungen / Decisions** | D-036; FR-L-05, FR-L-06, FR-D-08 |
+| **Abschlusskriterien** | a) Auf 360/375/390/412 px kein horizontales Überlaufen in allen Tabs; Tabellen scrollen in ihrem Rahmen. b) Achsentexte und Tooltip-Texte der Charts auf diesen Geräten mindestens ca. 9 px. c) Desktop-Referenzbilder pixelgleich, Tooltip-Werte unverändert. d) Zoom, Pan und Tooltip auf dem Handy funktionieren. e) Keine Konsolenfehler. |
+| **Prüfung (2026-10-26)** | **Erfüllt:** Mobile-Audit mit 6 Profilen (iPhone SE 375, iPhone 14 390, Galaxy 360, Pixel 7 412, iPhone quer 844, iPad 768; DPR 2, Touch, mobiler User-Agent), Landing oben/Kacheln und alle fünf Dashboard-Tabs. a) Vorher Positions bis 422 px und Monthly Returns bis 401 px Layoutbreite (Header-Buttons abgeschnitten); nachher auf allen Profilen Layoutbreite = Gerätebreite, Monthly-Tabelle scrollt im Rahmen (z. B. 340/688 px). b) Kleinster Text im Hochformat: Landing 8,9 bis 9,7 px (vorher 2,7 bis 3,1), Tooltip Landing 9,3 bis 9,8 px (vorher 3,5 bis 4,5), System-Chart 9,2 bis 9,7 px (vorher 3,4 bis 4,0). Im Querformat und auf dem iPad bleiben Charts im Desktop-Raum (Achsen ca. 8 bis 9 px, gedrehter Achsentitel 6,2 bis 6,8 px). c) Desktop: Referenzbilder pixelgleich (bei gleichem Datenstand gegen `HEAD` geprüft; ein Lauf zeigte einen einmaligen Render-Ausreisser, zwei Wiederholungen 0 Abweichungen); Werte an 80 + 2 × 40 Tooltip-Positionen identisch. d) Schmales Portfolio-Chart: Mausrad-Zoom, Pinch und Doppeltippen funktionieren; Tippen zeigt den Tooltip auf allen Profilen. e) Keine Konsolenfehler. **Während der Prüfung behoben:** alte Regel `#equityChart text { font-size: 11px }` überschrieb die Schrift des System-Charts; Einlaufanimation des System-Charts brach durch ein zweites Rendern ab (jetzt nur Neuzeichnen bei geänderter Breite). Regression BP-013/BP-014 danach erfüllt, Seitenübergang 6 von 6. **Offen (nicht beauftragt):** INC-24, INC-25. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -446,4 +497,7 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-T-04, FR-T-05 | BP-018 | D-031 |
 | FR-T-06, FR-T-07 | BP-019 | D-031 |
 | FR-T-09 bis FR-T-11 | BP-021 | D-033 |
+| FR-L-14 | BP-022 | D-034 |
+| INC-21 (FR-L-06/07) | BP-023 | D-035 |
+| INC-22, INC-23 (FR-L-05/06, FR-D-08) | BP-024 | D-036 |
 | Q-01 | alle | D-001 |

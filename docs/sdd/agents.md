@@ -178,7 +178,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 3. Chart: Kurve, orange Drawdown-Linie, Jahreslabels, Tooltip mit neun Werten.
 4. Zoom (Mausrad), Pan (Ziehen), Reset (Doppelklick und Button) funktionieren; Touch auf einem mobilen Gerät oder in der Geräteemulation.
 5. Sechs KPI-Karten mit plausibler Einfärbung (Regeln aus Kapitel 9 in `project_plan.md`).
-6. Regime-Panel zeigt Kurve, Zustandsbänder und End-Label.
+6. Regime-Panel: nur sichtbar bei `display.showRiskRegimePanel: true` in `kpi-config.js` (Standard `false`, D-034); dann zeigt es Kurve, Zustandsbänder und End-Label. Die Regime-Färbung wirkt in beiden Fällen.
 7. Eine Kachel je registriertem System; Klick öffnet das Dashboard mit dem richtigen Parameter.
 8. Konsole ohne neue Fehler. Warnungen zu übersprungenen Systemen sind zu prüfen.
 9. Motion (D-026): Nach dem Loader zeichnen sich Portfolio-Linie und Regime-Linie ein, die KPI-Karten zählen auf den bisherigen Endwert hoch. Zoom, Pan und Reset zeichnen nicht neu ein. Mit aktivem `prefers-reduced-motion` erscheinen die Endwerte sofort.
@@ -207,6 +207,12 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 2. `wl-equity.json`: aufsteigende Daten, numerische `equity`.
 3. `wl-positions.json`: Felder gemäss `project_plan.md` 5.3.
 4. `systems.js`-Eintrag vorhanden und `id` entspricht dem Ordnernamen.
+
+**Mobile (D-036)**
+
+1. In der Geräteemulation mit Touch (360 bis 412 px Breite): kein horizontales Überlaufen in allen Tabs; breite Tabellen scrollen in ihrem Rahmen.
+2. Chart-Achsen und Tooltips sind lesbar (etwa 9 px oder mehr); Tippen zeigt den Tooltip.
+3. Neue Chart-Elemente erhalten ihre Grössen aus der Geometrie (`getChartGeometry` bzw. `SIZES_WIDE`/`SIZES_NARROW`), keine festen Pixelwerte im Markup und keine CSS-Schriftgrössen für SVG-Texte.
 
 ### 9.3 Berichten
 

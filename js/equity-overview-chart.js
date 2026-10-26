@@ -4,6 +4,68 @@
   const CHART_MARGIN = { top: 20, right: 58, bottom: 40, left: 72 };
   const DEFAULT_EQUITY_DIVISOR = 100;
   const DEFAULT_PERIODS_PER_YEAR = 252;
+  const NARROW_CHART_MAX_WIDTH = 600;
+
+  /**
+   * Chart geometry for the current rendered width (D-036). Desktop keeps the
+   * 1000 × 340 space; narrow containers (smartphones) get a taller space with
+   * larger type instead of a scaled-down desktop chart. Render, tooltip and
+   * zoom/touch conversion all use the same geometry.
+   */
+  function getChartGeometry(svgElement) {
+    const renderedWidth =
+      svgElement?.getBoundingClientRect().width || SVG_WIDTH;
+
+    if (renderedWidth >= NARROW_CHART_MAX_WIDTH) {
+      return {
+        isNarrow: false,
+        width: SVG_WIDTH,
+        height: SVG_HEIGHT,
+        margin: CHART_MARGIN,
+        axisFont: 12,
+        ddFont: 11,
+        labelDy: 4,
+        xLabelInset: 12,
+        lineWidth: 3.2,
+        glowWide: 12,
+        glowMid: 6,
+        ddWidth: 1.8,
+        ddGlow: 5,
+        dotRadius: 5,
+        orbitRadius: 9,
+        tipWidth: 210,
+        tipFont: 12,
+        tipValueFont: 13,
+        tipFirstY: 18,
+        tipValueGap: 19,
+        tipLine: 17,
+      };
+    }
+
+    return {
+      isNarrow: true,
+      width: 600,
+      height: 420,
+      margin: { top: 24, right: 64, bottom: 46, left: 86 },
+      axisFont: 19,
+      ddFont: 18,
+      labelDy: 7,
+      xLabelInset: 14,
+      lineWidth: 5,
+      glowWide: 18,
+      glowMid: 9,
+      ddWidth: 2.6,
+      ddGlow: 7,
+      dotRadius: 8,
+      orbitRadius: 14,
+      tipWidth: 300,
+      tipFont: 19,
+      tipValueFont: 20,
+      tipFirstY: 28,
+      tipValueGap: 28,
+      tipLine: 26,
+    };
+  }
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -316,30 +378,59 @@
   }
 
   /**
-   * Counts how many positions of a single system were open on a given date.
+   * Counts the open positions of all systems per date (D-035).
    * A position is considered open on date D when:
-   *   entryDate <= D  AND  (isOpen === true  OR  exitDate > D)
+   *   entryDate <= D  AND  (isOpen === true  OR  no exitDate  OR  exitDate > D)
+   * Entry and exit timestamps are sorted once; two pointers then count
+   * "entries <= D" minus "exits <= D" while the dates ascend. This replaces a
+   * loop over all positions per date (INC-21).
+   *
+   * @param   {Array<Array>} positionLists – raw positions per system
+   * @returns {function}     openPositionsAt(timestamp), timestamps must ascend
    */
-  function countOpenPositionsOnDate(rawPositions, targetTimestamp) {
-    if (!Array.isArray(rawPositions)) return 0;
-    let count = 0;
-    for (const pos of rawPositions) {
-      const entryTs = Date.parse(String(pos?.entryDate ?? ""));
-      if (!Number.isFinite(entryTs) || entryTs > targetTimestamp) continue;
-      const isOpen = pos?.isOpen === true;
-      const exitRaw = String(pos?.exitDate ?? "")
-        .trim()
-        .toLowerCase();
-      if (isOpen || !exitRaw || exitRaw === "open") {
-        count += 1;
-        continue;
+  function createOpenPositionCounter(positionLists) {
+    const entries = [];
+    const exits = [];
+
+    positionLists.forEach((rawPositions) => {
+      if (!Array.isArray(rawPositions)) return;
+
+      rawPositions.forEach((pos) => {
+        const entryTs = Date.parse(String(pos?.entryDate ?? ""));
+        if (!Number.isFinite(entryTs)) return;
+
+        const exitRaw = String(pos?.exitDate ?? "")
+          .trim()
+          .toLowerCase();
+        const isOpen = pos?.isOpen === true || !exitRaw || exitRaw === "open";
+        const exitTs = isOpen ? Infinity : Date.parse(exitRaw);
+
+        // Invalid exit or exit not after entry: never open on any date (as before)
+        if (!(exitTs > entryTs)) return;
+
+        entries.push(entryTs);
+        if (exitTs !== Infinity) exits.push(exitTs);
+      });
+    });
+
+    entries.sort((a, b) => a - b);
+    exits.sort((a, b) => a - b);
+
+    let entryIndex = 0;
+    let exitIndex = 0;
+
+    return function openPositionsAt(targetTimestamp) {
+      while (
+        entryIndex < entries.length &&
+        entries[entryIndex] <= targetTimestamp
+      ) {
+        entryIndex += 1;
       }
-      const exitTs = Date.parse(exitRaw);
-      if (Number.isFinite(exitTs) && exitTs > targetTimestamp) {
-        count += 1;
+      while (exitIndex < exits.length && exits[exitIndex] <= targetTimestamp) {
+        exitIndex += 1;
       }
-    }
-    return count;
+      return entryIndex - exitIndex;
+    };
   }
 
   function aggregatePortfolioSeries(seriesCollection, unifiedDateAxis) {
@@ -366,6 +457,9 @@
         .sort((a, b) => a.exitTs - b.exitTs)
     );
     const posPointers = sortedClosedPositions.map(() => 0);
+    const openPositionsAt = createOpenPositionCounter(
+      filledSeriesCollection.map((entry) => entry.rawPositions)
+    );
     let cumulativeGrossProfit = 0;
     let cumulativeGrossLoss = 0;
     let cumulativeClosedTrades = 0;
@@ -387,7 +481,7 @@
         let activeSystems = 0;
         let stepReturnSum = 0;
         let stepReturnCount = 0;
-        let totalOpenPositions = 0;
+        const totalOpenPositions = openPositionsAt(axisPoint.timestamp);
 
         // Advance profit factor accumulators for trades closed up to this date
         sortedClosedPositions.forEach((positions, sysIdx) => {
@@ -419,11 +513,6 @@
             totalEquity += point.equity;
             activeSystems += 1;
           }
-
-          totalOpenPositions += countOpenPositionsOnDate(
-            entry.rawPositions,
-            axisPoint.timestamp
-          );
 
           if (index > 0) {
             const previousPoint = entry.series[index - 1];
@@ -921,9 +1010,9 @@
     // Replace portfolioSeries references inside this function with activeSeries
     portfolioSeries = activeSeries;
 
-    const width = SVG_WIDTH;
-    const height = SVG_HEIGHT;
-    const margin = CHART_MARGIN;
+    const geometry = getChartGeometry(containerElement);
+    const { width, height, margin } = geometry;
+    containerElement.setAttribute("viewBox", `0 0 ${width} ${height}`);
     const chartWidth = width - margin.left - margin.right;
     const chartHeight = height - margin.top - margin.bottom;
     const minTimestamp = Number(portfolioSeries[0]?.timestamp);
@@ -1043,9 +1132,11 @@
     const yLabels = Array.from({ length: 5 }, (_, i) => {
       const logValue = logMax - (i / 4) * logRange;
       const value = Math.exp(logValue);
-      const y = margin.top + (i / 4) * chartHeight + 4;
+      const y = margin.top + (i / 4) * chartHeight + geometry.labelDy;
 
-      return `<text x="12" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="12">${escapeHtml(
+      return `<text x="12" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="${
+        geometry.axisFont
+      }">${escapeHtml(
         formatScaledEquityValue(value, 0)
       )}</text>`;
     }).join("");
@@ -1054,14 +1145,18 @@
     const drawdownAxisLabels = Array.from({ length: 7 }, (_, i) => {
       const ddValue = i * (drawdownAxisMin / 6);
       const ratio = i / 6;
-      const y = margin.top + ratio * chartHeight + 4;
+      const y = margin.top + ratio * chartHeight + geometry.labelDy;
       const x = width - margin.right + 6;
-      return `<text x="${x}" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="11" opacity="0.8" text-anchor="start">${escapeHtml(
+      return `<text x="${x}" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="${
+        geometry.ddFont
+      }" opacity="0.8" text-anchor="start">${escapeHtml(
         formatPercent(ddValue, 0)
       )}</text>`;
     }).join("");
 
+    // Auf schmalen Charts fehlt der Platz für den gedrehten Achsentitel
     const drawdownAxisTitle = (() => {
+      if (geometry.isNarrow) return "";
       const x = width - 12;
       const y = margin.top + chartHeight / 2;
       return `<text x="${x}" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
@@ -1070,7 +1165,11 @@
     const allYears = [
       ...new Set(chartSeries.map((p) => new Date(p.date).getFullYear())),
     ];
-    const xLabels = allYears
+    // Schmale Charts: nur jedes zweite Jahr, sonst überlappen die Labels
+    const labelYears = geometry.isNarrow
+      ? allYears.filter((_, index) => index % 2 === 0)
+      : allYears;
+    const xLabels = labelYears
       .map((year) => {
         const point = chartSeries.find(
           (p) => new Date(p.date).getFullYear() === year
@@ -1081,10 +1180,15 @@
         const x = margin.left + ratio * chartWidth;
         const anchor = ratio < 0.08 ? "start" : ratio > 0.92 ? "end" : "middle";
         return `<text x="${x.toFixed(2)}" y="${
-          height - 12
-        }" text-anchor="${anchor}" class="wl-c-axis" fill="#aeb4be" font-size="12">${year}</text>`;
+          height - geometry.xLabelInset
+        }" text-anchor="${anchor}" class="wl-c-axis" fill="#aeb4be" font-size="${
+          geometry.axisFont
+        }">${year}</text>`;
       })
       .join("");
+
+    const tipHeight =
+      geometry.tipFirstY + geometry.tipValueGap + geometry.tipLine * 7 + 12;
 
     containerElement.innerHTML = `
       <defs>
@@ -1130,17 +1234,23 @@
       "wl-fade-in",
       900
     )}></path>
-      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="12" stroke-opacity="0.07" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="${
+        geometry.glowWide
+      }" stroke-opacity="0.07" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
       "wl-c-glow",
       "wl-fade-in",
       900
     )}></path>
-      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="6" stroke-opacity="0.16" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="${
+        geometry.glowMid
+      }" stroke-opacity="0.16" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
       "wl-c-glow",
       "wl-fade-in",
       900
     )}></path>
-      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"${classAttrs(
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="${
+        geometry.lineWidth
+      }" stroke-linejoin="round" stroke-linecap="round"${classAttrs(
       "wl-c-equity",
       "wl-draw-line",
       200,
@@ -1153,12 +1263,16 @@
           ? `<path d="${drawdownPath}" fill="none" stroke="url(#portfolioOverviewDrawdownStroke)" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"></path>`
           : ""
       }
-      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="5" stroke-opacity="0.1" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="${
+        geometry.ddGlow
+      }" stroke-opacity="0.1" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
       "wl-c-drawdown-glow",
       "wl-fade-in",
       700
     )}></path>
-      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${classAttrs(
+      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="${
+        geometry.ddWidth
+      }" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${classAttrs(
       "wl-c-drawdown",
       "wl-fade-in",
       700
@@ -1171,19 +1285,43 @@
         <line id="portfolioTooltipLine" class="wl-c-crosshair" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 2" opacity="0.35" x1="0" x2="0" y1="${
           margin.top
         }" y2="${height - margin.bottom}"/>
-        <circle id="portfolioTooltipOrbit" class="wl-c-orbit" r="9" fill="none" stroke="#2de2c4" stroke-width="1.2" visibility="hidden" cx="0" cy="0"/>
-        <circle id="portfolioTooltipDot" class="wl-c-dot" r="5" fill="#58c4ff" stroke="#1e1f22" stroke-width="2" cx="0" cy="0"/>
-        <rect id="portfolioTooltipBox" class="wl-c-tip-box" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="210" height="168"/>
+        <circle id="portfolioTooltipOrbit" class="wl-c-orbit" r="${
+          geometry.orbitRadius
+        }" fill="none" stroke="#2de2c4" stroke-width="1.2" visibility="hidden" cx="0" cy="0"/>
+        <circle id="portfolioTooltipDot" class="wl-c-dot" r="${
+          geometry.dotRadius
+        }" fill="#58c4ff" stroke="#1e1f22" stroke-width="2" cx="0" cy="0"/>
+        <rect id="portfolioTooltipBox" class="wl-c-tip-box" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="${
+          geometry.tipWidth
+        }" height="${tipHeight}"/>
         <path id="portfolioTooltipCorners" class="wl-c-tip-corners" fill="none" stroke="#2de2c4" stroke-width="1.5" visibility="hidden" d=""/>
-        <text id="portfolioTooltipDate" class="wl-c-tip-date" fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipValue" class="wl-c-tip-value" fill="#e6e6e6" font-size="13" x="0" y="0"/>
-        <text id="portfolioTooltipProfit" class="wl-c-tip-text" fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipDrawdown" class="wl-c-tip-dd" fill="#ff8c00" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipOpenPos" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipApr" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipPF" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipSharpe" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipProfitable" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipDate" class="wl-c-tip-date" fill="#b8bcc4" font-size="${
+          geometry.tipFont
+        }" x="0" y="0"/>
+        <text id="portfolioTooltipValue" class="wl-c-tip-value" fill="#e6e6e6" font-size="${
+          geometry.tipValueFont
+        }" x="0" y="0"/>
+        <text id="portfolioTooltipProfit" class="wl-c-tip-text" fill="#b8bcc4" font-size="${
+          geometry.tipFont
+        }" x="0" y="0"/>
+        <text id="portfolioTooltipDrawdown" class="wl-c-tip-dd" fill="#ff8c00" font-size="${
+          geometry.tipFont
+        }" x="0" y="0"/>
+        <text id="portfolioTooltipOpenPos" class="wl-c-tip-text" fill="#9aa7bf" font-size="${
+          geometry.tipFont
+        }" x="0" y="0"/>
+        <text id="portfolioTooltipApr" class="wl-c-tip-text" fill="#9aa7bf" font-size="${
+          geometry.tipFont
+        }" x="0" y="0"/>
+        <text id="portfolioTooltipPF" class="wl-c-tip-text" fill="#9aa7bf" font-size="${
+          geometry.tipFont
+        }" x="0" y="0"/>
+        <text id="portfolioTooltipSharpe" class="wl-c-tip-text" fill="#9aa7bf" font-size="${
+          geometry.tipFont
+        }" x="0" y="0"/>
+        <text id="portfolioTooltipProfitable" class="wl-c-tip-text" fill="#9aa7bf" font-size="${
+          geometry.tipFont
+        }" x="0" y="0"/>
       </g>
       <rect id="portfolioChartOverlay" x="${margin.left}" y="${
       margin.top
@@ -1247,13 +1385,18 @@
       tooltipOrbit.setAttribute("cx", point.x);
       tooltipOrbit.setAttribute("cy", point.y);
 
-      const boxWidth = 210;
-      const boxHeight = 168;
-      const pad = 10;
+      const boxWidth = geometry.tipWidth;
+      const boxHeight = tipHeight;
+      const pad = geometry.isNarrow ? 14 : 10;
       let boxX = point.x + 12;
       if (boxX + boxWidth > width - margin.right) {
         boxX = point.x - boxWidth - 12;
       }
+      // Schmale Charts: Box nicht über den linken Rand hinaus schieben
+      boxX = Math.max(4, boxX);
+      // Zeile k der Kennzahlen unter Datum und Portfolio-Wert
+      const valueY = boxY0 => boxY0 + geometry.tipFirstY + geometry.tipValueGap;
+      const lineY = (boxY0, k) => valueY(boxY0) + geometry.tipLine * k;
 
       const boxY = Math.max(
         margin.top,
@@ -1270,18 +1413,18 @@
       }
 
       tooltipDateEl.setAttribute("x", boxX + pad);
-      tooltipDateEl.setAttribute("y", boxY + 18);
+      tooltipDateEl.setAttribute("y", boxY + geometry.tipFirstY);
       tooltipDateEl.textContent = formatDateLabel(point.date);
 
       tooltipValueEl.setAttribute("x", boxX + pad);
-      tooltipValueEl.setAttribute("y", boxY + 37);
+      tooltipValueEl.setAttribute("y", valueY(boxY));
       tooltipValueEl.textContent = `Portfolio Value: ${formatScaledEquityValue(
         point.equity,
         0
       )}`;
 
       tooltipOpenPosEl.setAttribute("x", boxX + pad);
-      tooltipOpenPosEl.setAttribute("y", boxY + 54);
+      tooltipOpenPosEl.setAttribute("y", lineY(boxY, 1));
       tooltipOpenPosEl.textContent = `Open Positions: ${
         point.openPositions ?? 0
       }`;
@@ -1296,39 +1439,39 @@
             100
           : null;
       tooltipAprEl.setAttribute("x", boxX + pad);
-      tooltipAprEl.setAttribute("y", boxY + 71);
+      tooltipAprEl.setAttribute("y", lineY(boxY, 2));
       tooltipAprEl.textContent = `APR/CAGR: ${formatPercent(runningApr, 2)}`;
 
       tooltipProfitEl.setAttribute("x", boxX + pad);
-      tooltipProfitEl.setAttribute("y", boxY + 88);
+      tooltipProfitEl.setAttribute("y", lineY(boxY, 3));
       tooltipProfitEl.textContent = `Profit: ${formatPercent(
         calculateRunningProfitPercent(startingEquity, point.equity),
         0
       )}`;
 
       tooltipDrawdownEl.setAttribute("x", boxX + pad);
-      tooltipDrawdownEl.setAttribute("y", boxY + 105);
+      tooltipDrawdownEl.setAttribute("y", lineY(boxY, 4));
       tooltipDrawdownEl.textContent = `Drawdown: ${formatPercent(
         ddPoint?.drawdown ?? null,
         2
       )}`;
 
       tooltipPFEl.setAttribute("x", boxX + pad);
-      tooltipPFEl.setAttribute("y", boxY + 122);
+      tooltipPFEl.setAttribute("y", lineY(boxY, 5));
       tooltipPFEl.textContent = `Profit Factor: ${formatRatio(
         point.profitFactor ?? null,
         2
       )}`;
 
       tooltipSharpeEl.setAttribute("x", boxX + pad);
-      tooltipSharpeEl.setAttribute("y", boxY + 139);
+      tooltipSharpeEl.setAttribute("y", lineY(boxY, 6));
       tooltipSharpeEl.textContent = `Sharpe Ratio: ${formatRatio(
         point.sharpeRatio ?? null,
         2
       )}`;
 
       tooltipProfitableEl.setAttribute("x", boxX + pad);
-      tooltipProfitableEl.setAttribute("y", boxY + 156);
+      tooltipProfitableEl.setAttribute("y", lineY(boxY, 7));
       tooltipProfitableEl.textContent = `Profitable: ${formatPercent(
         point.profitablePercent ?? null,
         1
@@ -1436,8 +1579,9 @@
         if (!isDragging) return;
         const svgEl = chartContainerElement;
         const rect = svgEl.getBoundingClientRect();
-        const chartWidth = SVG_WIDTH - CHART_MARGIN.left - CHART_MARGIN.right;
-        const dxPx = (dragStartX - e.clientX) * (SVG_WIDTH / rect.width);
+        const g = getChartGeometry(svgEl);
+        const chartWidth = g.width - g.margin.left - g.margin.right;
+        const dxPx = (dragStartX - e.clientX) * (g.width / rect.width);
         const range = dragStartMax - dragStartMin;
         const dxMs = dxPx / (chartWidth / range);
         zoomState.min = Math.max(
@@ -1463,7 +1607,9 @@
         const overlayEl = svgEl.querySelector("#portfolioChartOverlay");
         if (!overlayEl) return;
         const signal = overlayAbortController.signal;
-        const chartWidth = SVG_WIDTH - CHART_MARGIN.left - CHART_MARGIN.right;
+        // Dieselbe Geometrie wie beim Rendern (Desktop oder schmaler Raum, D-036)
+        const g = getChartGeometry(svgEl);
+        const chartWidth = g.width - g.margin.left - g.margin.right;
 
         overlayEl.addEventListener(
           "wheel",
@@ -1473,7 +1619,7 @@
             const relX = (e.clientX - rect.left) / rect.width;
             const chartRelX = Math.max(
               0,
-              Math.min(1, (relX * SVG_WIDTH - CHART_MARGIN.left) / chartWidth)
+              Math.min(1, (relX * g.width - g.margin.left) / chartWidth)
             );
             const pivotTs =
               zoomState.min + chartRelX * (zoomState.max - zoomState.min);
@@ -1534,7 +1680,7 @@
         overlayEl.addEventListener(
           "touchmove",
           (e) => {
-            const chartW = SVG_WIDTH - CHART_MARGIN.left - CHART_MARGIN.right;
+            const chartW = chartWidth;
             const rect = svgEl.getBoundingClientRect();
             if (e.touches.length === 2 && lastTouchDist !== null) {
               e.preventDefault();
@@ -1547,8 +1693,8 @@
                 0,
                 Math.min(
                   1,
-                  (((midX - rect.left) / rect.width) * SVG_WIDTH -
-                    CHART_MARGIN.left) /
+                  (((midX - rect.left) / rect.width) * g.width -
+                    g.margin.left) /
                     chartW
                 )
               );
@@ -1562,7 +1708,7 @@
               applyZoom();
             } else if (e.touches.length === 1 && lastTouchX !== null) {
               const dxPx =
-                (lastTouchX - e.touches[0].clientX) * (SVG_WIDTH / rect.width);
+                (lastTouchX - e.touches[0].clientX) * (g.width / rect.width);
               const range = dragStartMax - dragStartMin;
               const dxMs = dxPx / (chartW / range);
               zoomState.min = Math.max(
