@@ -128,9 +128,11 @@ Wealth-Lab-Strategy-Orchestrator/
 |- css/
 |  |- landing.css                  Styles der Landing-Seite
 |  |- styles.css                   Styles des Dashboards
+|  |- motion.css                   Einlaufanimationen (beide Seiten)
 |- js/
 |  |- systems.js                   Systemregister (window.SYSTEMS)
 |  |- kpi-config.js                KPI-Konfiguration und Ampellogik
+|  |- motion.js                    Motion: Bereitschaft, Hochzählen (beide Seiten)
 |  |- landing.js                   Landing: Karten, Orchestrierung
 |  |- equity-overview-chart.js     Landing: Portfolio-Chart und -KPIs
 |  |- regime-engine-chart.js       Landing: Risk-Regime-Panel
@@ -154,6 +156,7 @@ Wealth-Lab-Strategy-Orchestrator/
 | Landing-Orchestrierung | `js/landing.js` | Loader, Systemkacheln, Tilt-Effekt, Start von Portfolio-Chart und Regime-Panel | keine (IIFE) |
 | Portfolio-Chart | `js/equity-overview-chart.js` | Laden aller Equity-/Positionsdaten, Aggregation, KPIs, SVG, Zoom/Pan | `window.initEquityOverviewChart`, `window._wlPortfolioTimeRange` |
 | Regime-Panel | `js/regime-engine-chart.js` | Laden und Zeichnen von Composite- und Stretch-Score | `window.initRegimeEnginePanel`, `window.renderRegimeEnginePanel` |
+| Motion | `js/motion.js`, `css/motion.css` | Aktivierung der Einlaufanimationen (nicht bei Reduced-Motion), Start nach dem Loader, Hochzählen von Kennzahlen | `window.WL_MOTION` (`countUp`, `whenReady`) |
 | Dashboard-Loader | `js/dashboard-loader.js` | URL-Parameter lesen, validieren, 4 JSON-Dateien laden, `bootDashboard` aufrufen, Fehler anzeigen | keine (IIFE, startet sofort) |
 | Dashboard-Renderer | `js/main.js` | Normalisierung, Tabs, Overview, Metrics, Positions, Tooltips | `window.bootDashboard`, `window.renderError` sowie globale Funktionen (`escapeHtml`, `formatNumber`, `formatPercent`, `getValueClass` u. a.) |
 | Monatsrenditen | `js/monthly-returns.js` | Monatsmatrix, Jahresrendite, Tabelle | globale Funktion `renderMonthlyReturns` |
@@ -163,8 +166,8 @@ Wealth-Lab-Strategy-Orchestrator/
 
 | Seite | Mechanismus | Reihenfolge |
 |---|---|---|
-| Landing | Dynamisches, **sequenzielles** Nachladen mit Cache-Buster `?v=<Date.now()>` [CODE] | `systems.js` → `kpi-config.js` → `equity-overview-chart.js` → `regime-engine-chart.js` → `landing.js` |
-| Dashboard | Statische `<script>`-Tags ohne Cache-Buster [CODE] | `monthly-returns.js` → `kpi-config.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js` |
+| Landing | Dynamisches, **sequenzielles** Nachladen mit Cache-Buster `?v=<Date.now()>` [CODE] | `systems.js` → `kpi-config.js` → `motion.js` → `equity-overview-chart.js` → `regime-engine-chart.js` → `landing.js` |
+| Dashboard | Statische `<script>`-Tags ohne Cache-Buster [CODE] | `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js` |
 
 Kopplung: `monthly-returns.js` ruft Funktionen auf, die erst in `main.js` definiert werden (`escapeHtml`, `formatNumber`, `formatPercent`, `getValueClass`). Das funktioniert, weil die Aufrufe zur Laufzeit nach dem Laden aller Skripte erfolgen. [CODE]
 
@@ -484,6 +487,20 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 - Datum: Dashboard `dd/mm/yyyy`; Kachel mit Uhrzeit; Chart `dd/mm/yy`; Positionen `d MMM yyyy`.
 - UI-Texte sind Englisch.
 
+### 10.5 Motion (Einlaufanimationen) **[Auftrag 2026-10-26, D-026, BP-013]**
+
+| ID | Anforderung | Herkunft |
+|---|---|---|
+| FR-M-01 | Beim ersten Rendern zeichnet sich die Equity-Linie des Portfolio-Charts (ca. 1,4 s) ein; Flächenverlauf und Drawdown-Linie blenden verzögert ein. | Auftrag |
+| FR-M-02 | Das Regime-Panel zeichnet die Composite-Linie ein; die Zustandsbänder (und, falls aktiviert, die Stretch-Linie) blenden verzögert ein. | Auftrag |
+| FR-M-03 | Im Dashboard zeichnet sich die Equity-Linie des System-Charts beim ersten Sichtbarwerden des Tabs "Equity Curve" ein. | Auftrag |
+| FR-M-04 | Die Zahlenwerte der sechs Portfolio-KPI-Karten (Landing) und der neun Overview-Karten (Dashboard) zählen von 0 auf den Endwert hoch. Der Endwert ist exakt der bisherige formatierte Text. Nicht numerische Werte ("-", "N/A") werden nicht animiert. | Auftrag |
+| FR-M-05 | Trophäen erscheinen nach dem Hochzählen mit einem kurzen Pop-Effekt. | Auftrag |
+| FR-M-06 | Die Animationen starten erst, nachdem der Loader ausgeblendet ist (Fallback nach 8 s). Zoom, Pan, Resize und Neuzeichnen lösen keine erneute Einlaufanimation aus. | Auftrag |
+| FR-M-07 | Bei `prefers-reduced-motion: reduce` und ohne `motion.js` erscheint der Endzustand sofort; Funktion und Werte sind identisch. | Auftrag |
+
+Nicht Teil dieses Auftrags: gestaffelte Systemkacheln, Sparklines, Seitenübergänge, Hintergrundanimation, Regime-Glow, gleitender Tab-Indikator, Heatmap (Vorschläge 2 und 3).
+
 ---
 
 ## 11. Fehlerbehandlung (Ist)
@@ -576,6 +593,7 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | INC-17 | T | Die Standardwerte im Code (`showRegimeStretchScore ?? true`) widersprechen dem konfigurierten Wert `false`; massgeblich ist die Konfiguration. Die CSS-Klasse `regime-legend-composite` hat keinen HTML-Gegenpart. | `regime-engine-chart.js`, `kpi-config.js` |
 | INC-18 | T | `lastUpdate` ist `"YYYY-MM-DD HH:mm:ss"` (nicht ISO-8601). Ob `new Date()` dies in allen Browsern parst, ist nicht belegt; bei Fehlschlag wird der Rohstring angezeigt. | `landing.js`, `main.js` |
 | INC-19 | T | Hilfsfunktionen (`escapeHtml`, `formatNumber`, `formatPercent`, `safeGet`, `fetchJson`) sind in mehreren Dateien dupliziert, teils mit abweichenden Fallbacks ("-" gegenüber "N/A"). | `main.js`, `landing.js`, Chart-Module |
+| INC-20 | T | `landing.css` enthält keine `prefers-reduced-motion`-Regel; `styles.css` schaltet alle Animationen global ab. Auf der Landing-Seite laufen die bestehenden Animationen (Loader, Kachel-Hover) bei Reduced-Motion weiter. BP-013 deckt nur die neue Motion ab (FR-M-07) und ändert dies nicht. | `css/landing.css`, `css/styles.css` |
 
 ### 14.2 Offene Entscheidungen und fehlende Information
 
@@ -627,3 +645,4 @@ Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt n
 | FR-D-10 | BP-010 |
 | 10.1 bis 10.3 | BP-011 |
 | 12.2 (ausserhalb des Repos) | BP-012 |
+| FR-M-01 bis FR-M-07 (10.5) | BP-013 |

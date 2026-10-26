@@ -853,9 +853,9 @@
         <div class="card-label">${escapeHtml(label)}</div>
         <div class="card-value ${escapeHtml(
           presentation.className
-        )}">${escapeHtml(formattedValue)}${
+        )}"><span class="wl-count">${escapeHtml(formattedValue)}</span>${
       presentation.trophy
-        ? ' <span class="kpi-trophy" aria-hidden="true">&#127942;</span>'
+        ? ' <span class="kpi-trophy wl-trophy-pop" aria-hidden="true">&#127942;</span>'
         : ""
     }</div>
       </div>
@@ -880,6 +880,8 @@
         )
       )
       .join("");
+
+    global.WL_MOTION?.countUp(containerElement);
   }
 
   function renderEquityOverviewChart(
@@ -888,6 +890,18 @@
     zoomedSeries
   ) {
     if (!containerElement) return;
+
+    // Einlaufanimation nur beim ersten Rendern; Zoom/Pan übergibt zoomedSeries
+    const animate = !zoomedSeries;
+    const lineMotion = animate
+      ? ' class="wl-draw-line" pathLength="1" style="--wl-delay:200ms"'
+      : "";
+    const areaMotion = animate
+      ? ' class="wl-fade-in" style="--wl-delay:900ms"'
+      : "";
+    const drawdownMotion = animate
+      ? ' class="wl-fade-in" style="--wl-delay:700ms"'
+      : "";
 
     const activeSeries =
       Array.isArray(zoomedSeries) && zoomedSeries.length >= 2
@@ -1086,8 +1100,8 @@
       <g opacity="0.28" stroke="#5a5f67" stroke-width="1">
         ${horizontalGrid}
       </g>
-      <path d="${areaPath}" fill="url(#portfolioOverviewFill)"></path>
-      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"></path>
+      <path d="${areaPath}" fill="url(#portfolioOverviewFill)"${areaMotion}></path>
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"${lineMotion}></path>
       ${
         // Max-DD-Segment-Overlay auf der Equity-Kurve — kann entfernt werden,
         // sobald die vollständige Drawdown-Kurve unten als ausreichend gilt.
@@ -1095,7 +1109,7 @@
           ? `<path d="${drawdownPath}" fill="none" stroke="url(#portfolioOverviewDrawdownStroke)" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"></path>`
           : ""
       }
-      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"></path>
+      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${drawdownMotion}></path>
       ${yLabels}
       ${drawdownAxisLabels}
       ${drawdownAxisTitle}

@@ -295,17 +295,17 @@
       <rect x="${M.left}" y="${
       M.top
     }" width="${CHART_W}" height="${CHART_H}" fill="rgba(10,15,24,0.55)"/>
-      <g clip-path="url(#regimeClip)">${bgSegments}</g>
+      <g clip-path="url(#regimeClip)" class="wl-fade-in" style="--wl-delay:600ms">${bgSegments}</g>
       <g>${gridLines}</g>
       <g>${yAxisLabels}</g>
       ${
         stretchPath
-          ? `<path d="${stretchPath}" fill="none" stroke="${COLOR_STRETCH}" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round" opacity="0.50" clip-path="url(#regimeClip)"/>`
+          ? `<path d="${stretchPath}" fill="none" stroke="${COLOR_STRETCH}" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round" opacity="0.50" clip-path="url(#regimeClip)" class="wl-fade-in" style="--wl-delay:600ms"/>`
           : ""
       }
       ${
         compositePath
-          ? `<path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)"/>`
+          ? `<path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)" class="wl-draw-line" pathLength="1" style="--wl-delay:300ms"/>`
           : ""
       }
       ${compositeEndLabel}

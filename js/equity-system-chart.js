@@ -166,6 +166,18 @@
       svgEl.getBoundingClientRect().width ??
       600;
     const isNarrow = containerWidth < 480;
+
+    // Einlaufanimation nur beim ersten sichtbaren Rendern (opts.animate)
+    const animate = opts?.animate === true;
+    const lineMotion = animate
+      ? ' class="wl-draw-line" pathLength="1" style="--wl-delay:200ms"'
+      : "";
+    const areaMotion = animate
+      ? ' class="wl-fade-in" style="--wl-delay:900ms"'
+      : "";
+    const ddMotion = animate
+      ? ' class="wl-fade-in" style="--wl-delay:700ms"'
+      : "";
     const M = isNarrow ? M_NARROW : M_WIDE;
     const CW = SVG_W - M.left - M.right;
     const CH = SVG_H - M.top - M.bottom;
@@ -323,11 +335,11 @@
       </defs>
       <g opacity="0.28" stroke="#5a5f67" stroke-width="1">${hGrid}</g>
       ${cashZoneRects}
-      <path d="${areaPath}" fill="url(#sysEquityFill)"/>
+      <path d="${areaPath}" fill="url(#sysEquityFill)"${areaMotion}/>
       <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2"
-            stroke-linejoin="round" stroke-linecap="round"/>
+            stroke-linejoin="round" stroke-linecap="round"${lineMotion}/>
       <path d="${ddPath}" fill="none" stroke="#ff8c00" stroke-width="1.8"
-            stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
+            stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${ddMotion}/>
       ${yLabels}
       ${ddAxisLabels}
       ${ddAxisTitle}
@@ -468,12 +480,18 @@
       svgEl._sysChartCleanup = null;
     }
 
+    // Der Tab "Equity Curve" ist beim Mount versteckt (Breite 0): animiert wird
+    // erst das erste Rendern mit sichtbarem Container, danach nie wieder.
+    let hasAnimated = false;
+
     function render() {
       const containerWidth =
         svgEl.parentElement?.offsetWidth ??
         svgEl.getBoundingClientRect().width ??
         600;
-      renderSystemEquityChart(svgEl, rawData, { containerWidth });
+      const animate = !hasAnimated && containerWidth > 0;
+      if (animate) hasAnimated = true;
+      renderSystemEquityChart(svgEl, rawData, { containerWidth, animate });
     }
 
     // Initial render (synchronous, before observer fires)

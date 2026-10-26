@@ -1,0 +1,73 @@
+/*
+ * motion.css – Einlaufanimationen für Charts und Kennzahlen (D-026)
+ *
+ * Regeln:
+ * - Aktiv nur unter html.wl-motion (gesetzt von js/motion.js, nicht bei prefers-reduced-motion).
+ * - Der statische Zustand ist der Endzustand; animiert wird nur der Startzustand
+ *   (@keyframes mit "from", animation-fill-mode: backwards).
+ * - Die Animation startet erst unter html.wl-motion-ready (Loader ausgeblendet).
+ */
+
+:root {
+  --wl-motion-ease: cubic-bezier(0.2, 0, 0, 1);
+  --wl-motion-draw: 1400ms;
+}
+
+@keyframes wl-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes wl-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes wl-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/* Linie zeichnet sich ein (Pfad mit pathLength="1"; dasharray 1 2 verhindert Punkt am Linienende) */
+html.wl-motion .wl-draw-line {
+  stroke-dasharray: 1 2;
+  animation: wl-draw var(--wl-motion-draw) var(--wl-motion-ease) backwards;
+  animation-delay: var(--wl-delay, 0ms);
+  animation-play-state: paused;
+}
+
+/* Fläche, Hilfslinie oder Zustandsbänder blenden ein */
+html.wl-motion .wl-fade-in {
+  animation: wl-fade-in 900ms ease backwards;
+  animation-delay: var(--wl-delay, 0ms);
+  animation-play-state: paused;
+}
+
+/* Trophäe erscheint nach dem Hochzählen */
+html.wl-motion .wl-trophy-pop {
+  display: inline-block;
+  animation: wl-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation-delay: 1100ms;
+  animation-play-state: paused;
+}
+
+html.wl-motion.wl-motion-ready .wl-draw-line,
+html.wl-motion.wl-motion-ready .wl-fade-in,
+html.wl-motion.wl-motion-ready .wl-trophy-pop {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wl-draw-line,
+  .wl-fade-in,
+  .wl-trophy-pop {
+    animation: none !important;
+  }
+}

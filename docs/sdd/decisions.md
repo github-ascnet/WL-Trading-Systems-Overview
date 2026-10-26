@@ -54,6 +54,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-023 | Datenaktualisierung über automatisierte Commits | Betrieb | Ist-Zustand |
 | D-024 | Keine automatisierten Tests und keine CI im Repository | Qualität | Ist-Zustand |
 | D-025 | Skript-Ladeverfahren je Seite | Architektur | Ist-Zustand |
+| D-026 | Motion: Einlaufanimationen nur mit CSS und `requestAnimationFrame` | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 
 ---
 
@@ -306,3 +307,14 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Begründung** | nicht dokumentiert |
 | **Quelle** | `index.html`, `dashboard/index.html` |
 | **Konsequenz** | Die Reihenfolge ist Teil der Abhängigkeitsauflösung (`systems.js` und `kpi-config.js` vor den Modulen, `landing.js` zuletzt; im Dashboard `main.js` vor `dashboard-loader.js`, damit `bootDashboard` verfügbar ist). Ein neues Skript muss in beide Listen konsistent einsortiert werden, falls es von beiden Seiten gebraucht wird. |
+
+## D-026 – Motion: Einlaufanimationen nur mit CSS und `requestAnimationFrame`
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26, Vorschlag 1 "Daten zum Leben erwecken", Arbeitspaket BP-013) |
+| **Entscheidung** | Die Charts erhalten eine Einlaufanimation (Linie zeichnet sich ein, Flächen blenden ein) und die Kennzahlenkarten zählen hoch. Umsetzung ausschliesslich mit CSS-Keyframes und `requestAnimationFrame`, ohne Bibliothek (D-001). Der Code liegt zentral in `css/motion.css` und `js/motion.js` und wird von beiden Seiten geladen. |
+| **Regeln** | 1. Aktiv nur, wenn `js/motion.js` die Klasse `wl-motion` an `<html>` setzt; bei `prefers-reduced-motion: reduce` geschieht das nicht, der Endzustand erscheint sofort. 2. Der statische Zustand ist der Endzustand; CSS animiert nur den Startzustand (`from`, `animation-fill-mode: backwards`). Ohne `motion.js` bleibt die Darstellung wie bisher. 3. Der Start erfolgt erst, wenn der Loader (`#pageLoader`) die Klasse `hidden` erhält (Fallback nach 8 s). 4. Einlauf nur beim **ersten** Rendern; Zoom, Pan und Resize zeichnen nicht neu ein. 5. Das Hochzählen setzt am Ende den ursprünglichen, bereits formatierten Text wieder ein; Werte, Formate und Berechnungen bleiben unverändert. |
+| **Begründung** | Auftrag des Auftraggebers: moderner Motion-Graphics-Eindruck. Die Regeln 1 bis 4 folgen aus D-001, D-011 und den Zoom-/Resize-Neuzeichnungen (`innerHTML`). |
+| **Quelle** | Auftrag 2026-10-26; Planungsdokument der Sitzung |
+| **Konsequenz** | D-025: `motion.js` kommt in beide Skriptlisten (nach `kpi-config.js`). D-019: ein zusätzliches, geteiltes Stylesheet `css/motion.css` nur für Motion. D-006 und D-016 bleiben unverändert. Die Vorschläge 2 und 3 (Kachel-Choreografie, Atmosphäre, Dashboard-Mikrointeraktionen) sind **nicht** beauftragt. |

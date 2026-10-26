@@ -55,6 +55,7 @@ flowchart TD
     BP010["BP-010<br/>Dashboard: Positions"]
     BP011["BP-011<br/>Layout, Navigation, A11y"]
     BP012["BP-012<br/>Datenexport (extern)"]
+    BP013["BP-013<br/>Motion: Einlaufanimation"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -71,6 +72,10 @@ flowchart TD
     BP004 --> BP005
     BP011 --> BP003
     BP011 --> BP007
+    BP004 --> BP013
+    BP005 --> BP013
+    BP007 --> BP013
+    BP008 --> BP013
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -239,6 +244,22 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Hinweis** | Nicht Teil dieses Repositorys. Das Paket steht hier nur, damit die Abhängigkeit sichtbar ist. Schnittstelle zum Repository ist ausschliesslich das Datenformat aus `project_plan.md` Kapitel 5. |
 | **Abschlusskriterien** | nicht definierbar ohne Information (OP-01) |
 
+### BP-013 – Motion: Einlaufanimation von Charts und Kennzahlen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless, Echtzeit, siehe "Prüfung"); nicht geprüft in anderen Browsern und auf echten Mobilgeräten |
+| **Ziel** | Charts zeichnen sich beim Öffnen ein, Kennzahlen zählen hoch (Vorschlag 1 "Daten zum Leben erwecken"). |
+| **Scope** | Neue Dateien `css/motion.css` und `js/motion.js` (`WL_MOTION`); Markup-Ergänzungen im Portfolio-Chart, Regime-Panel, System-Chart; Hochzählen in `createKpiCard` (Landing) und `renderOverview` (Dashboard); Einbindung in `index.html` (Skriptliste, Stylesheet) und `dashboard/index.html`. |
+| **Nicht im Scope** | Vorschläge 2 und 3; Änderung von Berechnungen, Formaten, KPI-Regeln, Loader-Vertrag; globale Reduced-Motion-Regel für `landing.css` (INC-20). |
+| **Voraussetzungen** | BP-004, BP-005, BP-007, BP-008 (betroffene Render-Funktionen) |
+| **Betroffene Dateien** | `css/motion.css` (neu), `js/motion.js` (neu), `js/equity-overview-chart.js`, `js/regime-engine-chart.js`, `js/equity-system-chart.js`, `js/main.js`, `index.html`, `dashboard/index.html` |
+| **Anforderungen / Decisions** | FR-M-01 bis FR-M-07; D-026; D-001, D-011, D-019, D-025 |
+| **Umsetzungsschritte** | 1. `motion.js`: `wl-motion`-Klasse (nicht bei Reduced-Motion), Bereitschaft über `#pageLoader` (`hidden`, Fallback 8 s), `countUp`. 2. `motion.css`: Keyframes und Klassen `wl-draw-line`, `wl-fade-in`, `wl-trophy-pop`. 3. Markup der drei Charts ergänzen, nur beim Erstrendern. 4. Hochzählen und Trophäen-Pop in den Kennzahlenkarten. 5. Einbindung in beide HTML-Seiten. |
+| **Abschlusskriterien** | a) Erstaufruf: Linie zeichnet sich nach dem Loader ein, KPIs zählen hoch, Endwerte identisch zu vorher. b) Zoom, Pan, Reset und Resize lösen keine neue Einzeichnung aus. c) System-Chart zeichnet sich beim ersten Öffnen des Tabs ein. d) Bei `prefers-reduced-motion: reduce` und ohne `motion.js` erscheint der Endzustand sofort. e) Fehlende Daten verhalten sich wie bisher (Fehlerkachel, Leerzustand). f) Konsole ohne neue Fehler. |
+| **Bekannte Abweichungen** | INC-20 (nicht Teil des Pakets) |
+| **Prüfung (2026-10-26)** | **Erfüllt** (Chrome headless über DevTools-Protokoll, Echtzeit, Server lokal): a) Loader ausgeblendet nach ca. 0,7 s, danach Einzeichnung (Offset 1 → 0 in ca. 1,4 s) und Hochzählen; Endwerte Landing `41.75% / 3192% / -13.79% / 2.29 / 2.33 / 65.65%` und Dashboard `45.32% / 4120% / -33.47% / 25.90 / 1.29 / 1.35 / 44.30 / 66.67% / 4` sind identisch mit dem Lauf bei `prefers-reduced-motion`. b) Mausrad-Zoom auf dem Portfolio-Chart erzeugt die Linie ohne Motion-Klasse; Fenstergrösse 900 px und 390 px zeichnet den System-Chart ohne Motion-Klasse neu. c) System-Chart animiert beim ersten Öffnen des Tabs (Offset 0,99 → 0 in ca. 1,5 s). d) Mit `--force-prefers-reduced-motion` setzt `motion.js` keine Klassen, Endwerte erscheinen sofort. f) Keine Konsolenfehler. **Nicht prüfbar / offen:** e) Fehlerfälle (fehlende Daten) nicht gezielt provoziert; Firefox, Safari und echte Touch-Geräte nicht getestet; Touch-Zoom nicht getestet. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -275,4 +296,5 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-D-09 | BP-009 | – |
 | FR-D-10 | BP-010 | – |
 | FR-D-12 | BP-006, BP-007 | D-006 |
+| FR-M-01 bis FR-M-07 | BP-013 | D-026 |
 | Q-01 | alle | D-001 |

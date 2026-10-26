@@ -45,6 +45,7 @@ Rangfolge bei Konflikten: `project_plan.md` → `decisions.md` → `build_plan.m
 | `dashboard/index.html`, `css/styles.css`, `js/dashboard-loader.js`, `js/main.js`, `js/monthly-returns.js`, `js/equity-system-chart.js` | Dashboard | Landing-Logik |
 | `js/systems.js` | Systemregister (nur `id`, `dataPath`) | Berechnungen, Texte |
 | `js/kpi-config.js` | Schwellen, Farben, Anzeigeschalter | Render-Code |
+| `js/motion.js`, `css/motion.css` | Einlaufanimationen (D-026) | Berechnungen, Datenzugriff |
 | `systems/<slug>/` | Systemdaten (vier Dateien) | zusätzliche Dateien ohne Entscheidung (Ausnahme im Ist: `FlagFile.txt`, OP-04) |
 | `systems/risk-regime/` | Regime-Daten | Handelssystem-Daten |
 | `docs/sdd/` | SDD-Dokumente | Quellcode |
@@ -95,8 +96,15 @@ Prüfen nach dem Hinzufügen: Kachel erscheint, Portfolio-Statuszeile zählt hoc
 
 ### 6.2 Skript-Reihenfolge (D-025)
 
-- Landing: `systems.js` → `kpi-config.js` → `equity-overview-chart.js` → `regime-engine-chart.js` → `landing.js`, geladen über das Inline-Skript in `index.html`. Neue Skripte in diese Liste eintragen.
-- Dashboard: `monthly-returns.js` → `kpi-config.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js` als statische Tags. `dashboard-loader.js` bleibt zuletzt, da es beim Laden sofort startet.
+- Landing: `systems.js` → `kpi-config.js` → `motion.js` → `equity-overview-chart.js` → `regime-engine-chart.js` → `landing.js`, geladen über das Inline-Skript in `index.html`. Neue Skripte in diese Liste eintragen.
+- Dashboard: `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js` als statische Tags. `dashboard-loader.js` bleibt zuletzt, da es beim Laden sofort startet.
+
+### 6.2a Motion (D-026)
+
+- Animationen nur über die Klassen `wl-draw-line`, `wl-fade-in`, `wl-trophy-pop` und `WL_MOTION.countUp`. Keine Animationsbibliothek.
+- Der statische Zustand ist der Endzustand. CSS animiert nur den Startzustand (`from`, `backwards`); eine neue Animation darf ohne `html.wl-motion` nichts verstecken.
+- Einlauf nur beim ersten Rendern. Neuzeichnen bei Zoom oder Resize erzeugt die Elemente ohne Motion-Klassen.
+- Hochzählen verändert den angezeigten Endtext nicht; Formatierung bleibt Sache der bestehenden Formatierfunktionen.
 
 ### 6.3 CSS
 
@@ -164,6 +172,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 6. Regime-Panel zeigt Kurve, Zustandsbänder und End-Label.
 7. Eine Kachel je registriertem System; Klick öffnet das Dashboard mit dem richtigen Parameter.
 8. Konsole ohne neue Fehler. Warnungen zu übersprungenen Systemen sind zu prüfen.
+9. Motion (D-026): Nach dem Loader zeichnen sich Portfolio-Linie und Regime-Linie ein, die KPI-Karten zählen auf den bisherigen Endwert hoch. Zoom, Pan und Reset zeichnen nicht neu ein. Mit aktivem `prefers-reduced-motion` erscheinen die Endwerte sofort.
 
 **Dashboard (`dashboard/index.html?system=<slug>`)**
 
@@ -175,6 +184,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 6. Monthly Returns: Matrix, Jahres- und Durchschnittswerte.
 7. Positions: Sortierung nach drei Spalten, offene Positionen "Open", Mobile ohne Preisspalten.
 8. Info-Symbol im Kopf zeigt die Strategiebeschreibung.
+9. Motion (D-026): Die Overview-Karten zählen nach dem Loader hoch; die Equity-Linie zeichnet sich beim ersten Öffnen des Tabs "Equity Curve" ein, nicht bei Resize.
 
 **Datenprüfung neues oder geändertes System**
 

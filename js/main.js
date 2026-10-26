@@ -353,13 +353,17 @@ function renderOverview(currentState, positions) {
       label: "Profit Factor",
       value: formatNumber(currentState.profitFactor),
       cssClass: profitFactorConfig.className,
-      valueSuffix: profitFactorConfig.trophy ? " 🏆" : "",
+      valueSuffix: profitFactorConfig.trophy
+        ? ' <span class="wl-trophy-pop">🏆</span>'
+        : "",
     },
     {
       label: "Sharpe Ratio",
       value: formatNumber(currentState.sharpeRatio),
       cssClass: sharpeConfig.className,
-      valueSuffix: sharpeConfig.trophy ? " 🏆" : "",
+      valueSuffix: sharpeConfig.trophy
+        ? ' <span class="wl-trophy-pop">🏆</span>'
+        : "",
     },
     {
       label: "MAR Ratio",
@@ -370,7 +374,9 @@ function renderOverview(currentState, positions) {
       label: "Risk-Return Score",
       value: formatNumber(currentState.riskReturnMetaScore),
       cssClass: riskScoreConfig.className,
-      valueSuffix: riskScoreConfig.trophy ? " 🏆" : "",
+      valueSuffix: riskScoreConfig.trophy
+        ? ' <span class="wl-trophy-pop">🏆</span>'
+        : "",
       tooltip:
         "RRSuperScore combines APR, MAR Ratio, Recovery Factor, stability metrics, maximum drawdown, and the share of extreme outliers into a weighted total score between 0 and 100.\n\nInterpretation:\n80-100 Very good - low risk, strong resilience\n50-79 Good - stable strategy with acceptable risk\n35-49 Average - visible weaknesses\n20-34 Weak - either inefficient or risky\n0-19 Critical - not recommended",
     },
@@ -378,7 +384,9 @@ function renderOverview(currentState, positions) {
       label: "Profitable %",
       value: formatPercent(currentState.profitablePercent),
       cssClass: profitableConfig.className,
-      valueSuffix: profitableConfig.trophy ? " 🏆" : "",
+      valueSuffix: profitableConfig.trophy
+        ? ' <span class="wl-trophy-pop">🏆</span>'
+        : "",
     },
     {
       label: "Open Trades",
@@ -401,13 +409,15 @@ function renderOverview(currentState, positions) {
             : ""
         }
       </div>
-      <div class="card-value ${escapeHtml(card.cssClass)}">${escapeHtml(
+      <div class="card-value ${escapeHtml(card.cssClass)}"><span class="wl-count">${escapeHtml(
         card.value
-      )}${card.valueSuffix ?? ""}</div>
+      )}</span>${card.valueSuffix ?? ""}</div>
     </div>
   `
     )
     .join("");
+
+  window.WL_MOTION?.countUp(overviewCards);
 
   const metrics = [
     ["Starting Capital", formatStartingCapital(currentState.startingCapital)],
