@@ -548,6 +548,18 @@
     }
   }
 
+  // Nur die Regime-Färbung des Hintergrunds, wenn das Panel ausgeblendet ist (D-034)
+  async function initRegimeTint() {
+    if (!window.WL_MOTION?.enabled) return;
+    const raw = await fetchJson("./systems/risk-regime/wl-regime-composite.json");
+    const compositeData = normalizeRegimeSeries(raw);
+    const lastComposite = compositeData[compositeData.length - 1];
+    if (lastComposite) {
+      window.WL_MOTION.setRegime(lastComposite.state);
+    }
+  }
+
   global.initRegimeEnginePanel = initRegimeEnginePanel;
+  global.initRegimeTint = initRegimeTint;
   global.renderRegimeEnginePanel = renderRegimeEnginePanel;
 })(window);

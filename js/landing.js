@@ -371,6 +371,14 @@
     const cardsContainer = document.getElementById("portfolioOverviewCards");
     const loadingStartedAt = Date.now();
 
+    // Risk-Regime-Panel per Schalter (D-034); ausgeblendet bleibt nur die Regime-Färbung
+    const showRegimePanel =
+      window.WL_KPI_CONFIG?.display?.showRiskRegimePanel !== false;
+    const regimeWrap = document.querySelector(".regime-engine-wrap");
+    if (regimeWrap && !showRegimePanel) {
+      regimeWrap.hidden = true;
+    }
+
     setLoadingState(true, "Loading dashboard overview...");
 
     try {
@@ -389,6 +397,7 @@
       // Regime engine panel — loads its own data, X-axis synced via _wlPortfolioTimeRange
       const regimeContainer = document.getElementById("regimeEngineChart");
       if (
+        showRegimePanel &&
         regimeContainer &&
         typeof window.initRegimeEnginePanel === "function"
       ) {
@@ -400,6 +409,13 @@
             tr?.max ?? null
           )
           .catch((err) => console.warn("[landing] Regime panel:", err));
+      } else if (
+        !showRegimePanel &&
+        typeof window.initRegimeTint === "function"
+      ) {
+        window
+          .initRegimeTint()
+          .catch((err) => console.warn("[landing] Regime tint:", err));
       }
     } finally {
       const elapsed = Date.now() - loadingStartedAt;

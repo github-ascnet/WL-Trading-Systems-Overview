@@ -35,6 +35,8 @@
       useDisplayEquity: false,
       // false → Stretch Score im Risk-Regime-Panel ausblenden
       showRegimeStretchScore: false,
+      // false → Risk-Regime-Panel auf der Landing-Seite ausblenden (die Regime-Färbung des Hintergrunds bleibt)
+      showRiskRegimePanel: false,
     },
     metrics: {
       apr: {
