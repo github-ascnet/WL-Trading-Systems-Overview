@@ -97,7 +97,7 @@ Prüfen nach dem Hinzufügen: Kachel erscheint, Portfolio-Statuszeile zählt hoc
 ### 6.2 Skript-Reihenfolge (D-025)
 
 - Landing: `systems.js` → `kpi-config.js` → `motion.js` → `equity-overview-chart.js` → `regime-engine-chart.js` → `landing.js`, geladen über das Inline-Skript in `index.html`. Neue Skripte in diese Liste eintragen.
-- Dashboard: `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js`, geladen über das Inline-Skript in `dashboard/index.html` (D-029). Keine statischen `<script src>`-Tags im Dashboard ergänzen; sie verhindern den Seitenübergang. `dashboard-loader.js` bleibt zuletzt, da es beim Laden sofort startet.
+- Dashboard: `systems.js` (Freigabeliste, D-037) → `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js`, geladen über das Inline-Skript in `dashboard/index.html` (D-029). Keine statischen `<script src>`-Tags im Dashboard ergänzen; sie verhindern den Seitenübergang. `dashboard-loader.js` bleibt zuletzt, da es beim Laden sofort startet.
 
 ### 6.2a Motion (D-026)
 
@@ -178,7 +178,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 3. Chart: Kurve, orange Drawdown-Linie, Jahreslabels, Tooltip mit neun Werten.
 4. Zoom (Mausrad), Pan (Ziehen), Reset (Doppelklick und Button) funktionieren; Touch auf einem mobilen Gerät oder in der Geräteemulation.
 5. Sechs KPI-Karten mit plausibler Einfärbung (Regeln aus Kapitel 9 in `project_plan.md`).
-6. Regime-Panel: nur sichtbar bei `display.showRiskRegimePanel: true` in `kpi-config.js` (Standard `false`, D-034); dann zeigt es Kurve, Zustandsbänder und End-Label. Die Regime-Färbung wirkt in beiden Fällen.
+6. Regime-Panel: nur sichtbar bei `display.showRiskRegimePanel: true` in `kpi-config.js` (Standard `false`, D-034); dann zeigt es Kurve, Zustandsbänder und End-Label, folgt Zoom, Pan und Reset des Portfolio-Charts ohne erneutes Einzeichnen (D-038) und ist beim Ausblenden des Loaders bereits gerendert. Die Regime-Färbung wirkt in beiden Fällen.
 7. Eine Kachel je registriertem System; Klick öffnet das Dashboard mit dem richtigen Parameter.
 8. Konsole ohne neue Fehler. Warnungen zu übersprungenen Systemen sind zu prüfen.
 9. Motion (D-026): Nach dem Loader zeichnen sich Portfolio-Linie und Regime-Linie ein, die KPI-Karten zählen auf den bisherigen Endwert hoch. Zoom, Pan und Reset zeichnen nicht neu ein. Mit aktivem `prefers-reduced-motion` erscheinen die Endwerte sofort.
@@ -189,7 +189,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 
 **Dashboard (`dashboard/index.html?system=<slug>`)**
 
-1. Ohne Parameter und mit ungültigem Slug erscheinen die definierten Fehlermeldungen.
+1. Ohne Parameter, mit ungültigem Slug und mit einem nicht in `js/systems.js` registrierten System ("Unknown system …", D-037) erscheinen die definierten Fehlermeldungen.
 2. Alle fünf Tabs lassen sich öffnen; auf schmalem Viewport über das Hamburger-Menü.
 3. Overview: neun Karten, 13 Tabellenzeilen, Badge "Updated".
 4. Metrics Report: 21 Zeilen.
@@ -212,6 +212,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 
 1. In der Geräteemulation mit Touch (360 bis 412 px Breite): kein horizontales Überlaufen in allen Tabs; breite Tabellen scrollen in ihrem Rahmen.
 2. Chart-Achsen und Tooltips sind lesbar (etwa 9 px oder mehr); Tippen zeigt den Tooltip.
+2a. Touch (D-039): Waagrechtes Wischen mit einem Finger führt den Tooltip (beide Charts) und verschiebt den Ausschnitt nicht; zwei Finger zoomen und verschieben das Portfolio-Chart, auch über mehrere Bewegungen; Doppeltippen setzt zurück; senkrechtes Wischen scrollt die Seite.
 3. Neue Chart-Elemente erhalten ihre Grössen aus der Geometrie (`getChartGeometry` bzw. `SIZES_WIDE`/`SIZES_NARROW`), keine festen Pixelwerte im Markup und keine CSS-Schriftgrössen für SVG-Texte.
 
 ### 9.3 Berichten

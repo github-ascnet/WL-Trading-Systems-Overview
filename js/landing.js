@@ -401,8 +401,9 @@
         regimeContainer &&
         typeof window.initRegimeEnginePanel === "function"
       ) {
+        // Der Loader wartet auf das Panel (D-038)
         const tr = window._wlPortfolioTimeRange;
-        window
+        await window
           .initRegimeEnginePanel(
             regimeContainer,
             tr?.min ?? null,

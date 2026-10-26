@@ -65,6 +65,9 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-034 | Risk-Regime-Panel der Landing-Seite per Schalter ausblendbar | Darstellung / Konfiguration | Verbindlich (Auftrag 2026-10-26) |
 | D-035 | Offene Positionen je Datum fortlaufend zählen (Ladezeit) | Berechnung / Leistung | Verbindlich (Auftrag 2026-10-26) |
 | D-036 | Mobile Darstellung: Grid-Spalte begrenzen, Charts mit eigenem schmalen Koordinatenraum | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-037 | Dashboard öffnet nur registrierte Systeme | Dashboard / Sicherheit | Verbindlich (Auftrag 2026-10-26) |
+| D-038 | Regime-Panel folgt Zoom und Pan des Portfolio-Charts | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-039 | Touch-Gesten der Charts: ein Finger Tooltip, zwei Finger Zoom/Pan | Bedienung | Verbindlich (Auftrag 2026-10-26) |
 
 ---
 
@@ -438,3 +441,30 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Begründung** | Mobile-Prüfung: Seite bis 422 px breit bei 390-px-Gerät (Header-Buttons abgeschnitten); Achsentexte 2,7 bis 4 px, Tooltip-Texte 3,5 bis 4,5 px. |
 | **Quelle** | Mobile-Prüfung 2026-10-26, Auftrag |
 | **Konsequenz** | Das Portfolio-Chart setzt seine `viewBox` selbst; die Angabe in `index.html` gilt nur bis zum ersten Rendern. Die bestehende Mobile-Regel `#equityChart text { font-size: 11px; }` in `styles.css` (sie überschrieb die Schriftgrössen des System-Charts) entfällt. Das System-Chart zeichnet beim `ResizeObserver` nur noch bei geänderter Breite neu; sonst würde der Wechsel vom schmalen Raum (versteckter Tab, Breite 0) in den breiten Raum über die Höhenänderung ein zweites Rendern auslösen und die Einlaufanimation abbrechen. Touch-Wischen über Charts (INC-24) und kleine Tippflächen (INC-25) sind nicht Teil dieser Entscheidung. |
+
+## D-037 – Dashboard öffnet nur registrierte Systeme
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26; beantwortet OP-10; Arbeitspaket BP-025) |
+| **Entscheidung** | `dashboard-loader.js` prüft nach der Slug-Prüfung (D-008), ob der Slug in `window.SYSTEMS` enthalten ist. Nicht registrierte Systeme werden nicht geladen; es erscheint die Meldung "Unknown system …". Dafür lädt die Detailseite `js/systems.js` als erstes Skript ihrer Liste (Ergänzung zu D-029). |
+| **Begründung** | INC-07: Nicht registrierte Ordner (z. B. veraltete Systeme) waren per URL aufrufbar. Damit wird `systems.js` (D-005) zur alleinigen Freigabeliste. |
+| **Konsequenz** | Ein neues System ist erst nach dem Eintrag in `systems.js` auch auf der Detailseite erreichbar (README-Ablauf unverändert). |
+
+## D-038 – Regime-Panel folgt Zoom und Pan des Portfolio-Charts
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26; Arbeitspaket BP-026) |
+| **Entscheidung** | Nach jedem Zoom-, Pan- oder Reset-Schritt sendet das Portfolio-Chart das Ereignis `wl:portfolio-range` mit dem sichtbaren Zeitraum. Das Regime-Panel zeichnet sich daraufhin für diesen Zeitraum neu (gebündelt je Bild, ohne Einlaufanimation). Die Landing-Seite wartet beim Laden auf das Panel, bevor der Loader verschwindet. Gilt nur, wenn das Panel eingeblendet ist (D-034). |
+| **Begründung** | INC-09: Bei Zoom liefen die Zeitachsen von Portfolio-Chart und Panel auseinander; der Loader verschwand vor dem Panel. |
+| **Konsequenz** | Lose Kopplung über ein DOM-Ereignis; keines der beiden Module ruft das andere direkt auf. |
+
+## D-039 – Touch-Gesten der Charts
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26, Auswahl des Auftraggebers; Arbeitspaket BP-027) |
+| **Entscheidung** | Portfolio-Chart und System-Chart: Ein Finger führt den Tooltip mit (Antippen und waagrechtes Wischen). Portfolio-Chart: Zwei Finger zoomen (Pinch) und verschieben den Ausschnitt (Bewegung des Mittelpunkts); das bisherige Verschieben mit einem Finger entfällt. Die Overlays erhalten `touch-action: pan-y`, damit senkrechtes Scrollen der Seite möglich bleibt. |
+| **Begründung** | INC-24: Wischen über die Charts scrollte die Seite, statt den Tooltip mitzuführen. |
+| **Konsequenz** | Desktop (Maus, Mausrad) unverändert. |

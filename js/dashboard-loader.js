@@ -28,6 +28,11 @@
     return SLUG_PATTERN.test(value);
   }
 
+  function isRegisteredSystem(systemId) {
+    const systems = Array.isArray(window.SYSTEMS) ? window.SYSTEMS : [];
+    return systems.some((system) => system?.id === systemId);
+  }
+
   async function fetchJson(path) {
     const response = await fetch(path, { cache: "no-store" });
     if (!response.ok) {
@@ -179,6 +184,16 @@
     if (!isValidSlug(systemId)) {
       renderGlobalError(
         "Invalid system slug. Only lowercase letters, digits, and hyphens are allowed."
+      );
+      await delay(LOADER_MIN_VISIBLE_MS);
+      setLoadingState(false);
+      return;
+    }
+
+    // Nur Systeme aus js/systems.js öffnen (D-037); der Slug ist oben bereits geprüft
+    if (!isRegisteredSystem(systemId)) {
+      renderGlobalError(
+        `Unknown system '${systemId}'. Only systems registered in js/systems.js can be opened.`
       );
       await delay(LOADER_MIN_VISIBLE_MS);
       setLoadingState(false);

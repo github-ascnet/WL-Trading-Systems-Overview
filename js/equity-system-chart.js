@@ -473,7 +473,7 @@
       <rect id="sysChartOverlay" x="${M.left}" y="${
       M.top
     }" width="${CW}" height="${CH}"
-            fill="transparent" style="cursor:crosshair;"/>
+            fill="transparent" style="cursor:crosshair;touch-action:pan-y;"/>
     `;
 
     // ── Tooltip interaction ───────────────────────────────────────────────
@@ -568,11 +568,20 @@
     overlay.addEventListener("mouseleave", () => {
       tipGroup.style.display = "none";
     });
+    // Touch (D-039): Antippen und waagrechtes Wischen führen den Tooltip;
+    // senkrechtes Scrollen übernimmt der Browser (touch-action: pan-y)
+    overlay.addEventListener(
+      "touchstart",
+      (e) => {
+        if (e.touches.length === 1) showTip(e.touches[0].clientX);
+      },
+      { passive: true }
+    );
     overlay.addEventListener(
       "touchmove",
       (e) => {
         if (e.touches.length === 1) {
-          e.preventDefault();
+          if (e.cancelable) e.preventDefault();
           showTip(e.touches[0].clientX);
         }
       },

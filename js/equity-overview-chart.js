@@ -158,7 +158,21 @@
     if (!response.ok) {
       throw new Error(`Could not load file: ${path} (${response.status})`);
     }
-    return response.json();
+    const rawText = await response.text();
+
+    try {
+      return JSON.parse(rawText);
+    } catch (parseError) {
+      // Some upstream exports may contain bare NaN values, which are invalid JSON (D-009).
+      const sanitizedText = rawText.replace(
+        /(:\s*)NaN(?=\s*[,}\]])/g,
+        "$1null"
+      );
+      if (sanitizedText !== rawText) {
+        return JSON.parse(sanitizedText);
+      }
+      throw parseError;
+    }
   }
 
   function setStatus(message) {
@@ -691,45 +705,6 @@
     return maxDrawdown;
   }
 
-  function calculateMaxDrawdownSegment(portfolioSeries) {
-    if (!Array.isArray(portfolioSeries) || portfolioSeries.length < 2) {
-      return null;
-    }
-
-    let peak = Number(portfolioSeries[0]?.equity);
-    let peakIndex = 0;
-    let maxDrawdown = 0;
-    let bestSegment = null;
-
-    if (!Number.isFinite(peak) || peak <= 0) {
-      return null;
-    }
-
-    portfolioSeries.forEach((point, index) => {
-      const equity = Number(point?.equity);
-      if (!Number.isFinite(equity) || equity <= 0) {
-        return;
-      }
-
-      if (equity > peak) {
-        peak = equity;
-        peakIndex = index;
-      }
-
-      const drawdown = ((equity - peak) / peak) * 100;
-      if (drawdown < maxDrawdown) {
-        maxDrawdown = drawdown;
-        bestSegment = {
-          startIndex: peakIndex,
-          endIndex: index,
-          drawdown,
-        };
-      }
-    });
-
-    return bestSegment;
-  }
-
   function calculateDrawdownSeries(chartSeries) {
     let peak = Number(chartSeries[0]?.equity);
 
@@ -1105,19 +1080,6 @@
       )
       .join(" ");
 
-    const maxDrawdownSegment = calculateMaxDrawdownSegment(chartSeries);
-    const drawdownPath = maxDrawdownSegment
-      ? points
-          .slice(maxDrawdownSegment.startIndex, maxDrawdownSegment.endIndex + 1)
-          .map(
-            (point, index) =>
-              `${index === 0 ? "M" : "L"}${point.x.toFixed(
-                2
-              )} ${point.y.toFixed(2)}`
-          )
-          .join(" ")
-      : "";
-
     const areaPath = `${linePath} L ${points[points.length - 1].x.toFixed(2)} ${
       height - margin.bottom
     } L ${points[0].x.toFixed(2)} ${height - margin.bottom} Z`;
@@ -1196,8 +1158,6 @@
           <stop offset="0%" stop-color="#58c4ff" stop-opacity="0.30"></stop>
           <stop offset="100%" stop-color="#58c4ff" stop-opacity="0.03"></stop>
         </linearGradient>
-        <linearGradient id="portfolioOverviewDrawdownStroke" x1="0" y1="0" x2="1" y2="0">
-        </linearGradient>
         <linearGradient id="wlAuroraLine" gradientUnits="userSpaceOnUse" x1="${
           margin.left
         }" y1="0" x2="${width - margin.right}" y2="0">
@@ -1256,13 +1216,6 @@
       200,
       ' pathLength="1"'
     )}></path>
-      ${
-        // Max-DD-Segment-Overlay auf der Equity-Kurve — kann entfernt werden,
-        // sobald die vollständige Drawdown-Kurve unten als ausreichend gilt.
-        drawdownPath
-          ? `<path d="${drawdownPath}" fill="none" stroke="url(#portfolioOverviewDrawdownStroke)" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"></path>`
-          : ""
-      }
       <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="${
         geometry.ddGlow
       }" stroke-opacity="0.1" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
@@ -1325,7 +1278,7 @@
       </g>
       <rect id="portfolioChartOverlay" x="${margin.left}" y="${
       margin.top
-    }" width="${chartWidth}" height="${chartHeight}" fill="transparent" style="cursor:crosshair;"/>
+    }" width="${chartWidth}" height="${chartHeight}" fill="transparent" style="cursor:crosshair;touch-action:pan-y;"/>
     `;
 
     const overlay = containerElement.querySelector("#portfolioChartOverlay");
@@ -1366,9 +1319,10 @@
     );
     const startingEquity = allTimeStartEquity;
 
-    overlay.addEventListener("mousemove", (event) => {
+    // Tooltip an einer Bildschirm-x-Position (Maus und Touch, D-039)
+    function showTooltipAt(clientX) {
       const rect = containerElement.getBoundingClientRect();
-      const svgX = ((event.clientX - rect.left) / rect.width) * width;
+      const svgX = ((clientX - rect.left) / rect.width) * width;
       const ratio = Math.max(0, Math.min(1, (svgX - margin.left) / chartWidth));
       const targetTimestamp = minTimestamp + ratio * timeRange;
       const index = findClosestPointIndex(targetTimestamp);
@@ -1476,7 +1430,11 @@
         point.profitablePercent ?? null,
         1
       )}`;
-    });
+    }
+
+    overlay.addEventListener("mousemove", (event) => showTooltipAt(event.clientX));
+    // Für die Touch-Gesten in initEquityOverviewChart (das Overlay wird je Rendern ersetzt)
+    containerElement._wlShowTooltipAt = showTooltipAt;
 
     overlay.addEventListener("mouseleave", () => {
       tooltipGroup.style.display = "none";
@@ -1559,6 +1517,12 @@
             zoomed
           );
           attachOverlayEvents();
+          // Sichtbaren Zeitraum melden, damit das Regime-Panel folgt (D-038)
+          document.dispatchEvent(
+            new CustomEvent("wl:portfolio-range", {
+              detail: { min: zoomState.min, max: zoomState.max },
+            })
+          );
         }
       }
 
@@ -1655,84 +1619,109 @@
           { signal }
         );
 
-        // touch: pinch-to-zoom + swipe
-        let lastTouchDist = null;
-        let lastTouchX = null;
-
-        overlayEl.addEventListener(
-          "touchstart",
-          (e) => {
-            if (e.touches.length === 2) {
-              lastTouchDist = Math.abs(
-                e.touches[0].clientX - e.touches[1].clientX
-              );
-              dragStartMin = zoomState.min;
-              dragStartMax = zoomState.max;
-            } else if (e.touches.length === 1) {
-              lastTouchX = e.touches[0].clientX;
-              dragStartMin = zoomState.min;
-              dragStartMax = zoomState.max;
-            }
-          },
-          { passive: true, signal }
-        );
-
-        overlayEl.addEventListener(
-          "touchmove",
-          (e) => {
-            const chartW = chartWidth;
-            const rect = svgEl.getBoundingClientRect();
-            if (e.touches.length === 2 && lastTouchDist !== null) {
-              e.preventDefault();
-              const dist = Math.abs(
-                e.touches[0].clientX - e.touches[1].clientX
-              );
-              const factor = lastTouchDist / dist;
-              const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-              const pivotRatio = Math.max(
-                0,
-                Math.min(
-                  1,
-                  (((midX - rect.left) / rect.width) * g.width -
-                    g.margin.left) /
-                    chartW
-                )
-              );
-              const pivotTs =
-                zoomState.min + pivotRatio * (zoomState.max - zoomState.min);
-              const newRange = (zoomState.max - zoomState.min) * factor;
-              zoomState.min = pivotTs - pivotRatio * newRange;
-              zoomState.max = pivotTs + (1 - pivotRatio) * newRange;
-              clampZoom();
-              lastTouchDist = dist;
-              applyZoom();
-            } else if (e.touches.length === 1 && lastTouchX !== null) {
-              const dxPx =
-                (lastTouchX - e.touches[0].clientX) * (g.width / rect.width);
-              const range = dragStartMax - dragStartMin;
-              const dxMs = dxPx / (chartW / range);
-              zoomState.min = Math.max(
-                fullMin,
-                Math.min(dragStartMin + dxMs, fullMax - range)
-              );
-              zoomState.max = zoomState.min + range;
-              applyZoom();
-            }
-          },
-          { passive: false, signal }
-        );
-
-        overlayEl.addEventListener(
-          "touchend",
-          () => {
-            lastTouchDist = null;
-            lastTouchX = null;
-          },
-          { signal }
-        );
       }
 
       attachOverlayEvents();
+
+      // ── Touch (D-039) ────────────────────────────────────────────────────
+      // Pointer-Events auf dem dauerhaften SVG-Element mit Pointer-Capture: Die Geste
+      // bleibt erhalten, auch wenn das Overlay beim Neuzeichnen ersetzt wird.
+      // Ein Finger führt den Tooltip, zwei Finger zoomen und verschieben, Doppeltippen
+      // setzt zurück. Senkrechtes Scrollen bleibt über touch-action: pan-y möglich.
+      const TAP_MOVE_TOLERANCE_PX = 8;
+      const DOUBLE_TAP_MS = 300;
+      const touchPointers = new Map();
+      let pinchStart = null;
+      let touchMoved = false;
+      let touchStartX = 0;
+      let lastTapAt = 0;
+      chartContainerElement.style.touchAction = "pan-y";
+
+      chartContainerElement.addEventListener("pointerdown", (e) => {
+        if (e.pointerType !== "touch") return;
+        if (!e.target.closest?.("#portfolioChartOverlay")) return;
+        e.preventDefault();
+        chartContainerElement.setPointerCapture(e.pointerId);
+        touchPointers.set(e.pointerId, e.clientX);
+
+        if (touchPointers.size === 1) {
+          touchMoved = false;
+          touchStartX = e.clientX;
+          chartContainerElement._wlShowTooltipAt?.(e.clientX);
+        } else if (touchPointers.size === 2) {
+          const [a, b] = [...touchPointers.values()];
+          pinchStart = { dist: Math.max(Math.abs(a - b), 1), mid: (a + b) / 2 };
+          touchMoved = true;
+        }
+      });
+
+      chartContainerElement.addEventListener("pointermove", (e) => {
+        if (e.pointerType !== "touch" || !touchPointers.has(e.pointerId)) return;
+        touchPointers.set(e.pointerId, e.clientX);
+
+        if (touchPointers.size === 1) {
+          if (Math.abs(e.clientX - touchStartX) > TAP_MOVE_TOLERANCE_PX) {
+            touchMoved = true;
+          }
+          chartContainerElement._wlShowTooltipAt?.(e.clientX);
+          return;
+        }
+
+        if (touchPointers.size === 2 && pinchStart) {
+          const [a, b] = [...touchPointers.values()];
+          const dist = Math.max(Math.abs(a - b), 1);
+          const mid = (a + b) / 2;
+          const rect = chartContainerElement.getBoundingClientRect();
+          const g = getChartGeometry(chartContainerElement);
+          const chartW = g.width - g.margin.left - g.margin.right;
+          const pxToSvg = g.width / rect.width;
+          const ratio = Math.max(
+            0,
+            Math.min(1, (((mid - rect.left) * pxToSvg) - g.margin.left) / chartW)
+          );
+
+          // Zoom um den Mittelpunkt der beiden Finger
+          const range = zoomState.max - zoomState.min;
+          const pivotTs = zoomState.min + ratio * range;
+          const newRange = range * (pinchStart.dist / dist);
+          zoomState.min = pivotTs - ratio * newRange;
+          zoomState.max = pivotTs + (1 - ratio) * newRange;
+          clampZoom();
+
+          // Verschieben mit dem Mittelpunkt
+          const currentRange = zoomState.max - zoomState.min;
+          const dxMs = (pinchStart.mid - mid) * pxToSvg * (currentRange / chartW);
+          zoomState.min = Math.max(
+            fullMin,
+            Math.min(zoomState.min + dxMs, fullMax - currentRange)
+          );
+          zoomState.max = zoomState.min + currentRange;
+
+          pinchStart = { dist, mid };
+          applyZoom();
+        }
+      });
+
+      function endTouchPointer(e) {
+        if (!touchPointers.has(e.pointerId)) return;
+        touchPointers.delete(e.pointerId);
+        if (touchPointers.size < 2) pinchStart = null;
+        if (e.type !== "pointerup" || touchPointers.size > 0 || touchMoved) return;
+
+        // Doppeltippen setzt den Zoom zurück (der Reset-Button ist auf dem Handy ausgeblendet)
+        const now = Date.now();
+        if (now - lastTapAt < DOUBLE_TAP_MS) {
+          zoomState.min = fullMin;
+          zoomState.max = fullMax;
+          applyZoom();
+          lastTapAt = 0;
+        } else {
+          lastTapAt = now;
+        }
+      }
+
+      chartContainerElement.addEventListener("pointerup", endTouchPointer);
+      chartContainerElement.addEventListener("pointercancel", endTouchPointer);
 
       // Reset-Button
       const chartWrap = chartContainerElement.closest(

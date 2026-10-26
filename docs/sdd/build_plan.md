@@ -67,6 +67,9 @@ flowchart TD
     BP022["BP-022<br/>Regime-Panel per Schalter, Footer"]
     BP023["BP-023<br/>Ladezeit: offene Positionen"]
     BP024["BP-024<br/>Mobile: Grid, Chart-Texte"]
+    BP025["BP-025<br/>Register, NaN, Overlay, Meta"]
+    BP026["BP-026<br/>Regime folgt Zoom"]
+    BP027["BP-027<br/>Touch-Gesten"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -110,6 +113,10 @@ flowchart TD
     BP004 --> BP024
     BP008 --> BP024
     BP011 --> BP024
+    BP006 --> BP025
+    BP004 --> BP025
+    BP022 --> BP026
+    BP024 --> BP027
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -452,6 +459,40 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Abschlusskriterien** | a) Auf 360/375/390/412 px kein horizontales Überlaufen in allen Tabs; Tabellen scrollen in ihrem Rahmen. b) Achsentexte und Tooltip-Texte der Charts auf diesen Geräten mindestens ca. 9 px. c) Desktop-Referenzbilder pixelgleich, Tooltip-Werte unverändert. d) Zoom, Pan und Tooltip auf dem Handy funktionieren. e) Keine Konsolenfehler. |
 | **Prüfung (2026-10-26)** | **Erfüllt:** Mobile-Audit mit 6 Profilen (iPhone SE 375, iPhone 14 390, Galaxy 360, Pixel 7 412, iPhone quer 844, iPad 768; DPR 2, Touch, mobiler User-Agent), Landing oben/Kacheln und alle fünf Dashboard-Tabs. a) Vorher Positions bis 422 px und Monthly Returns bis 401 px Layoutbreite (Header-Buttons abgeschnitten); nachher auf allen Profilen Layoutbreite = Gerätebreite, Monthly-Tabelle scrollt im Rahmen (z. B. 340/688 px). b) Kleinster Text im Hochformat: Landing 8,9 bis 9,7 px (vorher 2,7 bis 3,1), Tooltip Landing 9,3 bis 9,8 px (vorher 3,5 bis 4,5), System-Chart 9,2 bis 9,7 px (vorher 3,4 bis 4,0). Im Querformat und auf dem iPad bleiben Charts im Desktop-Raum (Achsen ca. 8 bis 9 px, gedrehter Achsentitel 6,2 bis 6,8 px). c) Desktop: Referenzbilder pixelgleich (bei gleichem Datenstand gegen `HEAD` geprüft; ein Lauf zeigte einen einmaligen Render-Ausreisser, zwei Wiederholungen 0 Abweichungen); Werte an 80 + 2 × 40 Tooltip-Positionen identisch. d) Schmales Portfolio-Chart: Mausrad-Zoom, Pinch und Doppeltippen funktionieren; Tippen zeigt den Tooltip auf allen Profilen. e) Keine Konsolenfehler. **Während der Prüfung behoben:** alte Regel `#equityChart text { font-size: 11px }` überschrieb die Schrift des System-Charts; Einlaufanimation des System-Charts brach durch ein zweites Rendern ab (jetzt nur Neuzeichnen bei geänderter Breite). Regression BP-013/BP-014 danach erfüllt, Seitenübergang 6 von 6. **Offen (nicht beauftragt):** INC-24, INC-25. |
 
+### BP-025 – Register-Prüfung, NaN-Bereinigung, Overlay, Meta-Text
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless, siehe "Prüfung"); beauftragt als Todo-Punkte 3, 4, 7 und INC-04 |
+| **Scope** | a) Detailseite nur für registrierte Systeme (D-037), `systems.js` in der Skriptliste der Detailseite. b) NaN-Bereinigung in `fetchJson` von `equity-overview-chart.js` und `regime-engine-chart.js` (wie D-009). c) Max-Drawdown-Overlay samt leerem Verlauf und `calculateMaxDrawdownSegment` entfernen. d) Meta-Description ohne feste Systemanzahl. |
+| **Nicht im Scope** | README (Todo 1), nicht registrierte Ordner (Todo 2), Signale (Todo 6), fehlende Informationen (Todo 8). |
+| **Betroffene Dateien** | `js/dashboard-loader.js`, `dashboard/index.html`, `js/equity-overview-chart.js`, `js/regime-engine-chart.js`, `index.html` |
+| **Anforderungen / Decisions** | D-037; D-008, D-009, D-029 |
+| **Abschlusskriterien** | a) Nicht registrierter Slug zeigt "Unknown system …", registrierte Systeme laden wie bisher. b) Mit einem `NaN` in Equity- und Positionsdatei bleibt das System im Portfolio (Statuszeile 10/10). c) Desktop-Referenzbilder pixelgleich, Werte unverändert. d) Seitenübergang 6 von 6, keine Konsolenfehler. |
+| **Prüfung (2026-10-26)** | **Erfüllt:** a) `?system=multifactor-edge` (Ordner vorhanden, nicht registriert): "Unknown system 'multifactor-edge'. Only systems registered in js/systems.js can be opened.", Loader ausgeblendet, kein Chart; `?system=strong-volume-trend` lädt normal (Titel, Equity-Chart mit 7 Pfaden). b) Testdaten mit `NaN` in `wl-equity.json` (Punkt 500) und `wl-positions.json` (Position 3) von `dip-snapback`: Statuszeile **10/10 systems included**, mit dem Stand `HEAD` bei gleichen Daten 9/10; Detailseite lädt in beiden Fällen. c) `classic`-Referenzbilder (sechs, mit eingeblendetem Panel) 0 abweichende Pixel; KPI-Karten, Statuszeile und Tooltip-Texte an 80 Positionen identisch zu vorher. Der entfernte Overlay war also tatsächlich unsichtbar (INC-13). d) Seitenübergang 6 von 6; keine Konsolenfehler. |
+
+### BP-026 – Regime-Panel folgt Zoom und Pan
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless, siehe "Prüfung"); beauftragt als Todo-Punkt 5 |
+| **Scope** | Ereignis `wl:portfolio-range` im Portfolio-Chart, Neuzeichnen des Panels ohne Einlaufanimation, Loader wartet auf das Panel (D-038). |
+| **Betroffene Dateien** | `js/equity-overview-chart.js`, `js/regime-engine-chart.js`, `js/landing.js` |
+| **Anforderungen / Decisions** | D-038; D-018, D-034 |
+| **Abschlusskriterien** | a) Bei eingeblendetem Panel entspricht dessen Zeitachse nach Zoom, Pan und Reset dem sichtbaren Portfolio-Zeitraum. b) Kein erneutes Einzeichnen beim Neuzeichnen. c) Beim Ausblenden des Loaders ist das Panel gerendert. d) Bei ausgeblendetem Panel keine Änderung. |
+| **Prüfung (2026-10-26)** | **Erfüllt** (Aurora, Panel per Testkonfiguration eingeblendet): a) Gesamtzeitraum: Portfolio 2016–2026, Panel 2017–2026 (die Regime-Daten beginnen später; wie bisher). Nach 8 Mausrad-Schritten beide 2018–2026; nach Doppelklick wieder Ausgangszustand. b) Nach dem Zoom im Panel 0 Elemente mit `wl-draw-line` oder `wl-fade-in`. c) Im Moment, in dem der Loader `hidden` erhält, enthält `#regimeEngineChart` bereits seine Pfade (Abfrage alle 50 ms). d) Standard (Panel aus): Werte und Abläufe der Regression unverändert (BP-013/BP-014-Skripte, Werte an 80 Positionen). Keine Konsolenfehler. |
+
+### BP-027 – Touch-Gesten der Charts
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und geprüft (Chrome headless, Mobil-Emulation mit Touch, siehe "Prüfung"); beauftragt als INC-24 |
+| **Scope** | Ein Finger führt den Tooltip (beide Charts), zwei Finger Pinch-Zoom und Pan (Portfolio-Chart), `touch-action: pan-y` auf den Overlays (D-039). |
+| **Betroffene Dateien** | `js/equity-overview-chart.js`, `js/equity-system-chart.js` |
+| **Anforderungen / Decisions** | D-039; D-017 |
+| **Abschlusskriterien** | a) Waagrechtes Wischen mit einem Finger zeigt den Tooltip an der Fingerposition (beide Charts). b) Ein Finger verschiebt den Ausschnitt nicht mehr; zwei Finger zoomen und verschieben. c) Maus und Mausrad unverändert. d) Keine Konsolenfehler. |
+| **Prüfung (2026-10-26)** | **Erfüllt** (390 × 844, DPR 2, Touch-Emulation, CDP-Touch-Ereignisse): a) Portfolio-Chart: Antippen zeigt den Tooltip (19/10/18), Wischen nach rechts verschiebt ihn (22/10/23); System-Chart (Tab Equity Curve): Antippen 18/10/19, Wischen 20/10/23, nach dem Loslassen ausgeblendet. b) Nach dem Wischen mit einem Finger Achse unverändert (2016–2026). Zwei Finger, sechs Schritte auseinander: 2020–2022; danach gemeinsam verschoben: 2019–2021 (die Geste bleibt über mehrere Neuzeichnungen erhalten); Doppeltippen setzt zurück. Senkrechtes Wischen über dem Portfolio-Chart scrollt die Seite wie neben dem Chart. c) Mausrad-Zoom und Doppelklick (BP-026-Prüfung, BP-013-Skript), Maus-Tooltip-Werte an 80 Positionen unverändert. d) Mobile-Audit (sechs Profile): kein horizontales Überlaufen, Tooltip auf allen Profilen, keine Konsolenfehler. **Nicht prüfbar:** Scrollen über dem System-Chart: Der Tab passt auf 844 px, es gibt nichts zu scrollen; gleiche `touch-action` wie beim Portfolio-Chart. **Nicht geprüft:** echte Geräte, Safari/iOS. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -461,13 +502,13 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | Kandidat | Bezug | Entscheidung erforderlich |
 |---|---|---|
 | C-01 | README an Ist-Stand anpassen (zehn Systeme, Dateiliste, Beispiel-URL) | INC-01 bis INC-03: ja/nein |
-| C-02 | Systembeschreibung "9 systems" und Footerjahr vereinheitlichen | INC-04, INC-05: ja/nein, gewünschter Wortlaut |
+| C-02 | Systembeschreibung "9 systems" und Footerjahr vereinheitlichen | INC-04 umgesetzt in BP-025; INC-05: ja/nein, gewünschter Wortlaut |
 | C-03 | Zwei nicht registrierte Systeme behandeln | OP-03: registrieren, aktualisieren oder entfernen |
 | C-04 | Anzeige oder Entfall der Signale | OP-05 |
-| C-05 | Dashboard auf registrierte Systeme beschränken | OP-10 |
-| C-06 | `NaN`-Bereinigung in allen Ladepfaden | INC-08: ja/nein |
-| C-07 | Regime-Panel bei Zoom synchronisieren, Loader-Abwarten | INC-09: ja/nein |
-| C-08 | Verlaufsdefinition des Max-DD-Overlays klären oder Overlay entfernen | INC-13 |
+| C-05 | Dashboard auf registrierte Systeme beschränken | Entschieden, umgesetzt in BP-025 (D-037) |
+| C-06 | `NaN`-Bereinigung in allen Ladepfaden | Entschieden, umgesetzt in BP-025 |
+| C-07 | Regime-Panel bei Zoom synchronisieren, Loader-Abwarten | Entschieden, umgesetzt in BP-026 (D-038) |
+| C-08 | Verlaufsdefinition des Max-DD-Overlays klären oder Overlay entfernen | Entschieden (entfernen), umgesetzt in BP-025 |
 | C-09 | Drawdown-Achse des Portfolio-Charts dynamisch statt fest | INC-14 |
 | C-10 | Gemeinsame Hilfsfunktionen statt Duplikate | INC-19: ja/nein; würde D-001 nicht verletzen, ist aber Refactoring |
 | C-11 | Angaben zur Berechnungsvariante, Skalierung und Ampelschwellen dokumentieren | OP-06, OP-07, OP-12 (reine Dokumentation) |
@@ -500,4 +541,7 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-L-14 | BP-022 | D-034 |
 | INC-21 (FR-L-06/07) | BP-023 | D-035 |
 | INC-22, INC-23 (FR-L-05/06, FR-D-08) | BP-024 | D-036 |
+| INC-04, INC-07, INC-08, INC-13 | BP-025 | D-037 |
+| INC-09 (FR-L-08) | BP-026 | D-038 |
+| INC-24 (FR-L-06, FR-D-08) | BP-027 | D-039 |
 | Q-01 | alle | D-001 |

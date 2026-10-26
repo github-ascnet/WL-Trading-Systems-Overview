@@ -32,7 +32,16 @@
   async function fetchJson(path) {
     const res = await fetch(path, { cache: "no-store" });
     if (!res.ok) throw new Error(`Cannot load ${path} (${res.status})`);
-    return res.json();
+    const rawText = await res.text();
+
+    try {
+      return JSON.parse(rawText);
+    } catch (parseError) {
+      // Bare NaN values from the export are invalid JSON (D-009)
+      const sanitizedText = rawText.replace(/(:\s*)NaN(?=\s*[,}\]])/g, "$1null");
+      if (sanitizedText !== rawText) return JSON.parse(sanitizedText);
+      throw parseError;
+    }
   }
 
   function normalizeRegimeSeries(raw) {
@@ -132,9 +141,21 @@
     compositeData,
     stretchData,
     minTs,
-    maxTs
+    maxTs,
+    opts
   ) {
     if (!containerEl) return;
+
+    // Einlaufanimation nur beim ersten Rendern; Neuzeichnen bei Zoom ohne (D-038)
+    const animate = opts?.animate !== false;
+    const fadeAttrs = (delayMs) =>
+      animate ? ` class="wl-fade-in" style="--wl-delay:${delayMs}ms"` : "";
+    const glowAttrs = animate
+      ? ' class="wl-c-regime-glow wl-fade-in" style="--wl-delay:900ms"'
+      : ' class="wl-c-regime-glow"';
+    const lineAttrs = animate
+      ? ' class="wl-c-regime-line wl-draw-line" pathLength="1" style="--wl-delay:300ms"'
+      : ' class="wl-c-regime-line"';
 
     const showStretch =
       window.WL_KPI_CONFIG?.display?.showRegimeStretchScore ?? true;
@@ -338,18 +359,18 @@
             })
           : ""
       }
-      <g clip-path="url(#regimeClip)" class="wl-fade-in" style="--wl-delay:600ms">${bgSegments}</g>
+      <g clip-path="url(#regimeClip)"${fadeAttrs(600)}>${bgSegments}</g>
       <g>${gridLines}</g>
       <g>${yAxisLabels}</g>
       ${
         stretchPath
-          ? `<path d="${stretchPath}" fill="none" stroke="${COLOR_STRETCH}" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round" opacity="0.50" clip-path="url(#regimeClip)" class="wl-fade-in" style="--wl-delay:600ms"/>`
+          ? `<path d="${stretchPath}" fill="none" stroke="${COLOR_STRETCH}" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round" opacity="0.50" clip-path="url(#regimeClip)"${fadeAttrs(600)}/>`
           : ""
       }
       ${
         compositePath
-          ? `<path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="7" stroke-opacity="0.12" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)" visibility="hidden" class="wl-c-regime-glow wl-fade-in" style="--wl-delay:900ms"/>
-            <path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)" class="wl-c-regime-line wl-draw-line" pathLength="1" style="--wl-delay:300ms"/>`
+          ? `<path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="7" stroke-opacity="0.12" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)" visibility="hidden"${glowAttrs}/>
+            <path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)"${lineAttrs}/>`
           : ""
       }
       ${compositeEndLabel}
@@ -527,6 +548,28 @@
         effectiveMin,
         effectiveMax
       );
+      // Zoom/Pan des Portfolio-Charts übernehmen (D-038): gebündelt je Bild, ohne Einlaufanimation
+      if (!containerEl.dataset.rangeSync) {
+        containerEl.dataset.rangeSync = "1";
+        let pendingRange = null;
+        document.addEventListener("wl:portfolio-range", (event) => {
+          const alreadyScheduled = pendingRange !== null;
+          pendingRange = event.detail;
+          if (alreadyScheduled) return;
+          window.requestAnimationFrame(() => {
+            const range = pendingRange;
+            pendingRange = null;
+            renderRegimeEnginePanel(
+              containerEl,
+              compositeData,
+              stretchData,
+              range.min,
+              range.max,
+              { animate: false }
+            );
+          });
+        });
+      }
       // Hintergrund-Tint nach dem letzten Composite-Zustand (rein visuell)
       const lastComposite = compositeData[compositeData.length - 1];
       if (lastComposite) {
