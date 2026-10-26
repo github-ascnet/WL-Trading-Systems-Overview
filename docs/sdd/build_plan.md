@@ -58,6 +58,7 @@ flowchart TD
     BP013["BP-013<br/>Motion: Einlaufanimation"]
     BP014["BP-014<br/>Atmosphäre, Mikro-Interaktionen"]
     BP015["BP-015<br/>Kacheln, Sparklines, Übergang"]
+    BP016["BP-016<br/>Loader als Mini-Chart"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -86,6 +87,8 @@ flowchart TD
     BP013 --> BP015
     BP003 --> BP015
     BP004 --> BP015
+    BP011 --> BP016
+    BP013 --> BP016
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -302,6 +305,21 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Bekannte Abweichungen** | siehe D-028 "Abweichung vom Vorschlag" |
 | **Prüfung (2026-10-26)** | **Erfüllt:** a) Bei 1280 × 1000 px sind 4 von 10 Kacheln sichtbar und nach dem Loader aufgestiegen (Deckkraft 1), die übrigen 6 bleiben bis zum Scrollen verborgen und steigen danach auf. b) 10 Sparklines, 10 Abrufe von `wl-equity.json` (kein zusätzlicher Abruf); Sparklines sichtbarer Kacheln eingezeichnet, die übrigen erst nach dem Scrollen. c) Fallback nicht gezielt provoziert (Code: ohne Serie wird der Platzhalter entfernt). d) Klick auf eine Kachel öffnet das richtige Dashboard, der Rücklink führt zurück; Seitenübergang in beide Richtungen aktiv, Landing → Dashboard nach D-029 in 6 von 6 Läufen (vorher 2 von 5). Fehlerpfade des Dashboards (ohne Parameter, ungültiger Slug, unbekanntes System) unverändert. e) Tilt setzt nach dem Aufstieg wieder `transform`. f) Reduced-Motion: keine Motion-Klassen, alle Kacheln sofort sichtbar, 10 Sparklines vollständig, kein Seitenübergang. g) Keine Konsolenfehler. Regression BP-013 und BP-014 mit dem neuen Ladeverfahren: Endwerte der Kennzahlen, Zoom ohne Neueinzeichnung, Equity-Tab, Regime-Tint, Drift, Tab-Indikator, Heatmap, Positionen, Mobile-Menü und Reduced-Motion unverändert erfüllt. **Nicht geprüft:** Firefox und Safari (Seitenübergang dort je nach Version nicht unterstützt, Navigation funktioniert dann wie bisher), echte Mobilgeräte. |
 
+### BP-016 – Motion: Loader als animierter Mini-Chart
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless mit GPU, siehe "Prüfung"); nicht geprüft in anderen Browsern und auf echten Mobilgeräten |
+| **Ziel** | Ansprechenderer Loader mit Motion-Graphics-Effekt. |
+| **Scope** | SVG-Markup im Loader beider Seiten, Loader-Regeln in `motion.css`, Entfernen der Spinner-Regeln. |
+| **Nicht im Scope** | Ladelogik, Mindestanzeigedauer, Texte des Loaders, `landing.js`, `dashboard-loader.js`. |
+| **Voraussetzungen** | BP-011, BP-013 (`motion.css` auf beiden Seiten eingebunden) |
+| **Betroffene Dateien** | `index.html`, `dashboard/index.html`, `css/motion.css`, `css/landing.css`, `css/styles.css` |
+| **Anforderungen / Decisions** | FR-M-17; D-030; D-019 |
+| **Abschlusskriterien** | a) Loader zeigt den animierten Chart ab dem ersten Bild auf beiden Seiten. b) Ausblenden funktioniert wie bisher; danach keine laufenden Animationen im Loader. c) Reduced-Motion: statischer, vollständiger Chart, lesbarer Titel. d) Layout des Loaders auf Mobile intakt. e) Keine Konsolenfehler. |
+| **Bekannte Abweichungen** | keine |
+| **Prüfung (2026-10-26)** | **Erfüllt** (Netzwerk künstlich um 2,5 s verzögert, damit der Loader sichtbar bleibt): a) Landing und Dashboard zeigen den Chart, `wl-loader-line` und `wl-loader-shimmer` laufen, die Linie zeichnet sich ein (Offset 0,03 bis 0,10 gemessen), Puls-Ring und Ausblendphase auf Aufnahmen sichtbar. b) Nach dem Ausblenden ist der Loader `visibility: hidden`, alle 15 Animationen im Loader sind pausiert (0 laufend), die Karte ist auf 0,96 verkleinert. c) Reduced-Motion: keine Animationen, Chart vollständig, Titel in normaler Textfarbe. d) Bei 390 px Breite Karte 358 px, Layout intakt. e) Keine Konsolenfehler. **Nicht geprüft:** Firefox, Safari, echte Mobilgeräte. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -341,4 +359,5 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-M-01 bis FR-M-07 | BP-013 | D-026 |
 | FR-M-08 bis FR-M-13 | BP-014 | D-027 |
 | FR-M-14 bis FR-M-16 | BP-015 | D-028 |
+| FR-M-17 | BP-016 | D-030 |
 | Q-01 | alle | D-001 |

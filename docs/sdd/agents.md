@@ -175,6 +175,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 9. Motion (D-026): Nach dem Loader zeichnen sich Portfolio-Linie und Regime-Linie ein, die KPI-Karten zählen auf den bisherigen Endwert hoch. Zoom, Pan und Reset zeichnen nicht neu ein. Mit aktivem `prefers-reduced-motion` erscheinen die Endwerte sofort.
 10. Motion (D-027): Ab 701 px driftet der Hintergrund und färbt sich nach dem letzten Regime-Zustand; unter 701 px nicht. Beim Prüfen im Headless-Browser GPU-Beschleunigung nicht abschalten, sonst täuscht die Drift eine niedrige Bildrate vor.
 11. Motion (D-028): Sichtbare Kacheln steigen nach dem Loader gestaffelt auf, weitere beim Scrollen; jede Kachel zeigt eine Sparkline; der Wechsel zum Dashboard und zurück überblendet (Chrome, Edge).
+12. Loader (D-030): Beim Laden zeichnet sich im Loader eine Mini-Equity-Kurve in einer Schleife ein; zum Prüfen das Netzwerk drosseln, sonst ist der Loader nur kurz sichtbar.
 
 **Dashboard (`dashboard/index.html?system=<slug>`)**
 

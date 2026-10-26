@@ -58,6 +58,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-027 | Atmosphäre und Mikro-Interaktionen (Hintergrund, Regime-Tint, Tab-Indikator, Heatmap, Tabellen) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-028 | Kachel-Choreografie, Sparklines und Seitenübergang | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-029 | Dashboard lädt Skripte dynamisch und nacheinander | Architektur | Verbindlich (2026-10-26, Folge von D-028) |
+| D-030 | Loader als animierter Mini-Chart (reines CSS) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 
 ---
 
@@ -353,3 +354,15 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Begründung** | Gemessen am 2026-10-26 (Chrome headless, je Navigation Landing → Dashboard): Mit statischen Skripten rendert das Dashboard oft schon während des Parsens zum ersten Mal (`readyState: loading`, 25 bis 600 ms), und Chrome bricht den Seitenübergang mit "ViewTransition opt-in disabled" ab (Erfolg 2 von 5). Varianten: `defer` 1 von 5, `@view-transition` ohne `@media` 1 von 5, Render-Blocking bis Body-Ende (`<link rel="expect" blocking="render">`) 15 von 16, dynamisches Laden 13 von 13. Gewählt wurde die zuverlässigste Variante, die zudem dem bestehenden Muster der Landing-Seite entspricht. |
 | **Quelle** | Messungen im Rahmen von BP-015 |
 | **Konsequenz** | Die Skripte werden seriell statt parallel geladen; das Dashboard startet geringfügig später (wie die Landing-Seite). `dashboard-loader.js` bleibt zuletzt und startet beim Laden. Neue Dashboard-Skripte kommen in die Liste im Inline-Skript (`agents.md` 6.2). |
+
+## D-030 – Loader als animierter Mini-Chart (reines CSS)
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26, Arbeitspaket BP-016) |
+| **Entscheidung** | Der Spinner im Loader beider Seiten wird durch ein Inline-SVG `.page-loader-chart` ersetzt: Raster, gestaffelt wachsende Volumenbalken, eine Equity-Linie, die sich in einer Schleife (2,4 s) einzeichnet, Flächenverlauf, pulsierender Punkt an der Spitze. Der Titel erhält einen laufenden Schimmer, die Karte schrumpft beim Ausblenden leicht. Die Regeln stehen in `css/motion.css`. |
+| **Ausnahme zu D-026** | Der Loader ist vor `motion.js` sichtbar. Seine Animation hängt deshalb **nicht** an `html.wl-motion` und nicht am Loader-Ende, sondern läuft ab dem ersten Bild. Reduced-Motion wird über `@media (prefers-reduced-motion: reduce)` behandelt: statischer, vollständig gezeichneter Chart und normaler Titel. |
+| **Regeln** | 1. Reines CSS, kein JavaScript; `landing.js` und `dashboard-loader.js` bleiben unverändert (nur die Klasse `hidden` steuert das Ausblenden). 2. Der statische Zustand ist der vollständige Chart. 3. Ist der Loader ausgeblendet, werden die Endlos-Animationen pausiert, damit sie keine Last erzeugen. |
+| **Begründung** | Auftrag des Auftraggebers ("Loader aufpeppen"). Thematisch passend zur Anwendung (Equity-Kurve statt neutralem Spinner). |
+| **Quelle** | Auftrag 2026-10-26 |
+| **Konsequenz** | Markup in `index.html` und `dashboard/index.html` geändert (gleiches SVG). Die nicht mehr verwendeten Regeln `.page-loader-spinner` und `@keyframes page-loader-spin` werden aus `landing.css` und `styles.css` entfernt. |

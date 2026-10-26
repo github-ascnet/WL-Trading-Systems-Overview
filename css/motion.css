@@ -234,6 +234,209 @@ html[data-wl-regime="RiskOff"] {
   }
 }
 
+/* ---- Loader als Mini-Chart (FR-M-17, D-030) ----
+ * Ausnahme: läuft ab dem ersten Bild, unabhängig von html.wl-motion,
+ * weil der Loader vor motion.js sichtbar ist.
+ */
+
+.page-loader-chart {
+  display: block;
+  width: 168px;
+  height: 68px;
+  margin: 0 auto 14px;
+  overflow: visible;
+}
+
+.page-loader-chart .loader-grid line {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.page-loader-chart .loader-bars rect {
+  fill: rgba(88, 196, 255, 0.18);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: wl-loader-bar 2.4s var(--wl-motion-ease) infinite;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+.page-loader-chart .loader-area {
+  fill: url(#loaderAreaFill);
+  animation: wl-loader-area 2.4s ease-in-out infinite;
+}
+
+.page-loader-chart .loader-line {
+  fill: none;
+  stroke: #58c4ff;
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 1 2;
+  filter: drop-shadow(0 0 4px rgba(88, 196, 255, 0.55));
+  animation: wl-loader-line 2.4s var(--wl-motion-ease) infinite;
+}
+
+.page-loader-chart .loader-tip,
+.page-loader-chart .loader-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.page-loader-chart .loader-tip {
+  fill: #58c4ff;
+  animation: wl-loader-tip 2.4s ease-out infinite;
+}
+
+.page-loader-chart .loader-pulse {
+  fill: none;
+  stroke: #58c4ff;
+  stroke-width: 1.5;
+  opacity: 0;
+  animation: wl-loader-pulse 2.4s ease-out infinite;
+}
+
+.page-loader-title {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 0%,
+    var(--text) 45%,
+    #ffffff 50%,
+    var(--text) 55%,
+    var(--muted) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: wl-loader-shimmer 2.4s linear infinite;
+}
+
+/* Karte schrumpft beim Ausblenden leicht */
+.page-loader-overlay .page-loader-card {
+  transition: transform 220ms var(--wl-motion-ease), opacity 220ms ease;
+}
+
+.page-loader-overlay.hidden .page-loader-card {
+  transform: scale(0.96) translateY(6px);
+  opacity: 0;
+}
+
+/* Ausgeblendet: Endlos-Animationen anhalten */
+.page-loader-overlay.hidden .page-loader-chart *,
+.page-loader-overlay.hidden .page-loader-title {
+  animation-play-state: paused;
+}
+
+@keyframes wl-loader-line {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  82% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes wl-loader-area {
+  0%,
+  25% {
+    opacity: 0;
+  }
+  55%,
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes wl-loader-tip {
+  0%,
+  45% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+  65%,
+  82% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes wl-loader-pulse {
+  0%,
+  52% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  56% {
+    opacity: 0.7;
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+
+@keyframes wl-loader-bar {
+  0% {
+    transform: scaleY(0.15);
+    opacity: 0.4;
+  }
+  40%,
+  82% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.15);
+    opacity: 0.4;
+  }
+}
+
+@keyframes wl-loader-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader-chart *,
+  .page-loader-title {
+    animation: none !important;
+  }
+
+  .page-loader-title {
+    background: none;
+    color: var(--text);
+  }
+
+  .page-loader-overlay .page-loader-card {
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wl-draw-line,
   .wl-fade-in,

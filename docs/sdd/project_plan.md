@@ -487,7 +487,7 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 - Datum: Dashboard `dd/mm/yyyy`; Kachel mit Uhrzeit; Chart `dd/mm/yy`; Positionen `d MMM yyyy`.
 - UI-Texte sind Englisch.
 
-### 10.5 Motion **[Auftrag 2026-10-26, D-026 bis D-028, BP-013 bis BP-015]**
+### 10.5 Motion **[Auftrag 2026-10-26, D-026 bis D-030, BP-013 bis BP-016]**
 
 **Einlaufanimationen (D-026, BP-013):**
 
@@ -521,6 +521,12 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 | FR-M-16 | Navigation zwischen Landing und Dashboard überblendet weich (View Transitions), sofern der Browser es unterstützt und kein Reduced-Motion aktiv ist. | Auftrag |
 
 Nicht umgesetzt (Entscheidung 2026-10-26): Puls eines Kennzahl-Farbpunkts. Bereits vorhanden: weiches Ausblenden des Loaders.
+
+**Loader (D-030, BP-016):**
+
+| ID | Anforderung | Herkunft |
+|---|---|---|
+| FR-M-17 | Der Loader beider Seiten zeigt statt des Spinners einen animierten Mini-Chart (Equity-Linie zeichnet sich in einer Schleife ein, Volumenbalken, pulsierende Spitze) und einen schimmernden Titel; beim Ausblenden schrumpft die Karte leicht. Bei Reduced-Motion statisch. Ausgeblendet erzeugt er keine Animationslast. | Auftrag |
 
 ---
 
@@ -669,3 +675,4 @@ Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt n
 | FR-M-01 bis FR-M-07 (10.5) | BP-013 |
 | FR-M-08 bis FR-M-13 (10.5) | BP-014 |
 | FR-M-14 bis FR-M-16 (10.5) | BP-015 |
+| FR-M-17 (10.5) | BP-016 |
