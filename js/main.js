@@ -449,6 +449,35 @@ function renderOverview(currentState, positions) {
     .join("");
 }
 
+// Leuchtende Equity-Kurve oben im Overview (nur Theme "aurora", D-033)
+function renderOverviewHero(equityData, currentState) {
+  if (
+    window.WL_VISUAL_THEME !== "aurora" ||
+    typeof window.renderSystemHeroChart !== "function"
+  ) {
+    return;
+  }
+
+  const overviewCards = document.getElementById("overviewCards");
+  if (!overviewCards) return;
+
+  let hero = document.getElementById("systemHero");
+  if (!hero) {
+    hero = document.createElement("div");
+    hero.id = "systemHero";
+    hero.className = "system-hero";
+    hero.setAttribute("aria-hidden", "true");
+    hero.innerHTML =
+      '<svg viewBox="0 0 1000 170" preserveAspectRatio="xMidYMid meet" focusable="false"></svg>';
+    overviewCards.parentElement.insertBefore(hero, overviewCards);
+  }
+
+  window.renderSystemHeroChart(hero.querySelector("svg"), equityData, {
+    startLabel: formatDateLong(currentState.backtestStartDate),
+    endLabel: formatPercent(currentState.profitPercent, 0),
+  });
+}
+
 function renderMetricsReport(currentState) {
   const metricsTableBody = document.getElementById("metricsTableBody");
   if (!metricsTableBody) return;
@@ -765,6 +794,7 @@ function bootDashboard({ systemId, currentState, equity, positions, signals }) {
     }
 
     renderOverview(safeCurrentState, positions);
+    renderOverviewHero(Array.isArray(equity) ? equity : [], safeCurrentState);
     renderMetricsReport(safeCurrentState);
     renderPositions(Array.isArray(positions) ? positions : []);
     renderMonthlyReturns(Array.isArray(equity) ? equity : [], safeCurrentState);

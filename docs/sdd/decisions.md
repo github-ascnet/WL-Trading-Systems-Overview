@@ -61,6 +61,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-030 | Loader als animierter Mini-Chart (reines CSS) | Darstellung | Verbindlich (Auftrag 2026-10-26); Animationstechnik ersetzt durch D-032 |
 | D-031 | Visuelles Theme "Aurora" (Future State), umschaltbar | Darstellung / Architektur | Verbindlich (Auftrag 2026-10-26) |
 | D-032 | Loader-Animation nur mit Compositor-Eigenschaften | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-033 | Aurora auf den System-Detailseiten (Regime-Färbung, Hero-Kurve, lebendige Flächen) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 
 ---
 
@@ -391,3 +392,14 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Begründung** | Messung 2026-10-26 (Chrome headless mit GPU): Auf der Landing-Seite blockiert ein einzelner Task den Main-Thread fast die gesamte Loader-Zeit (1,26 bis 1,48 s bei normaler CPU, 19,8 bis 24,9 s bei 4-fach gedrosselter CPU; Ursache siehe INC-21). Animationen auf dem Main-Thread stehen dann still. Screencast-Bilder zeigen: Die Linie bleibt halb gezeichnet stehen, während Balken und Fläche (Compositor) weiterlaufen. Compositor-Animationen laufen unabhängig vom Main-Thread. |
 | **Quelle** | Messungen im Rahmen von BP-020 |
 | **Konsequenz** | Markup des Loaders in beiden Seiten geändert; Klassennamen (`loader-line`, `loader-area`, `loader-bars`, `loader-tip`, `loader-pulse`, `loader-grid`) bleiben, damit `theme-aurora.css` weiter greift. Die eigentliche Ursache der Blockade (INC-21) ist davon unberührt. |
+
+## D-033 – Aurora auf den System-Detailseiten
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26: "die einzelnen Systeme wirken noch sehr statisch"; Auswahl des Auftraggebers: Detailseiten, Regime-Färbung, Hero-Kurve, lebendige Flächen; Arbeitspaket BP-021) |
+| **Entscheidung** | 1. **Regime-Färbung:** `dashboard-loader.js` lädt nach dem erfolgreichen Start zusätzlich `systems/risk-regime/wl-regime-composite.json` (nicht blockierend) und übergibt den letzten Zustand an `WL_MOTION.setRegime` (D-027). Nur im Theme `aurora` und nur bei aktiver Motion; sonst kein Abruf. 2. **Hero-Kurve:** `main.js` fügt im Theme `aurora` oben im Overview ein Element `#systemHero` ein; `renderSystemHeroChart` in `equity-system-chart.js` zeichnet eine logarithmische Equity-Linie mit Verlauf, Glow, Fläche, Sternenfeld, pulsierendem Endpunkt, Startdatum und Profit-%. Sie zeichnet sich einmal ein; nach dem Ende der Einlaufanimation werden die Motion-Klassen entfernt, damit ein Tab-Wechsel sie nicht wiederholt. Bei Containerbreite unter 600 px nutzt sie einen höheren Koordinatenraum (600 × 210 statt 1000 × 170) mit grösserer Schrift. 3. **Lebendige Flächen:** reines CSS unter `html[data-theme="aurora"].wl-motion`: langsam wanderndes Aurora-Lichtband im Kopfbereich und in den Panel-Köpfen, gestaffelter Aufstieg der Overview-Karten, gestaffeltes Einblenden der Tabellenzeilen (Overview, Metrics), Glow beim Überfahren. Der Kopfbereich beschneidet das Band mit `overflow-x: clip`, damit die Seite nicht horizontal überläuft und das Mobile-Menü weiter nach unten ausklappen kann. |
+| **Regeln** | a) `classic` bleibt unverändert: kein zusätzlicher Abruf, kein zusätzliches DOM-Element, keine Regel ohne Aurora-Bezug. b) Nur `transform` und `opacity` animieren (D-032). c) Reduced-Motion: keine Färbung, keine Lichtbänder, keine Staffelung; die Hero-Kurve erscheint statisch. |
+| **Begründung** | Auftrag. Das Laden gehört nach D-006 in den Loader, das Rendern nach `main.js`. |
+| **Quelle** | Auftrag und Rückfrage 2026-10-26 |
+| **Konsequenz** | Zusätzlicher Abruf von ca. 150 KB je Detailseiten-Aufruf im Theme `aurora`. Das Tabellen-Einblenden wiederholt sich beim erneuten Öffnen eines Tabs (wie BP-014 bei den Positionen). |

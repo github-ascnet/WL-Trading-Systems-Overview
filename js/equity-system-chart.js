@@ -582,7 +582,118 @@
     return cleanup;
   }
 
+  // ── Hero curve (theme "aurora", D-033) ───────────────────────────────────
+
+  /**
+   * Kompakte Hero-Kurve oben im Overview: log. Equity-Linie mit Verlauf, Glow,
+   * Fläche, Sternenfeld, pulsierendem Endpunkt, Startdatum und Profit-%.
+   * Zeichnet sich einmal ein; danach werden die Motion-Klassen entfernt, damit
+   * ein Tab-Wechsel die Einlaufanimation nicht wiederholt.
+   *
+   * @param {SVGElement} svgEl   – viewBox 0 0 1000 170
+   * @param {Array}      rawData – Array of { date, equity }
+   * @param {object}     [opts]  – { startLabel, endLabel }
+   */
+  function renderSystemHeroChart(svgEl, rawData, opts) {
+    if (!svgEl) return;
+
+    // Schmale Container (Mobile): höherer Koordinatenraum, damit Kurve und Text lesbar bleiben
+    const isNarrow = (svgEl.parentElement?.offsetWidth ?? 1000) < 600;
+    const W = isNarrow ? 600 : 1000;
+    const H = isNarrow ? 210 : 170;
+    const m = isNarrow
+      ? { top: 40, right: 112, bottom: 14, left: 12 }
+      : { top: 34, right: 96, bottom: 14, left: 14 };
+    svgEl.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svgEl.classList.toggle("wl-hero-narrow", isNarrow);
+    const cw = W - m.left - m.right;
+    const ch = H - m.top - m.bottom;
+
+    const series = normalizeData(rawData);
+    if (series.length < 2) {
+      svgEl.innerHTML = "";
+      return;
+    }
+
+    const minTs = series[0].timestamp;
+    const timeRange = Math.max(series[series.length - 1].timestamp - minTs, 1);
+    const logs = series.map((p) => Math.log(Math.max(p.equity, 1)));
+    const logMin = Math.min(...logs);
+    const logRange = Math.max(Math.max(...logs) - logMin, 1e-9);
+
+    const points = series.map((p, i) => ({
+      x: m.left + ((p.timestamp - minTs) / timeRange) * cw,
+      y: m.top + (1 - (logs[i] - logMin) / logRange) * ch,
+    }));
+    const linePath = points
+      .map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
+      .join(" ");
+    const end = points[points.length - 1];
+    const areaPath =
+      `${linePath} L${end.x.toFixed(1)} ${H - m.bottom} ` +
+      `L${points[0].x.toFixed(1)} ${H - m.bottom} Z`;
+
+    const stars = global.WL_THEME
+      ? global.WL_THEME.createStarfieldSvg({
+          x: 0,
+          y: 0,
+          width: W,
+          height: H,
+          count: 80,
+          seed: 21,
+        })
+      : "";
+
+    svgEl.innerHTML = `
+      <defs>
+        <linearGradient id="wlHeroLine" gradientUnits="userSpaceOnUse"
+                        x1="${m.left}" y1="0" x2="${W - m.right}" y2="0">
+          <stop offset="0%"   stop-color="#58c4ff"/>
+          <stop offset="55%"  stop-color="#2de2c4"/>
+          <stop offset="100%" stop-color="#6ee7a8"/>
+        </linearGradient>
+        <linearGradient id="wlHeroArea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#2de2c4" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#2de2c4" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${stars}
+      <path d="${areaPath}" fill="url(#wlHeroArea)" class="wl-fade-in" style="--wl-delay:900ms"/>
+      <path d="${linePath}" fill="none" stroke="#2de2c4" stroke-width="14" stroke-opacity="0.07"
+            stroke-linejoin="round" stroke-linecap="round" class="wl-fade-in" style="--wl-delay:900ms"/>
+      <path d="${linePath}" fill="none" stroke="#2de2c4" stroke-width="7" stroke-opacity="0.15"
+            stroke-linejoin="round" stroke-linecap="round" class="wl-fade-in" style="--wl-delay:900ms"/>
+      <path d="${linePath}" fill="none" stroke="url(#wlHeroLine)" stroke-width="3"
+            stroke-linejoin="round" stroke-linecap="round" class="wl-draw-line" pathLength="1"
+            style="--wl-delay:200ms"/>
+      <circle class="wl-hero-pulse" cx="${end.x.toFixed(1)}" cy="${end.y.toFixed(
+      1
+    )}" r="10" fill="none" stroke="#6ee7a8" stroke-width="1.5"/>
+      <circle class="wl-fade-in" cx="${end.x.toFixed(1)}" cy="${end.y.toFixed(
+      1
+    )}" r="4.5" fill="#6ee7a8" style="--wl-delay:1400ms"/>
+      <text class="wl-hero-caption" x="${m.left}" y="${
+      isNarrow ? 26 : 20
+    }">EQUITY SINCE ${esc(
+      String(opts?.startLabel ?? "").toUpperCase()
+    )}</text>
+      <text class="wl-hero-value wl-fade-in" x="${(end.x + 16).toFixed(1)}" y="${(
+      end.y + 7
+    ).toFixed(1)}" style="--wl-delay:1400ms">${esc(opts?.endLabel ?? "")}</text>
+    `;
+
+    // Einlaufanimation nur einmal: nach dem Ende die Motion-Klassen entfernen
+    svgEl.querySelectorAll(".wl-draw-line, .wl-fade-in").forEach((el) => {
+      el.addEventListener(
+        "animationend",
+        () => el.classList.remove("wl-draw-line", "wl-fade-in"),
+        { once: true }
+      );
+    });
+  }
+
   // ── Exports ───────────────────────────────────────────────────────────────
   global.renderSystemEquityChart = renderSystemEquityChart;
   global.mountSystemEquityChart = mountSystemEquityChart;
+  global.renderSystemHeroChart = renderSystemHeroChart;
 })(window);

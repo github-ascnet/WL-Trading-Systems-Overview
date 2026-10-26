@@ -63,6 +63,7 @@ flowchart TD
     BP018["BP-018<br/>Aurora: Charts, HUD"]
     BP019["BP-019<br/>Aurora: Regime, Loader"]
     BP020["BP-020<br/>Loader flüssig (Compositor)"]
+    BP021["BP-021<br/>Aurora auf Detailseiten"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -98,6 +99,8 @@ flowchart TD
     BP017 --> BP019
     BP016 --> BP020
     BP019 --> BP020
+    BP018 --> BP021
+    BP014 --> BP021
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -384,6 +387,20 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Abschlusskriterien** | a) Während des langen Tasks bewegt sich die Linie sichtbar weiter (Screencast-Bilder, 4-fach gedrosselte CPU). b) Keine Loader-Animation auf `stroke-dashoffset` oder `background-position`. c) Aussehen entspricht D-030 (classic und aurora). d) Ausgeblendet keine laufenden Animationen; Reduced-Motion statisch. e) `classic`-Referenzbilder unverändert, keine Konsolenfehler. |
 | **Prüfung (2026-10-26)** | **Vorher:** Landing, 4-fach gedrosselte CPU, ein Task von 19,8 s blockiert den Main-Thread; auf den Screencast-Bildern bleibt die Linie halb gezeichnet stehen, Balken und Fläche laufen weiter. **Nachher, erfüllt:** a) Bei gleicher Blockade (Task bis 29,2 s) zeigen die Screencast-Bilder die Linie im Abstand von ca. 200 ms bei rund 60 %, 85 % und 100 % sowie Ausblenden und Neubeginn des Zyklus; Bildlücke höchstens 250 ms (Takt der Aufnahme). b) Im Loader keine Animation mehr auf `stroke-dashoffset`, `background-position` oder mit Filter. c) Aufnahmen classic und aurora (Landing, Dashboard) entsprechen der Gestaltung von D-030; kein Kasten um Linie oder Titel. d) 16 Loader-Animationen, nach dem Ausblenden 0 laufend; Reduced-Motion 0 Animationen. e) `classic`-Referenzbilder 0 abweichende Pixel; Seitenübergang 6 von 6; keine Konsolenfehler. **Hinweis:** Die Ladezeit selbst ist unverändert; Ursache siehe INC-21 und OP-13. |
 
+### BP-021 – Aurora auf den System-Detailseiten
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless mit GPU, siehe "Prüfung") |
+| **Ziel** | Die Detailseiten erhalten dieselbe lebendige Aurora-Wirkung wie die Landing-Seite. |
+| **Scope** | Regime-Färbung (Abruf in `dashboard-loader.js`), Hero-Kurve im Overview (`main.js`, `equity-system-chart.js`), Lichtbänder, Staffelung und Hover-Glow (`theme-aurora.css`). |
+| **Nicht im Scope** | Funkelnde Sterne im Seitenhintergrund (nicht gewählt); Änderungen an `classic`; Berechnungen. |
+| **Voraussetzungen** | BP-014 (Regime-Tint), BP-018 (Aurora-Charts) |
+| **Betroffene Dateien** | `js/dashboard-loader.js`, `js/main.js`, `js/equity-system-chart.js`, `css/theme-aurora.css` |
+| **Anforderungen / Decisions** | FR-T-09 bis FR-T-11; D-033; D-006, D-027, D-031, D-032 |
+| **Abschlusskriterien** | a) Detailseite färbt sich nach dem Regime-Zustand (Aurora, ab 701 px). b) Hero-Kurve zeichnet sich ein, Profit-% und Startdatum korrekt, kein erneutes Einzeichnen beim Tab-Wechsel. c) Lichtbänder laufen, Karten und Zeilen blenden gestaffelt ein. d) `classic`: Referenzbilder pixelgleich, kein Regime-Abruf, kein `#systemHero`. e) Reduced-Motion statisch; Bildrate mit GPU unverändert; Seitenübergang 6 von 6; keine Konsolenfehler. |
+| **Prüfung (2026-10-26)** | **Erfüllt:** a) `data-wl-regime="Caution"`, genau 1 Abruf von `wl-regime-composite.json`. b) Hero zeigt "4120%" und "EQUITY SINCE 17 OCT 2016" (entspricht `profitPercent` und `backtestStartDate`); die Linie trägt zuerst `wl-draw-line`, nach dem Einzeichnen keine Motion-Klasse mehr, auch nach Wechsel zu Metrics und zurück; Puls `wl-orbit`. c) Lichtband `wl-aurora-band` im Kopf und in den Panel-Köpfen; Karten `wl-rise-in` mit 45-ms-Versatz, Zeilen `wl-fade-in` ab 200 ms mit 25-ms-Versatz (Overview und Metrics); Positionen behalten ihre Verzögerungen aus BP-014 (Zeile 3: 0,056 s). d) `classic`: kein `#systemHero`, 0 Regime-Abrufe, keine Bänder oder Staffelung, sechs Referenzbilder 0 abweichende Pixel. e) Reduced-Motion: keine Motion-Klassen, keine Bänder, kein Puls, 0 Regime-Abrufe, Hero statisch sichtbar; Bildrate 61 (aurora, classic, reduced); Seitenübergang 6 von 6; KPI-Endwerte unverändert; keine Konsolenfehler oder Warnungen. **Während der Prüfung behoben:** Das Lichtband im Kopfbereich liess die Seite horizontal überlaufen (390 px); behoben mit `overflow-x: clip`, danach kein Überlaufen bei 1280 px und 390 px, Mobile-Menü vollständig bedienbar. Die Hero-Kurve war auf 390 px mit 59 px Höhe zu klein; behoben mit dem schmalen Koordinatenraum (jetzt 118 px Höhe). **Nicht geprüft:** Firefox, Safari, echte Mobilgeräte. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -428,4 +445,5 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-T-01 bis FR-T-03 | BP-017 | D-031 |
 | FR-T-04, FR-T-05 | BP-018 | D-031 |
 | FR-T-06, FR-T-07 | BP-019 | D-031 |
+| FR-T-09 bis FR-T-11 | BP-021 | D-033 |
 | Q-01 | alle | D-001 |

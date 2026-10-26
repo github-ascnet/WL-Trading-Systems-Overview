@@ -199,6 +199,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 8. Info-Symbol im Kopf zeigt die Strategiebeschreibung.
 9. Motion (D-026): Die Overview-Karten zählen nach dem Loader hoch; die Equity-Linie zeichnet sich beim ersten Öffnen des Tabs "Equity Curve" ein, nicht bei Resize.
 10. Motion (D-027): Der Tab-Indikator gleitet beim Tab-Wechsel (ab 769 px), Monthly Returns zeigt die Heatmap, die ersten 20 Positionszeilen blenden gestaffelt ein, auch nach dem Sortieren.
+11. Aurora (D-033): Hero-Kurve oben im Overview zeichnet sich einmal ein (nicht erneut nach Tab-Wechsel), Lichtband im Kopf, gestaffelte Karten und Zeilen, Regime-Färbung; bei 390 px kein horizontales Überlaufen, Mobile-Menü bedienbar.
 
 **Datenprüfung neues oder geändertes System**
 

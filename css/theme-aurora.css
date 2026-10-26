@@ -321,10 +321,6 @@ html[data-theme="aurora"] .card {
   box-shadow: var(--au-edge);
 }
 
-html[data-theme="aurora"] .card:hover {
-  border-color: rgba(45, 226, 196, 0.3);
-}
-
 html[data-theme="aurora"] .card-info {
   background: rgba(45, 226, 196, 0.12);
   color: var(--au-teal);
@@ -601,12 +597,185 @@ html[data-theme="aurora"] .page-loader-chart .loader-pulse {
 }
 
 /* ======================================================================
- * Reduced-Motion (FR-T-08): kein Funkeln, kein Orbit-Puls
+ * Detailseiten (FR-T-10): Hero-Kurve oben im Overview (#systemHero aus main.js)
+ * ==================================================================== */
+
+html[data-theme="aurora"] .system-hero {
+  margin-bottom: var(--space-4, 16px);
+  border: 1px solid rgba(88, 196, 255, 0.12);
+  border-radius: 12px;
+  background: radial-gradient(
+      ellipse 70% 90% at 85% 0%,
+      rgba(45, 226, 196, 0.1),
+      transparent 70%
+    ),
+    rgba(3, 9, 16, 0.6);
+  overflow: hidden;
+}
+
+html[data-theme="aurora"] .system-hero svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+html[data-theme="aurora"] .wl-hero-caption {
+  fill: var(--au-muted);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+html[data-theme="aurora"] .wl-hero-value {
+  fill: var(--au-text);
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-theme="aurora"] .wl-hero-narrow .wl-hero-caption {
+  font-size: 17px;
+}
+
+html[data-theme="aurora"] .wl-hero-narrow .wl-hero-value {
+  font-size: 30px;
+}
+
+/* Puls um den Endpunkt: unsichtbar bis zum Start, danach nur transform/opacity */
+html[data-theme="aurora"] .wl-hero-pulse {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wl-orbit 2.2s ease-out 1.6s infinite;
+}
+
+/* ======================================================================
+ * Detailseiten (FR-T-11): lebendige Flächen, nur mit Motion (html.wl-motion)
+ * ==================================================================== */
+
+/* Langsam wanderndes Aurora-Lichtband (transform, Compositor) */
+html[data-theme="aurora"].wl-motion .topbar::before,
+html[data-theme="aurora"].wl-motion .panel-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -50%;
+  width: 200%;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(45, 226, 196, 0.1) 18%,
+    rgba(110, 231, 168, 0.07) 30%,
+    transparent 44%,
+    rgba(139, 123, 255, 0.07) 64%,
+    transparent 80%
+  );
+  animation: wl-aurora-band 18s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Band seitlich beschneiden; vertikal sichtbar lassen (Mobile-Menü klappt nach unten aus) */
+html[data-theme="aurora"].wl-motion .topbar {
+  overflow-x: clip;
+}
+
+html[data-theme="aurora"].wl-motion .panel-header {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+html[data-theme="aurora"].wl-motion .panel-header::before {
+  animation-duration: 24s;
+}
+
+@keyframes wl-aurora-band {
+  from {
+    transform: translateX(-15%);
+  }
+  to {
+    transform: translateX(15%);
+  }
+}
+
+/* Overview-Karten steigen gestaffelt auf */
+html[data-theme="aurora"].wl-motion #overviewCards .card {
+  animation: wl-rise-in 520ms var(--wl-motion-ease) backwards;
+  animation-play-state: paused;
+}
+
+/* Tabellenzeilen (Overview, Metrics) blenden gestaffelt ein, auch beim erneuten Öffnen */
+html[data-theme="aurora"].wl-motion #overviewTableBody tr,
+html[data-theme="aurora"].wl-motion #metricsTableBody tr {
+  animation: wl-fade-in 380ms var(--wl-motion-ease) backwards;
+  animation-play-state: paused;
+}
+
+html[data-theme="aurora"].wl-motion.wl-motion-ready #overviewCards .card,
+html[data-theme="aurora"].wl-motion.wl-motion-ready #overviewTableBody tr,
+html[data-theme="aurora"].wl-motion.wl-motion-ready #metricsTableBody tr {
+  animation-play-state: running;
+}
+
+html[data-theme="aurora"].wl-motion #overviewCards .card {
+  animation-delay: calc(var(--wl-i, 0) * 45ms);
+}
+
+html[data-theme="aurora"].wl-motion #overviewTableBody tr,
+html[data-theme="aurora"].wl-motion #metricsTableBody tr {
+  animation-delay: calc(200ms + var(--wl-i, 0) * 25ms);
+}
+
+/* Position im Raster bzw. in der Tabelle (wirkt nur über die Verzögerungen oben) */
+html[data-theme="aurora"] #overviewCards .card:nth-child(2),
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(2) { --wl-i: 1; }
+html[data-theme="aurora"] #overviewCards .card:nth-child(3),
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(3) { --wl-i: 2; }
+html[data-theme="aurora"] #overviewCards .card:nth-child(4),
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(4) { --wl-i: 3; }
+html[data-theme="aurora"] #overviewCards .card:nth-child(5),
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(5) { --wl-i: 4; }
+html[data-theme="aurora"] #overviewCards .card:nth-child(6),
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(6) { --wl-i: 5; }
+html[data-theme="aurora"] #overviewCards .card:nth-child(7),
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(7) { --wl-i: 6; }
+html[data-theme="aurora"] #overviewCards .card:nth-child(8),
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(8) { --wl-i: 7; }
+html[data-theme="aurora"] #overviewCards .card:nth-child(9),
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(9) { --wl-i: 8; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(10) { --wl-i: 9; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(11) { --wl-i: 10; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(12) { --wl-i: 11; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(13) { --wl-i: 12; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(14) { --wl-i: 13; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(15) { --wl-i: 14; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(16) { --wl-i: 15; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(17) { --wl-i: 16; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(18) { --wl-i: 17; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(19) { --wl-i: 18; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(20) { --wl-i: 19; }
+html[data-theme="aurora"] :is(#overviewTableBody, #metricsTableBody) tr:nth-child(21) { --wl-i: 20; }
+
+/* Glow beim Überfahren */
+html[data-theme="aurora"] .card:hover {
+  border-color: rgba(45, 226, 196, 0.45);
+  box-shadow: var(--au-edge), 0 0 22px rgba(45, 226, 196, 0.12);
+}
+
+html[data-theme="aurora"] tbody tr:hover td:first-child {
+  box-shadow: inset 2px 0 0 var(--au-teal);
+}
+
+/* ======================================================================
+ * Reduced-Motion (FR-T-08): kein Funkeln, kein Puls
  * ==================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   html[data-theme="aurora"] .wl-c-twinkle,
-  html[data-theme="aurora"] .wl-c-orbit {
+  html[data-theme="aurora"] .wl-c-orbit,
+  html[data-theme="aurora"] .wl-hero-pulse {
     animation: none !important;
   }
 }

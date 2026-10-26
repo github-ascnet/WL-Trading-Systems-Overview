@@ -540,6 +540,9 @@ Nicht umgesetzt (Entscheidung 2026-10-26): Puls eines Kennzahl-Farbpunkts. Berei
 | FR-T-05 | Chart-Tooltips als HUD: dunkle Glasfläche, Verlaufsrand, Eckmarken, Fadenkreuz mit Glow, Orbit-Ring um den Punkt. | BP-018 |
 | FR-T-06 | Regime-Panel: Zustandsbänder als Polarlicht-Vorhänge (`StrongRiskOn` grün, `RiskOff` rosé), Composite-Linie mit Verlauf und Glow, End-Label als Plakette in Zustandsfarbe. | BP-019 |
 | FR-T-07 | Loader in Aurora-Farben, nur per CSS. | BP-019 |
+| FR-T-09 | Detailseiten (Aurora): Hintergrund färbt sich nach dem letzten Composite-Zustand wie auf der Landing-Seite (D-033). | BP-021 |
+| FR-T-10 | Detailseiten (Aurora): oben im Overview eine leuchtende Equity-Hero-Kurve mit Sternen, pulsierendem Endpunkt, Startdatum und Profit-%; einmaliges Einzeichnen. | BP-021 |
+| FR-T-11 | Detailseiten (Aurora): wanderndes Lichtband in Kopf und Panel-Köpfen, gestaffelte Karten und Tabellenzeilen, Glow beim Überfahren. | BP-021 |
 | FR-T-08 | Leistung und Barrierefreiheit: keine SVG-Filter auf neu gezeichneten Pfaden, kein zusätzliches `backdrop-filter`, Funkeln und Puls aus bei Reduced-Motion; Daten, Kennzahlen, Ampelfarben, Texte und Interaktion unverändert. | alle |
 
 ---
@@ -696,3 +699,4 @@ Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt n
 | FR-T-01 bis FR-T-03 (10.6) | BP-017 |
 | FR-T-04, FR-T-05 (10.6) | BP-018 |
 | FR-T-06, FR-T-07 (10.6) | BP-019 |
+| FR-T-09 bis FR-T-11 (10.6) | BP-021 |

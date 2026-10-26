@@ -141,6 +141,27 @@
     return { systemId, currentState, equity, positions, signals };
   }
 
+  // Regime-Färbung der Detailseite (nur Theme "aurora", D-033): rein visuell, nicht blockierend
+  async function applyRegimeTint() {
+    if (window.WL_VISUAL_THEME !== "aurora" || !window.WL_MOTION?.enabled) {
+      return;
+    }
+
+    try {
+      const composite = await fetchJson(
+        "../systems/risk-regime/wl-regime-composite.json"
+      );
+      const last = Array.isArray(composite)
+        ? composite[composite.length - 1]
+        : null;
+      if (last?.state) {
+        window.WL_MOTION.setRegime(last.state);
+      }
+    } catch (error) {
+      console.warn("[dashboard-loader] Regime tint unavailable:", error);
+    }
+  }
+
   async function bootFromUrl() {
     const systemId = getSystemIdFromUrl().trim();
     const loadingStartedAt = Date.now();
@@ -172,6 +193,7 @@
         );
       }
       window.bootDashboard(payload);
+      applyRegimeTint();
     } catch (error) {
       console.error(error);
       renderGlobalError(error.message || "Unknown loading error");
