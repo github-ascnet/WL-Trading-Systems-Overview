@@ -10,6 +10,8 @@
  *   window.WL_MOTION.enabled              – false bei prefers-reduced-motion
  *   window.WL_MOTION.whenReady(fn)        – fn nach dem Ausblenden des Loaders
  *   window.WL_MOTION.countUp(containerEl) – zählt alle .wl-count-Elemente hoch
+ *   window.WL_MOTION.setRegime(state)     – färbt den Hintergrund nach Regime-Zustand (Landing)
+ *   window.WL_MOTION.initTabIndicator(nav) – gleitende Tab-Markierung (Dashboard)
  */
 (function motionModule(global) {
   "use strict";
@@ -120,10 +122,75 @@
     }
   }
 
+  // Regime-Tint (Landing): setzt data-wl-regime an <html>, die Färbung steht in motion.css
+  function setRegime(state) {
+    if (!enabled) return;
+
+    const value = String(state ?? "").trim();
+    if (!/^[A-Za-z]+$/.test(value)) return;
+
+    let ambient = document.querySelector(".wl-ambient");
+    if (!ambient) {
+      ambient = document.createElement("div");
+      ambient.className = "wl-ambient";
+      ambient.setAttribute("aria-hidden", "true");
+      document.body.insertBefore(ambient, document.body.firstChild);
+      // Ausgangszustand berechnen lassen, damit die Färbung weich übergeht
+      global.getComputedStyle(ambient).getPropertyValue("--wl-tint");
+    }
+
+    whenReady(() => rootEl.setAttribute("data-wl-regime", value));
+  }
+
+  // Gleitende Markierung hinter dem aktiven Tab (nur oberhalb des Mobile-Breakpoints)
+  function initTabIndicator(navEl) {
+    if (!enabled || !navEl || navEl.dataset.indicatorBound === "1") return;
+    navEl.dataset.indicatorBound = "1";
+
+    const indicator = document.createElement("span");
+    indicator.className = "wl-tab-indicator";
+    indicator.setAttribute("aria-hidden", "true");
+    navEl.appendChild(indicator);
+
+    const compactQuery = global.matchMedia("(max-width: 768px)");
+
+    function update() {
+      const active = navEl.querySelector(".tab.active");
+      if (!active || compactQuery.matches) {
+        navEl.classList.remove("wl-has-indicator");
+        return;
+      }
+
+      indicator.style.width = `${active.offsetWidth}px`;
+      indicator.style.height = `${active.offsetHeight}px`;
+      indicator.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop}px)`;
+      // Erste Positionierung ohne Übergang: Position übernehmen lassen, erst danach
+      // aktiviert die Klasse die Übergänge
+      if (!navEl.classList.contains("wl-has-indicator")) {
+        void indicator.offsetWidth;
+        navEl.classList.add("wl-has-indicator");
+      }
+    }
+
+    // main.js setzt .active im Klick-Handler des Tabs, dieser läuft vor dem Handler der Navigation
+    navEl.addEventListener("click", update);
+    compactQuery.addEventListener("change", update);
+    if (typeof global.ResizeObserver === "function") {
+      new global.ResizeObserver(update).observe(navEl);
+    }
+    update();
+  }
+
   if (enabled) {
     rootEl.classList.add("wl-motion");
     watchLoader();
   }
 
-  global.WL_MOTION = { enabled, whenReady, countUp };
+  global.WL_MOTION = {
+    enabled,
+    whenReady,
+    countUp,
+    setRegime,
+    initTabIndicator,
+  };
 })(window);

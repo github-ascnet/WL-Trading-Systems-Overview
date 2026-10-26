@@ -269,6 +269,8 @@ function setupTabs() {
 
     tab.dataset.bound = "1";
   });
+
+  window.WL_MOTION?.initTabIndicator(mainNav);
 }
 
 function renderOverview(currentState, positions) {
@@ -493,6 +495,8 @@ function renderMetricsReport(currentState) {
     .join("");
 }
 
+const POSITIONS_STAGGER_ROWS = 20;
+
 let _positionsData = [];
 let _positionsSortKey = null;
 let _positionsSortAsc = true;
@@ -502,7 +506,12 @@ function renderPositionsRows(positions) {
   if (!positionsTableBody) return;
 
   positionsTableBody.innerHTML = positions
-    .map((position) => {
+    .map((position, index) => {
+      // Nur die ersten Zeilen blenden gestaffelt ein (Tabellen mit über 1 000 Zeilen)
+      const rowMotion =
+        index < POSITIONS_STAGGER_ROWS
+          ? ` class="wl-stagger-in" style="--wl-delay:${index * 28}ms"`
+          : "";
       const plPercentClass = getValueClass(position.plPercent);
       const symbol = String(position.symbol ?? "").replace(/\..*$/, "");
       const exitDateDisplay = position.exitDate
@@ -519,7 +528,7 @@ function renderPositionsRows(positions) {
         entryMs != null ? Math.round((exitMs - entryMs) / 86400000) : "";
 
       return `
-      <tr>
+      <tr${rowMotion}>
         <td class="col-symbol">${escapeHtml(symbol)}</td>
         <td>${escapeHtml(formatDateLong(position.entryDate))}</td>
         <td>${escapeHtml(exitDateDisplay)}</td>

@@ -483,6 +483,11 @@
         effectiveMin,
         effectiveMax
       );
+      // Hintergrund-Tint nach dem letzten Composite-Zustand (rein visuell)
+      const lastComposite = compositeData[compositeData.length - 1];
+      if (lastComposite) {
+        window.WL_MOTION?.setRegime(lastComposite.state);
+      }
       // Sync legend item visibility with config
       const legendStretch = document.getElementById("regimeLegendStretch");
       if (legendStretch) {

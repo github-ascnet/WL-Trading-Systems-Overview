@@ -55,6 +55,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-024 | Keine automatisierten Tests und keine CI im Repository | Qualität | Ist-Zustand |
 | D-025 | Skript-Ladeverfahren je Seite | Architektur | Ist-Zustand |
 | D-026 | Motion: Einlaufanimationen nur mit CSS und `requestAnimationFrame` | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-027 | Atmosphäre und Mikro-Interaktionen (Hintergrund, Regime-Tint, Tab-Indikator, Heatmap, Tabellen) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 
 ---
 
@@ -317,4 +318,15 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Regeln** | 1. Aktiv nur, wenn `js/motion.js` die Klasse `wl-motion` an `<html>` setzt; bei `prefers-reduced-motion: reduce` geschieht das nicht, der Endzustand erscheint sofort. 2. Der statische Zustand ist der Endzustand; CSS animiert nur den Startzustand (`from`, `animation-fill-mode: backwards`). Ohne `motion.js` bleibt die Darstellung wie bisher. 3. Der Start erfolgt erst, wenn der Loader (`#pageLoader`) die Klasse `hidden` erhält (Fallback nach 8 s). 4. Einlauf nur beim **ersten** Rendern; Zoom, Pan und Resize zeichnen nicht neu ein. 5. Das Hochzählen setzt am Ende den ursprünglichen, bereits formatierten Text wieder ein; Werte, Formate und Berechnungen bleiben unverändert. |
 | **Begründung** | Auftrag des Auftraggebers: moderner Motion-Graphics-Eindruck. Die Regeln 1 bis 4 folgen aus D-001, D-011 und den Zoom-/Resize-Neuzeichnungen (`innerHTML`). |
 | **Quelle** | Auftrag 2026-10-26; Planungsdokument der Sitzung |
-| **Konsequenz** | D-025: `motion.js` kommt in beide Skriptlisten (nach `kpi-config.js`). D-019: ein zusätzliches, geteiltes Stylesheet `css/motion.css` nur für Motion. D-006 und D-016 bleiben unverändert. Die Vorschläge 2 und 3 (Kachel-Choreografie, Atmosphäre, Dashboard-Mikrointeraktionen) sind **nicht** beauftragt. |
+| **Konsequenz** | D-025: `motion.js` kommt in beide Skriptlisten (nach `kpi-config.js`). D-019: ein zusätzliches, geteiltes Stylesheet `css/motion.css` nur für Motion. D-006 und D-016 bleiben unverändert. Der Vorschlag 2 (Kachel-Choreografie, Sparklines, Seitenübergang) ist **nicht** beauftragt. Der Vorschlag 3 ist mit D-027 beauftragt. |
+
+## D-027 – Atmosphäre und Mikro-Interaktionen
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26, Vorschlag 3 "Lebendige Atmosphäre und modernes Dashboard", Arbeitspaket BP-014) |
+| **Entscheidung** | Die Regeln aus D-026 gelten unverändert (Klasse `wl-motion`, statischer Endzustand, keine Bibliothek). Zusätzlich: 1. **Hintergrund-Drift:** Die vorhandenen unscharfen Flächen `body::before/::after` driften langsam (50 bis 65 s, `alternate`) allein über `transform`; kein zusätzlicher Filter. 2. **Regime-Tint (nur Landing):** Der letzte Zustand der Composite-Serie setzt `data-wl-regime` an `<html>`; eine feste Ebene `.wl-ambient` färbt den Hintergrund weich über (2,4 s). Zuordnung: `StrongRiskOn` stark grün, `RiskOn` schwach grün, `Caution` schwach bernsteinfarben, `RiskOff` rot, `Neutral` keine Färbung. Rein visuell, keine Handelsaussage. 3. Drift und Regime-Tint nur ab 701 px Breite. 4. **Tab-Indikator (Dashboard):** Eine gleitende Markierung folgt dem aktiven Tab, nur ab 769 px (im Hamburger-Menü entfällt sie). 5. **Heatmap Monthly Returns:** Zellhintergrund mit Intensität proportional zum Betrag der Monatsrendite, skaliert auf das 95. Perzentil der Beträge; Klassen `positive`/`negative` und Zahlenwerte bleiben. Die Heatmap ist statisch und gilt auch bei Reduced-Motion; nur das gestaffelte Einblenden ist Motion. 6. **Positions:** Die ersten 20 Zeilen blenden gestaffelt ein, beim Öffnen des Tabs und nach jedem Sortieren. 7. `panelFadeIn` wird von 800 ms auf 350 ms verkürzt. |
+| **Begründung** | Auftrag des Auftraggebers. Die Begrenzung auf 20 Zeilen folgt aus bis zu 1 609 Positionen je System; die Begrenzung ab 701 bzw. 769 px aus Leistung und Platz auf Mobilgeräten. |
+| **Abweichung vom Vorschlag** | a) `Caution` erhält eine schwache Färbung (im Vorschlag "neutral sonst"), weil der aktuelle Zustand `Caution` ist und der Effekt sonst nicht sichtbar wäre. b) Das Sortieren blendet die Zeilen neu ein statt sie umzuordnen (FLIP); Positionen haben keinen eindeutigen Schlüssel. |
+| **Quelle** | Auftrag 2026-10-26 |
+| **Konsequenz** | D-019: `styles.css` erhält die Heatmap-Regeln und die verkürzte `panelFadeIn`-Dauer. `motion.js` erhält `setRegime` und `initTabIndicator`; `motion.css` die zugehörigen Regeln. Der Zusammenhang Zeitraum/Regime auf der Landing-Seite (INC-09) bleibt unverändert. |

@@ -1,16 +1,23 @@
 /*
- * motion.css – Einlaufanimationen für Charts und Kennzahlen (D-026)
+ * motion.css – Animationen für Charts, Kennzahlen, Hintergrund und Dashboard (D-026, D-027)
  *
  * Regeln:
  * - Aktiv nur unter html.wl-motion (gesetzt von js/motion.js, nicht bei prefers-reduced-motion).
  * - Der statische Zustand ist der Endzustand; animiert wird nur der Startzustand
  *   (@keyframes mit "from", animation-fill-mode: backwards).
- * - Die Animation startet erst unter html.wl-motion-ready (Loader ausgeblendet).
+ * - Einlaufanimationen starten erst unter html.wl-motion-ready (Loader ausgeblendet).
  */
 
 :root {
   --wl-motion-ease: cubic-bezier(0.2, 0, 0, 1);
   --wl-motion-draw: 1400ms;
+}
+
+/* Farbe des Regime-Tints; als <color> registriert, damit sie weich überblendet */
+@property --wl-tint {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0, 0, 0, 0);
 }
 
 @keyframes wl-draw {
@@ -58,16 +65,146 @@ html.wl-motion .wl-trophy-pop {
   animation-play-state: paused;
 }
 
+/* Tabellenzellen und -zeilen blenden gestaffelt ein (Monthly Returns, Positions) */
+html.wl-motion .wl-stagger-in {
+  animation: wl-fade-in 420ms var(--wl-motion-ease) backwards;
+  animation-delay: var(--wl-delay, 0ms);
+  animation-play-state: paused;
+}
+
 html.wl-motion.wl-motion-ready .wl-draw-line,
 html.wl-motion.wl-motion-ready .wl-fade-in,
-html.wl-motion.wl-motion-ready .wl-trophy-pop {
+html.wl-motion.wl-motion-ready .wl-trophy-pop,
+html.wl-motion.wl-motion-ready .wl-stagger-in {
   animation-play-state: running;
+}
+
+/* ---- Hintergrund-Drift (FR-M-08) und Regime-Tint (FR-M-09), ab 701 px ---- */
+
+@keyframes wl-drift-a {
+  from {
+    transform: translate3d(-2%, -1.5%, 0);
+  }
+  to {
+    transform: translate3d(2.5%, 2%, 0);
+  }
+}
+
+@keyframes wl-drift-b {
+  from {
+    transform: translate3d(2%, 1.5%, 0);
+  }
+  to {
+    transform: translate3d(-2.5%, -2%, 0);
+  }
+}
+
+.wl-ambient {
+  display: none;
+}
+
+html[data-wl-regime="StrongRiskOn"] {
+  --wl-tint: rgba(63, 207, 142, 0.2);
+}
+
+html[data-wl-regime="RiskOn"] {
+  --wl-tint: rgba(63, 207, 142, 0.12);
+}
+
+html[data-wl-regime="Caution"] {
+  --wl-tint: rgba(255, 191, 95, 0.13);
+}
+
+html[data-wl-regime="RiskOff"] {
+  --wl-tint: rgba(255, 110, 122, 0.18);
+}
+
+@media (min-width: 701px) {
+  html.wl-motion body::before {
+    animation: wl-drift-a 52s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  html.wl-motion body::after {
+    animation: wl-drift-b 64s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  html.wl-motion .wl-ambient {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background: radial-gradient(
+        ellipse 75% 55% at 50% -8%,
+        var(--wl-tint),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 65% 45% at 50% 108%,
+        var(--wl-tint),
+        transparent 70%
+      );
+    transition: --wl-tint 2400ms ease;
+  }
+}
+
+/* ---- Gleitender Tab-Indikator (FR-M-10), ab 769 px ---- */
+
+.wl-tab-indicator {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  html.wl-motion .tabs {
+    position: relative;
+  }
+
+  html.wl-motion .tabs .tab {
+    position: relative;
+    z-index: 1;
+  }
+
+  html.wl-motion .wl-tab-indicator {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    box-sizing: border-box;
+    border-radius: var(--radius-8, 8px);
+    border: 1px solid rgba(110, 168, 255, 0.45);
+    background: var(--color-accent-soft, rgba(110, 168, 255, 0.14));
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  html.wl-motion .tabs.wl-has-indicator .wl-tab-indicator {
+    opacity: 1;
+    transition: transform 320ms var(--wl-motion-ease),
+      width 320ms var(--wl-motion-ease), height 320ms var(--wl-motion-ease);
+  }
+
+  /* Die Markierung übernimmt die Darstellung des aktiven Tabs */
+  html.wl-motion .tabs.wl-has-indicator .tab.active {
+    background: transparent;
+    border-color: transparent;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .wl-draw-line,
   .wl-fade-in,
-  .wl-trophy-pop {
+  .wl-trophy-pop,
+  .wl-stagger-in {
+    animation: none !important;
+  }
+
+  body::before,
+  body::after {
     animation: none !important;
   }
 }

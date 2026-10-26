@@ -72,6 +72,14 @@ function renderMonthlyReturns(equityData, currentState) {
   ];
 
   const allValues = years.flatMap((y) => Object.values(matrix[y]));
+
+  // Heatmap: volle Intensität ab dem 95. Perzentil der Beträge, damit Ausreisser
+  // die übrigen Monate nicht verblassen lassen
+  const sortedAbs = allValues.map(Math.abs).sort((a, b) => a - b);
+  const heatScale =
+    sortedAbs.length > 0
+      ? sortedAbs[Math.min(sortedAbs.length - 1, Math.floor(sortedAbs.length * 0.95))]
+      : 0;
   const avgMonthly = allValues.length
     ? allValues.reduce((a, b) => a + b, 0) / allValues.length
     : 0;
@@ -86,7 +94,7 @@ function renderMonthlyReturns(equityData, currentState) {
   const headerCells = MONTH_NAMES.map((m) => `<th>${m}</th>`).join("");
 
   const rows = years
-    .map((year) => {
+    .map((year, yearIndex) => {
       const yearData = matrix[year];
       const annual = calcAnnual(yearData);
       const annualClass = getValueClass(annual);
@@ -95,7 +103,14 @@ function renderMonthlyReturns(equityData, currentState) {
         const m = i + 1;
         if (yearData[m] !== undefined) {
           const cls = getValueClass(yearData[m]);
-          return `<td class="mr-cell ${escapeHtml(cls)}">${escapeHtml(
+          const heat =
+            heatScale > 0
+              ? 0.1 + 0.9 * Math.min(1, Math.abs(yearData[m]) / heatScale)
+              : 0;
+          const delay = (yearIndex + m) * 24;
+          return `<td class="mr-cell wl-stagger-in ${escapeHtml(
+            cls
+          )}" style="--mr-i:${heat.toFixed(2)};--wl-delay:${delay}ms">${escapeHtml(
             formatPercent(yearData[m])
           )}</td>`;
         }

@@ -56,6 +56,7 @@ flowchart TD
     BP011["BP-011<br/>Layout, Navigation, A11y"]
     BP012["BP-012<br/>Datenexport (extern)"]
     BP013["BP-013<br/>Motion: Einlaufanimation"]
+    BP014["BP-014<br/>Atmosphäre, Mikro-Interaktionen"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -76,6 +77,11 @@ flowchart TD
     BP005 --> BP013
     BP007 --> BP013
     BP008 --> BP013
+    BP013 --> BP014
+    BP005 --> BP014
+    BP009 --> BP014
+    BP010 --> BP014
+    BP011 --> BP014
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -260,6 +266,22 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Bekannte Abweichungen** | INC-20 (nicht Teil des Pakets) |
 | **Prüfung (2026-10-26)** | **Erfüllt** (Chrome headless über DevTools-Protokoll, Echtzeit, Server lokal): a) Loader ausgeblendet nach ca. 0,7 s, danach Einzeichnung (Offset 1 → 0 in ca. 1,4 s) und Hochzählen; Endwerte Landing `41.75% / 3192% / -13.79% / 2.29 / 2.33 / 65.65%` und Dashboard `45.32% / 4120% / -33.47% / 25.90 / 1.29 / 1.35 / 44.30 / 66.67% / 4` sind identisch mit dem Lauf bei `prefers-reduced-motion`. b) Mausrad-Zoom auf dem Portfolio-Chart erzeugt die Linie ohne Motion-Klasse; Fenstergrösse 900 px und 390 px zeichnet den System-Chart ohne Motion-Klasse neu. c) System-Chart animiert beim ersten Öffnen des Tabs (Offset 0,99 → 0 in ca. 1,5 s). d) Mit `--force-prefers-reduced-motion` setzt `motion.js` keine Klassen, Endwerte erscheinen sofort. f) Keine Konsolenfehler. **Nicht prüfbar / offen:** e) Fehlerfälle (fehlende Daten) nicht gezielt provoziert; Firefox, Safari und echte Touch-Geräte nicht getestet; Touch-Zoom nicht getestet. |
 
+### BP-014 – Motion: Atmosphäre und Mikro-Interaktionen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless, Echtzeit, siehe "Prüfung"); nicht geprüft in anderen Browsern und auf echten Mobilgeräten |
+| **Ziel** | Lebendiger Hintergrund und modernere Dashboard-Interaktionen (Vorschlag 3). |
+| **Scope** | Hintergrund-Drift, Regime-Tint (Landing), gleitender Tab-Indikator, Heatmap und gestaffeltes Einblenden bei Monthly Returns, gestaffelte Positionszeilen, kürzerer Panelwechsel. |
+| **Nicht im Scope** | Vorschlag 2 (Kacheln, Sparklines, Seitenübergang); FLIP-Umordnung der Positionstabelle; Änderung von Berechnungen, Formaten, Regeln. |
+| **Voraussetzungen** | BP-013 (`motion.js`, `motion.css`), BP-005, BP-009, BP-010, BP-011 |
+| **Betroffene Dateien** | `css/motion.css`, `js/motion.js`, `css/styles.css`, `js/regime-engine-chart.js`, `js/main.js`, `js/monthly-returns.js` |
+| **Anforderungen / Decisions** | FR-M-08 bis FR-M-13; D-027; D-026, D-019 |
+| **Umsetzungsschritte** | 1. `motion.js`: `setRegime`, `initTabIndicator`. 2. `motion.css`: Drift, `.wl-ambient`, Tab-Indikator, `wl-stagger-in`. 3. `regime-engine-chart.js`: letzten Zustand melden. 4. `main.js`: Indikator initialisieren, Zeilen staffeln. 5. `monthly-returns.js` und `styles.css`: Heatmap. 6. `styles.css`: `panelFadeIn` 350 ms. |
+| **Abschlusskriterien** | a) Drift läuft nur ab 701 px und mit `wl-motion`; Leerlauf ohne dauerhaft hohe Last. b) Landing färbt gemäss letztem Composite-Zustand; Neutral ohne Färbung. c) Tab-Indikator gleitet bei Tab-Wechsel, entfällt unter 769 px, Hamburger-Menü unverändert. d) Heatmap zeigt Intensität nach Betrag, Zahlenwerte und Klassen unverändert. e) Erste 20 Positionszeilen blenden gestaffelt ein, weitere Zeilen unverändert; Sortierung funktioniert wie zuvor. f) Reduced-Motion: kein Drift, keine Staffelung, keine Gleitanimation; Heatmap bleibt. g) Keine Konsolenfehler. |
+| **Bekannte Abweichungen** | INC-09 (Regime-Panel folgt Zoom nicht) bleibt unberührt |
+| **Prüfung (2026-10-26)** | **Erfüllt**, mit einem Vorbehalt zu a): a) Bei 1280 px läuft die Drift (`wl-drift-a`, `wl-drift-b`, Zustand `running`); bei 390 px sind Drift und Ebene aus. Mit GPU-Beschleunigung (Intel-Grafik) 61 Bilder pro Sekunde mit und ohne Drift. **Vorbehalt:** Im Software-Rendering (`--disable-gpu`) fällt die Bildrate mit aktiver Drift auf 4 Bilder pro Sekunde (ohne Drift 61), weil die unscharfen Vollbildflächen mit Mischmodus neu zusammengesetzt werden. Geräte ohne GPU-Beschleunigung können die Drift als ruckelnd erleben. b) Letzter Zustand `Caution` setzt `data-wl-regime="Caution"`, Tint `rgba(255, 191, 95, 0.13)`; Ebene `.wl-ambient` nur bei Breite ab 701 px. c) Indikator liegt exakt auf dem aktiven Tab (`translate(4px, 4px)`, 101 px), gleitet beim Wechsel in ca. 320 ms (48 px → 287 px gemessen), ist bei 390 px aus, Hamburger-Menü und Panelwechsel funktionieren unverändert. d) 110 Heatmap-Zellen, Alpha 0,03 bis 0,30, Zahlenwerte und Klassen unverändert, Jahreswerte ohne Hintergrund. e) 72 Positionen, davon 20 mit Staffelung, nach dem Sortieren weiterhin 72/20, Sortierung korrekt. f) Mit emuliertem `prefers-reduced-motion`: keine Klassen, keine Drift, keine Ebene, kein Indikator, keine Zellanimation; Heatmap bleibt (Alpha 0,07). g) Keine Konsolenfehler. Zusätzlich: `panelFadeIn` 0,35 s. **Nicht geprüft:** Firefox, Safari, echte Mobilgeräte, Dauerlast im Leerlauf über längere Zeit. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -297,4 +319,5 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-D-10 | BP-010 | – |
 | FR-D-12 | BP-006, BP-007 | D-006 |
 | FR-M-01 bis FR-M-07 | BP-013 | D-026 |
+| FR-M-08 bis FR-M-13 | BP-014 | D-027 |
 | Q-01 | alle | D-001 |

@@ -502,7 +502,7 @@ select:focus-visible,
 
 .panel.active {
   display: block;
-  animation: panelFadeIn 800ms ease both;
+  animation: panelFadeIn 350ms ease both;
 }
 
 @keyframes panelFadeIn {
@@ -815,12 +815,15 @@ select:hover {
   color: var(--text);
 }
 
+/* Heatmap: Intensität --mr-i (0 bis 1) wird in monthly-returns.js berechnet */
 .mr-cell.positive {
   color: var(--green);
+  background: rgba(63, 207, 142, calc(var(--mr-i, 0) * 0.3));
 }
 
 .mr-cell.negative {
   color: var(--red);
+  background: rgba(255, 110, 122, calc(var(--mr-i, 0) * 0.3));
 }
 
 .mr-annual {

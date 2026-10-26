@@ -156,7 +156,7 @@ Wealth-Lab-Strategy-Orchestrator/
 | Landing-Orchestrierung | `js/landing.js` | Loader, Systemkacheln, Tilt-Effekt, Start von Portfolio-Chart und Regime-Panel | keine (IIFE) |
 | Portfolio-Chart | `js/equity-overview-chart.js` | Laden aller Equity-/Positionsdaten, Aggregation, KPIs, SVG, Zoom/Pan | `window.initEquityOverviewChart`, `window._wlPortfolioTimeRange` |
 | Regime-Panel | `js/regime-engine-chart.js` | Laden und Zeichnen von Composite- und Stretch-Score | `window.initRegimeEnginePanel`, `window.renderRegimeEnginePanel` |
-| Motion | `js/motion.js`, `css/motion.css` | Aktivierung der Einlaufanimationen (nicht bei Reduced-Motion), Start nach dem Loader, Hochzählen von Kennzahlen | `window.WL_MOTION` (`countUp`, `whenReady`) |
+| Motion | `js/motion.js`, `css/motion.css` | Aktivierung der Einlaufanimationen (nicht bei Reduced-Motion), Start nach dem Loader, Hochzählen von Kennzahlen, Regime-Tint, Tab-Indikator | `window.WL_MOTION` (`countUp`, `whenReady`, `setRegime`, `initTabIndicator`) |
 | Dashboard-Loader | `js/dashboard-loader.js` | URL-Parameter lesen, validieren, 4 JSON-Dateien laden, `bootDashboard` aufrufen, Fehler anzeigen | keine (IIFE, startet sofort) |
 | Dashboard-Renderer | `js/main.js` | Normalisierung, Tabs, Overview, Metrics, Positions, Tooltips | `window.bootDashboard`, `window.renderError` sowie globale Funktionen (`escapeHtml`, `formatNumber`, `formatPercent`, `getValueClass` u. a.) |
 | Monatsrenditen | `js/monthly-returns.js` | Monatsmatrix, Jahresrendite, Tabelle | globale Funktion `renderMonthlyReturns` |
@@ -487,7 +487,9 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 - Datum: Dashboard `dd/mm/yyyy`; Kachel mit Uhrzeit; Chart `dd/mm/yy`; Positionen `d MMM yyyy`.
 - UI-Texte sind Englisch.
 
-### 10.5 Motion (Einlaufanimationen) **[Auftrag 2026-10-26, D-026, BP-013]**
+### 10.5 Motion **[Auftrag 2026-10-26, D-026 und D-027, BP-013 und BP-014]**
+
+**Einlaufanimationen (D-026, BP-013):**
 
 | ID | Anforderung | Herkunft |
 |---|---|---|
@@ -499,7 +501,18 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 | FR-M-06 | Die Animationen starten erst, nachdem der Loader ausgeblendet ist (Fallback nach 8 s). Zoom, Pan, Resize und Neuzeichnen lösen keine erneute Einlaufanimation aus. | Auftrag |
 | FR-M-07 | Bei `prefers-reduced-motion: reduce` und ohne `motion.js` erscheint der Endzustand sofort; Funktion und Werte sind identisch. | Auftrag |
 
-Nicht Teil dieses Auftrags: gestaffelte Systemkacheln, Sparklines, Seitenübergänge, Hintergrundanimation, Regime-Glow, gleitender Tab-Indikator, Heatmap (Vorschläge 2 und 3).
+**Atmosphäre und Mikro-Interaktionen (D-027, BP-014):**
+
+| ID | Anforderung | Herkunft |
+|---|---|---|
+| FR-M-08 | Die Hintergrundflächen (`body::before/::after`) driften langsam; ab 701 Breite, nicht bei Reduced-Motion. | Auftrag |
+| FR-M-09 | Landing: Der letzte Composite-Zustand färbt den Hintergrund weich ein (grün bei `RiskOn`/`StrongRiskOn`, bernsteinfarben bei `Caution`, rot bei `RiskOff`, keine Färbung bei `Neutral`); ab 701 px Breite, nicht bei Reduced-Motion. | Auftrag |
+| FR-M-10 | Dashboard: Ein gleitender Indikator folgt dem aktiven Tab (ab 769 px). | Auftrag |
+| FR-M-11 | Dashboard: Monthly Returns als Heatmap (Intensität nach Betrag, skaliert auf das 95. Perzentil); Zellen blenden diagonal gestaffelt ein. | Auftrag |
+| FR-M-12 | Dashboard: Die ersten 20 Positionszeilen blenden gestaffelt ein, beim Öffnen und nach dem Sortieren. | Auftrag |
+| FR-M-13 | Dashboard: Der Panelwechsel (`panelFadeIn`) dauert 350 ms statt 800 ms. | Auftrag |
+
+Nicht Teil der Aufträge: gestaffelte Systemkacheln, Sparklines, Seitenübergänge (Vorschlag 2).
 
 ---
 
@@ -646,3 +659,4 @@ Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt n
 | 10.1 bis 10.3 | BP-011 |
 | 12.2 (ausserhalb des Repos) | BP-012 |
 | FR-M-01 bis FR-M-07 (10.5) | BP-013 |
+| FR-M-08 bis FR-M-13 (10.5) | BP-014 |

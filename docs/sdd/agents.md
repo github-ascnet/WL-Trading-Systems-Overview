@@ -173,6 +173,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 7. Eine Kachel je registriertem System; Klick öffnet das Dashboard mit dem richtigen Parameter.
 8. Konsole ohne neue Fehler. Warnungen zu übersprungenen Systemen sind zu prüfen.
 9. Motion (D-026): Nach dem Loader zeichnen sich Portfolio-Linie und Regime-Linie ein, die KPI-Karten zählen auf den bisherigen Endwert hoch. Zoom, Pan und Reset zeichnen nicht neu ein. Mit aktivem `prefers-reduced-motion` erscheinen die Endwerte sofort.
+10. Motion (D-027): Ab 701 px driftet der Hintergrund und färbt sich nach dem letzten Regime-Zustand; unter 701 px nicht. Beim Prüfen im Headless-Browser GPU-Beschleunigung nicht abschalten, sonst täuscht die Drift eine niedrige Bildrate vor.
 
 **Dashboard (`dashboard/index.html?system=<slug>`)**
 
@@ -185,6 +186,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 7. Positions: Sortierung nach drei Spalten, offene Positionen "Open", Mobile ohne Preisspalten.
 8. Info-Symbol im Kopf zeigt die Strategiebeschreibung.
 9. Motion (D-026): Die Overview-Karten zählen nach dem Loader hoch; die Equity-Linie zeichnet sich beim ersten Öffnen des Tabs "Equity Curve" ein, nicht bei Resize.
+10. Motion (D-027): Der Tab-Indikator gleitet beim Tab-Wechsel (ab 769 px), Monthly Returns zeigt die Heatmap, die ersten 20 Positionszeilen blenden gestaffelt ein, auch nach dem Sortieren.
 
 **Datenprüfung neues oder geändertes System**
 
