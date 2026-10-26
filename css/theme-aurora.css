@@ -587,9 +587,9 @@ html[data-theme="aurora"] .page-loader-chart .loader-area {
   fill: rgba(45, 226, 196, 0.16);
 }
 
-html[data-theme="aurora"] .page-loader-chart .loader-line {
+html[data-theme="aurora"] .page-loader-chart .loader-line,
+html[data-theme="aurora"] .page-loader-chart .loader-line-glow {
   stroke: var(--au-teal);
-  filter: drop-shadow(0 0 4px rgba(45, 226, 196, 0.6));
 }
 
 html[data-theme="aurora"] .page-loader-chart .loader-tip {

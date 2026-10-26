@@ -234,17 +234,46 @@ html[data-wl-regime="RiskOff"] {
   }
 }
 
-/* ---- Loader als Mini-Chart (FR-M-17, D-030) ----
+/* ---- Loader als Mini-Chart (FR-M-17, D-030; Technik D-032) ----
  * Ausnahme: läuft ab dem ersten Bild, unabhängig von html.wl-motion,
  * weil der Loader vor motion.js sichtbar ist.
+ * Nur transform und opacity (Compositor), damit der Loader flüssig bleibt,
+ * während der Main-Thread die Daten verarbeitet (FR-M-18).
  */
 
 .page-loader-chart {
-  display: block;
-  width: 168px;
-  height: 68px;
-  margin: 0 auto 14px;
+  position: relative;
+  width: 176px;
+  height: 78px;
+  margin: 0 auto 10px;
+}
+
+/* Drei SVG-Ebenen mit gleicher viewBox: Raster/Balken, Fläche/Linie, Spitze/Puls */
+.page-loader-chart .loader-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   overflow: visible;
+}
+
+/* Linie wird aufgedeckt: Fenster (aussen) und Inhalt (innen) verschieben sich
+ * gegenläufig, der Inhalt bleibt stehen */
+.page-loader-chart .loader-reveal,
+.page-loader-chart .loader-reveal-inner {
+  position: absolute;
+  inset: 0;
+}
+
+.page-loader-chart .loader-reveal {
+  overflow: hidden;
+  animation: wl-loader-reveal 2.4s var(--wl-motion-ease) infinite;
+  will-change: transform, opacity;
+}
+
+.page-loader-chart .loader-reveal-inner {
+  animation: wl-loader-reveal-inner 2.4s var(--wl-motion-ease) infinite;
+  will-change: transform;
 }
 
 .page-loader-chart .loader-grid line {
@@ -271,9 +300,16 @@ html[data-wl-regime="RiskOff"] {
   stroke-width: 2.4;
   stroke-linejoin: round;
   stroke-linecap: round;
-  stroke-dasharray: 1 2;
-  filter: drop-shadow(0 0 4px rgba(88, 196, 255, 0.55));
-  animation: wl-loader-line 2.4s var(--wl-motion-ease) infinite;
+}
+
+/* Glow als breiter, halbtransparenter Strich (kein Filter auf der Compositor-Ebene) */
+.page-loader-chart .loader-line-glow {
+  fill: none;
+  stroke: #58c4ff;
+  stroke-width: 8;
+  stroke-opacity: 0.18;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 .page-loader-chart .loader-tip,
@@ -295,20 +331,10 @@ html[data-wl-regime="RiskOff"] {
   animation: wl-loader-pulse 2.4s ease-out infinite;
 }
 
+/* Titel "atmet" über opacity (Compositor); ein Schimmer nur auf der Schrift wäre
+ * ohne background-position nicht möglich (D-032) */
 .page-loader-title {
-  background: linear-gradient(
-    90deg,
-    var(--muted) 0%,
-    var(--text) 45%,
-    #ffffff 50%,
-    var(--text) 55%,
-    var(--muted) 100%
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: wl-loader-shimmer 2.4s linear infinite;
+  animation: wl-loader-breathe 2.4s ease-in-out infinite;
 }
 
 /* Karte schrumpft beim Ausblenden leicht */
@@ -327,21 +353,31 @@ html[data-wl-regime="RiskOff"] {
   animation-play-state: paused;
 }
 
-@keyframes wl-loader-line {
+@keyframes wl-loader-reveal {
   0% {
-    stroke-dashoffset: 1;
+    transform: translateX(-100%);
     opacity: 1;
   }
   50% {
-    stroke-dashoffset: 0;
+    transform: translateX(0);
   }
   82% {
-    stroke-dashoffset: 0;
+    transform: translateX(0);
     opacity: 1;
   }
   100% {
-    stroke-dashoffset: 0;
+    transform: translateX(0);
     opacity: 0;
+  }
+}
+
+@keyframes wl-loader-reveal-inner {
+  0% {
+    transform: translateX(100%);
+  }
+  50%,
+  100% {
+    transform: translateX(0);
   }
 }
 
@@ -412,12 +448,13 @@ html[data-wl-regime="RiskOff"] {
   }
 }
 
-@keyframes wl-loader-shimmer {
-  from {
-    background-position: 100% 0;
+@keyframes wl-loader-breathe {
+  0%,
+  100% {
+    opacity: 1;
   }
-  to {
-    background-position: -100% 0;
+  50% {
+    opacity: 0.62;
   }
 }
 
@@ -425,11 +462,6 @@ html[data-wl-regime="RiskOff"] {
   .page-loader-chart *,
   .page-loader-title {
     animation: none !important;
-  }
-
-  .page-loader-title {
-    background: none;
-    color: var(--text);
   }
 
   .page-loader-overlay .page-loader-card {

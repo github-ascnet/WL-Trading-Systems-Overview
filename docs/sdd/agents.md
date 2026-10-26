@@ -105,6 +105,7 @@ Prüfen nach dem Hinzufügen: Kachel erscheint, Portfolio-Statuszeile zählt hoc
 - Der statische Zustand ist der Endzustand. CSS animiert nur den Startzustand (`from`, `backwards`); eine neue Animation darf ohne `html.wl-motion` nichts verstecken.
 - Einlauf nur beim ersten Rendern. Neuzeichnen bei Zoom oder Resize erzeugt die Elemente ohne Motion-Klassen.
 - Hochzählen verändert den angezeigten Endtext nicht; Formatierung bleibt Sache der bestehenden Formatierfunktionen.
+- Loader (D-032): nur `transform` und `opacity` animieren, keine Filter auf animierten Ebenen. Der Loader läuft, während der Main-Thread lädt; Main-Thread-Eigenschaften wie `stroke-dashoffset` oder `background-position` frieren dann ein.
 
 ### 6.2b Visuelles Theme (D-031)
 

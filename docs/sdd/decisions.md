@@ -58,8 +58,9 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-027 | Atmosphäre und Mikro-Interaktionen (Hintergrund, Regime-Tint, Tab-Indikator, Heatmap, Tabellen) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-028 | Kachel-Choreografie, Sparklines und Seitenübergang | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-029 | Dashboard lädt Skripte dynamisch und nacheinander | Architektur | Verbindlich (2026-10-26, Folge von D-028) |
-| D-030 | Loader als animierter Mini-Chart (reines CSS) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-030 | Loader als animierter Mini-Chart (reines CSS) | Darstellung | Verbindlich (Auftrag 2026-10-26); Animationstechnik ersetzt durch D-032 |
 | D-031 | Visuelles Theme "Aurora" (Future State), umschaltbar | Darstellung / Architektur | Verbindlich (Auftrag 2026-10-26) |
+| D-032 | Loader-Animation nur mit Compositor-Eigenschaften | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 
 ---
 
@@ -360,7 +361,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 
 | | |
 |---|---|
-| **Status** | Verbindlich (Auftrag vom 2026-10-26, Arbeitspaket BP-016) |
+| **Status** | Verbindlich (Auftrag vom 2026-10-26, Arbeitspaket BP-016). **Animationstechnik ersetzt** durch D-032 am 2026-10-26: Die Linie wird aufgedeckt statt über `stroke-dashoffset` gezeichnet; der Titel-Schimmer ist durch ein Atmen über `opacity` ersetzt. Gestaltung im Übrigen, Ausnahme zu D-026 und Regeln 1 bis 3 gelten weiter. |
 | **Entscheidung** | Der Spinner im Loader beider Seiten wird durch ein Inline-SVG `.page-loader-chart` ersetzt: Raster, gestaffelt wachsende Volumenbalken, eine Equity-Linie, die sich in einer Schleife (2,4 s) einzeichnet, Flächenverlauf, pulsierender Punkt an der Spitze. Der Titel erhält einen laufenden Schimmer, die Karte schrumpft beim Ausblenden leicht. Die Regeln stehen in `css/motion.css`. |
 | **Ausnahme zu D-026** | Der Loader ist vor `motion.js` sichtbar. Seine Animation hängt deshalb **nicht** an `html.wl-motion` und nicht am Loader-Ende, sondern läuft ab dem ersten Bild. Reduced-Motion wird über `@media (prefers-reduced-motion: reduce)` behandelt: statischer, vollständig gezeichneter Chart und normaler Titel. |
 | **Regeln** | 1. Reines CSS, kein JavaScript; `landing.js` und `dashboard-loader.js` bleiben unverändert (nur die Klasse `hidden` steuert das Ausblenden). 2. Der statische Zustand ist der vollständige Chart. 3. Ist der Loader ausgeblendet, werden die Endlos-Animationen pausiert, damit sie keine Last erzeugen. |
@@ -379,3 +380,14 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Verhältnis zu D-025 / D-029** | Ergänzung, keine Ersetzung: Die Skriptlisten bleiben; `theme.js` kommt zusätzlich in den Head. D-029 hat gezeigt, dass Skripte im Body den Seitenübergang stören; ein Head-Skript läuft vor dem Parsen des Body und muss im Rahmen von BP-017 gegen den Seitenübergang geprüft werden. |
 | **Quelle** | Auftrag und Rückfragen 2026-10-26 |
 | **Konsequenz** | D-019: drittes, themenbezogenes Stylesheet. Neue Chart-Elemente müssen Klassen nach dem Muster `wl-c-*` erhalten, damit das Theme sie erfasst. |
+
+## D-032 – Loader-Animation nur mit Compositor-Eigenschaften
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26 "Loader läuft nicht flüssig", Arbeitspaket BP-020); ersetzt die Animationstechnik von D-030 |
+| **Entscheidung** | Der Loader animiert ausschliesslich `transform` und `opacity`. Die Linie wird nicht mehr über `stroke-dashoffset` gezeichnet, sondern von links nach rechts **aufgedeckt**: zwei verschachtelte HTML-Ebenen verschieben sich gegenläufig per `translateX` (äussere Ebene mit `overflow: hidden`), der Inhalt bleibt dabei stehen. Der Titel-Schimmer (`background-position` mit `background-clip: text`) wird durch ein **"Atmen" des Titels** über `opacity` ersetzt. Der Glow der Linie ist ein breiter, halbtransparenter Strich (`loader-line-glow`) statt `filter: drop-shadow`. Balken, Fläche, Spitze und Puls bleiben wie in D-030. Der Chart besteht aus drei übereinanderliegenden SVG-Ebenen (Raster/Balken, Fläche/Linie, Spitze/Puls). |
+| **Verworfene Varianten** | a) Lichtbahn als `::after`-Ebene mit `mix-blend-mode: overlay`: hellt auch den Kartenhintergrund auf und erscheint als sichtbarer Kasten; ein Schimmer nur auf der Schrift ist auf dem Compositor nicht ohne doppelten Text möglich. b) `drop-shadow` auf der Linie in der eigenen Compositor-Ebene: zeigte beim Aufdecken einen hellen Rahmen um die Linie. |
+| **Begründung** | Messung 2026-10-26 (Chrome headless mit GPU): Auf der Landing-Seite blockiert ein einzelner Task den Main-Thread fast die gesamte Loader-Zeit (1,26 bis 1,48 s bei normaler CPU, 19,8 bis 24,9 s bei 4-fach gedrosselter CPU; Ursache siehe INC-21). Animationen auf dem Main-Thread stehen dann still. Screencast-Bilder zeigen: Die Linie bleibt halb gezeichnet stehen, während Balken und Fläche (Compositor) weiterlaufen. Compositor-Animationen laufen unabhängig vom Main-Thread. |
+| **Quelle** | Messungen im Rahmen von BP-020 |
+| **Konsequenz** | Markup des Loaders in beiden Seiten geändert; Klassennamen (`loader-line`, `loader-area`, `loader-bars`, `loader-tip`, `loader-pulse`, `loader-grid`) bleiben, damit `theme-aurora.css` weiter greift. Die eigentliche Ursache der Blockade (INC-21) ist davon unberührt. |

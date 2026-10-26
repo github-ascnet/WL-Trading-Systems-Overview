@@ -526,6 +526,7 @@ Nicht umgesetzt (Entscheidung 2026-10-26): Puls eines Kennzahl-Farbpunkts. Berei
 
 | ID | Anforderung | Herkunft |
 |---|---|---|
+| FR-M-18 | Die Loader-Animation läuft flüssig, auch wenn der Main-Thread blockiert ist: nur `transform` und `opacity`; die Linie wird aufgedeckt, der Titel atmet (ersetzt den Schimmer aus FR-M-17) (D-032, BP-020). | Auftrag |
 | FR-M-17 | Der Loader beider Seiten zeigt statt des Spinners einen animierten Mini-Chart (Equity-Linie zeichnet sich in einer Schleife ein, Volumenbalken, pulsierende Spitze) und einen schimmernden Titel; beim Ausblenden schrumpft die Karte leicht. Bei Reduced-Motion statisch. Ausgeblendet erzeugt er keine Animationslast. | Auftrag |
 
 ### 10.6 Visuelles Theme "Aurora" **[Auftrag 2026-10-26, D-031, BP-017 bis BP-019]**
@@ -633,6 +634,7 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | INC-17 | T | Die Standardwerte im Code (`showRegimeStretchScore ?? true`) widersprechen dem konfigurierten Wert `false`; massgeblich ist die Konfiguration. Die CSS-Klasse `regime-legend-composite` hat keinen HTML-Gegenpart. | `regime-engine-chart.js`, `kpi-config.js` |
 | INC-18 | T | `lastUpdate` ist `"YYYY-MM-DD HH:mm:ss"` (nicht ISO-8601). Ob `new Date()` dies in allen Browsern parst, ist nicht belegt; bei Fehlschlag wird der Rohstring angezeigt. | `landing.js`, `main.js` |
 | INC-19 | T | Hilfsfunktionen (`escapeHtml`, `formatNumber`, `formatPercent`, `safeGet`, `fetchJson`) sind in mehreren Dateien dupliziert, teils mit abweichenden Fallbacks ("-" gegenüber "N/A"). | `main.js`, `landing.js`, Chart-Module |
+| INC-21 | T | Die Portfolio-Aggregation blockiert den Main-Thread beim Laden der Landing-Seite: `countOpenPositionsOnDate` durchläuft für jedes Datum der gemeinsamen Achse alle Positionen jedes Systems (Aufwand Datumswerte × Positionen). Gemessen 2026-10-26: 1 081 ms Eigenzeit (normale CPU), Gesamttask 1,26 bis 1,48 s; bei 4-fach gedrosselter CPU 19,8 bis 24,9 s Loader-Zeit. Auf langsamen Geräten lädt die Landing-Seite entsprechend lange. | `js/equity-overview-chart.js` (`countOpenPositionsOnDate`, `aggregatePortfolioSeries`) |
 | INC-20 | T | `landing.css` enthält keine `prefers-reduced-motion`-Regel; `styles.css` schaltet alle Animationen global ab. Auf der Landing-Seite laufen die bestehenden Animationen (Loader, Kachel-Hover) bei Reduced-Motion weiter. BP-013 deckt nur die neue Motion ab (FR-M-07) und ändert dies nicht. | `css/landing.css`, `css/styles.css` |
 
 ### 14.2 Offene Entscheidungen und fehlende Information
@@ -651,6 +653,7 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | OP-10 | E | Soll das Dashboard auf registrierte Systeme beschränkt werden? | INC-07 |
 | OP-11 | E | Soll die Strategiename-Bereinigung auch auf der Landing-Seite gelten? | INC-11 |
 | OP-12 | E | Welche Berechnungsvariante gilt für das Portfolio verbindlich: Rohsumme oder Equal-Weight (`useDisplayEquity`)? | derzeit `false` |
+| OP-13 | E | Soll die Zählung offener Positionen je Datum (INC-21) optimiert werden (z. B. einmal sortieren und fortlaufend zählen statt je Datum alle Positionen zu durchlaufen), bei identischem Ergebnis? | Performance-Änderung, nicht beauftragt |
 
 ---
 
@@ -689,6 +692,7 @@ Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt n
 | FR-M-08 bis FR-M-13 (10.5) | BP-014 |
 | FR-M-14 bis FR-M-16 (10.5) | BP-015 |
 | FR-M-17 (10.5) | BP-016 |
+| FR-M-18 (10.5) | BP-020 |
 | FR-T-01 bis FR-T-03 (10.6) | BP-017 |
 | FR-T-04, FR-T-05 (10.6) | BP-018 |
 | FR-T-06, FR-T-07 (10.6) | BP-019 |

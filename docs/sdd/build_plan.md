@@ -62,6 +62,7 @@ flowchart TD
     BP017["BP-017<br/>Aurora: Grundlage, Flächen"]
     BP018["BP-018<br/>Aurora: Charts, HUD"]
     BP019["BP-019<br/>Aurora: Regime, Loader"]
+    BP020["BP-020<br/>Loader flüssig (Compositor)"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -95,6 +96,8 @@ flowchart TD
     BP016 --> BP017
     BP017 --> BP018
     BP017 --> BP019
+    BP016 --> BP020
+    BP019 --> BP020
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -367,6 +370,20 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Abschlusskriterien** | a) Bänder, Linie und Plakette gemäss FR-T-06; b) Loader in Aurora-Farben; c) `classic` pixelgleich; d) Reduced-Motion ohne Funkeln und Puls. |
 | **Prüfung (2026-10-26)** | **Erfüllt:** a) `StrongRiskOn`/`RiskOff` als vertikale Verläufe, Composite-Linie mit Verlauf und Glow, Plakette "Caution" in Bernstein sichtbar und innerhalb des Panels. b) Loader in Teal/Grün, Animation läuft, nach dem Ausblenden 0 laufende Animationen. c) siehe BP-017 b). d) Reduced-Motion: Funkeln `animation-name: none`, keine Motion-Klassen. **Nicht geprüft:** Firefox, Safari, echte Mobilgeräte. |
 
+### BP-020 – Loader flüssig: nur Compositor-Animationen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless mit GPU, siehe "Prüfung") |
+| **Ziel** | Der Loader läuft flüssig, auch während der Main-Thread blockiert ist. |
+| **Scope** | Loader-Markup beider Seiten (drei SVG-Ebenen, Aufdeck-Ebenen), Loader-Regeln in `motion.css` (Aufdecken per `translateX`, Schimmer als `::after`-Lichtbahn). |
+| **Nicht im Scope** | Ursache der Blockade (INC-21, OP-13); Ladelogik; Gestaltung über D-030 hinaus. |
+| **Voraussetzungen** | BP-016, BP-019 |
+| **Betroffene Dateien** | `index.html`, `dashboard/index.html`, `css/motion.css`, ggf. `css/theme-aurora.css` |
+| **Anforderungen / Decisions** | FR-M-17, FR-M-18; D-030, D-032 |
+| **Abschlusskriterien** | a) Während des langen Tasks bewegt sich die Linie sichtbar weiter (Screencast-Bilder, 4-fach gedrosselte CPU). b) Keine Loader-Animation auf `stroke-dashoffset` oder `background-position`. c) Aussehen entspricht D-030 (classic und aurora). d) Ausgeblendet keine laufenden Animationen; Reduced-Motion statisch. e) `classic`-Referenzbilder unverändert, keine Konsolenfehler. |
+| **Prüfung (2026-10-26)** | **Vorher:** Landing, 4-fach gedrosselte CPU, ein Task von 19,8 s blockiert den Main-Thread; auf den Screencast-Bildern bleibt die Linie halb gezeichnet stehen, Balken und Fläche laufen weiter. **Nachher, erfüllt:** a) Bei gleicher Blockade (Task bis 29,2 s) zeigen die Screencast-Bilder die Linie im Abstand von ca. 200 ms bei rund 60 %, 85 % und 100 % sowie Ausblenden und Neubeginn des Zyklus; Bildlücke höchstens 250 ms (Takt der Aufnahme). b) Im Loader keine Animation mehr auf `stroke-dashoffset`, `background-position` oder mit Filter. c) Aufnahmen classic und aurora (Landing, Dashboard) entsprechen der Gestaltung von D-030; kein Kasten um Linie oder Titel. d) 16 Loader-Animationen, nach dem Ausblenden 0 laufend; Reduced-Motion 0 Animationen. e) `classic`-Referenzbilder 0 abweichende Pixel; Seitenübergang 6 von 6; keine Konsolenfehler. **Hinweis:** Die Ladezeit selbst ist unverändert; Ursache siehe INC-21 und OP-13. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -407,6 +424,7 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-M-08 bis FR-M-13 | BP-014 | D-027 |
 | FR-M-14 bis FR-M-16 | BP-015 | D-028 |
 | FR-M-17 | BP-016 | D-030 |
+| FR-M-18 | BP-020 | D-032 |
 | FR-T-01 bis FR-T-03 | BP-017 | D-031 |
 | FR-T-04, FR-T-05 | BP-018 | D-031 |
 | FR-T-06, FR-T-07 | BP-019 | D-031 |

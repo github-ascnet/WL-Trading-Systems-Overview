@@ -15,35 +15,46 @@
 <body>
     <div id="pageLoader" class="page-loader-overlay" role="status" aria-live="polite" aria-label="Loading system data">
         <div class="page-loader-card">
-            <svg class="page-loader-chart" viewBox="0 0 160 64" aria-hidden="true" focusable="false">
-                <defs>
-                    <linearGradient id="loaderAreaFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#58c4ff" stop-opacity="0.35"></stop>
-                        <stop offset="100%" stop-color="#58c4ff" stop-opacity="0"></stop>
-                    </linearGradient>
-                </defs>
-                <g class="loader-grid">
-                    <line x1="0" y1="16" x2="160" y2="16"></line>
-                    <line x1="0" y1="32" x2="160" y2="32"></line>
-                    <line x1="0" y1="48" x2="160" y2="48"></line>
-                </g>
-                <g class="loader-bars">
-                    <rect x="4" y="57" width="9" height="7" style="--i:0"></rect>
-                    <rect x="19.4" y="53" width="9" height="11" style="--i:1"></rect>
-                    <rect x="34.8" y="56" width="9" height="8" style="--i:2"></rect>
-                    <rect x="50.2" y="51" width="9" height="13" style="--i:3"></rect>
-                    <rect x="65.6" y="54" width="9" height="10" style="--i:4"></rect>
-                    <rect x="81" y="49" width="9" height="15" style="--i:5"></rect>
-                    <rect x="96.4" y="52" width="9" height="12" style="--i:6"></rect>
-                    <rect x="111.8" y="55" width="9" height="9" style="--i:7"></rect>
-                    <rect x="127.2" y="50" width="9" height="14" style="--i:8"></rect>
-                    <rect x="142.6" y="48" width="9" height="16" style="--i:9"></rect>
-                </g>
-                <path class="loader-area" d="M4 50 L18 44 L28 47 L40 36 L52 40 L64 29 L76 33 L88 23 L100 27 L112 16 L124 20 L138 11 L154 7 L154 64 L4 64 Z"></path>
-                <path class="loader-line" pathLength="1" d="M4 50 L18 44 L28 47 L40 36 L52 40 L64 29 L76 33 L88 23 L100 27 L112 16 L124 20 L138 11 L154 7"></path>
-                <circle class="loader-pulse" cx="154" cy="7" r="3.5"></circle>
-                <circle class="loader-tip" cx="154" cy="7" r="3.5"></circle>
-            </svg>
+            <div class="page-loader-chart" aria-hidden="true">
+                <svg class="loader-layer" viewBox="-4 -6 168 74" focusable="false">
+                    <g class="loader-grid">
+                        <line x1="0" y1="16" x2="160" y2="16"></line>
+                        <line x1="0" y1="32" x2="160" y2="32"></line>
+                        <line x1="0" y1="48" x2="160" y2="48"></line>
+                    </g>
+                    <g class="loader-bars">
+                        <rect x="4" y="57" width="9" height="7" style="--i:0"></rect>
+                        <rect x="19.4" y="53" width="9" height="11" style="--i:1"></rect>
+                        <rect x="34.8" y="56" width="9" height="8" style="--i:2"></rect>
+                        <rect x="50.2" y="51" width="9" height="13" style="--i:3"></rect>
+                        <rect x="65.6" y="54" width="9" height="10" style="--i:4"></rect>
+                        <rect x="81" y="49" width="9" height="15" style="--i:5"></rect>
+                        <rect x="96.4" y="52" width="9" height="12" style="--i:6"></rect>
+                        <rect x="111.8" y="55" width="9" height="9" style="--i:7"></rect>
+                        <rect x="127.2" y="50" width="9" height="14" style="--i:8"></rect>
+                        <rect x="142.6" y="48" width="9" height="16" style="--i:9"></rect>
+                    </g>
+                </svg>
+                <div class="loader-reveal">
+                    <div class="loader-reveal-inner">
+                        <svg class="loader-layer" viewBox="-4 -6 168 74" focusable="false">
+                            <defs>
+                                <linearGradient id="loaderAreaFill" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#58c4ff" stop-opacity="0.35"></stop>
+                                    <stop offset="100%" stop-color="#58c4ff" stop-opacity="0"></stop>
+                                </linearGradient>
+                            </defs>
+                            <path class="loader-area" d="M4 50 L18 44 L28 47 L40 36 L52 40 L64 29 L76 33 L88 23 L100 27 L112 16 L124 20 L138 11 L154 7 L154 64 L4 64 Z"></path>
+                            <path class="loader-line-glow" d="M4 50 L18 44 L28 47 L40 36 L52 40 L64 29 L76 33 L88 23 L100 27 L112 16 L124 20 L138 11 L154 7"></path>
+                            <path class="loader-line" d="M4 50 L18 44 L28 47 L40 36 L52 40 L64 29 L76 33 L88 23 L100 27 L112 16 L124 20 L138 11 L154 7"></path>
+                        </svg>
+                    </div>
+                </div>
+                <svg class="loader-layer" viewBox="-4 -6 168 74" focusable="false">
+                    <circle class="loader-pulse" cx="154" cy="7" r="3.5"></circle>
+                    <circle class="loader-tip" cx="154" cy="7" r="3.5"></circle>
+                </svg>
+            </div>
             <div class="page-loader-title">Loading system...</div>
             <div class="page-loader-text" id="pageLoaderText">Please wait while the dashboard is being prepared.</div>
         </div>
