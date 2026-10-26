@@ -12,12 +12,14 @@
  *   window.WL_MOTION.countUp(containerEl) – zählt alle .wl-count-Elemente hoch
  *   window.WL_MOTION.setRegime(state)     – färbt den Hintergrund nach Regime-Zustand (Landing)
  *   window.WL_MOTION.initTabIndicator(nav) – gleitende Tab-Markierung (Dashboard)
+ *   window.WL_MOTION.revealOnScroll(els)  – gestaffelter Aufstieg beim Sichtbarwerden (Landing)
  */
 (function motionModule(global) {
   "use strict";
 
   const READY_FALLBACK_MS = 8000;
   const COUNT_DURATION_MS = 1200;
+  const REVEAL_STAGGER_MS = 60;
 
   const rootEl = document.documentElement;
   const reducedMotionQuery =
@@ -181,6 +183,40 @@
     update();
   }
 
+  // Elemente steigen beim ersten Sichtbarwerden gestaffelt auf (Systemkacheln)
+  function revealOnScroll(elements) {
+    if (!enabled) return;
+
+    const items = Array.from(elements || []);
+    if (items.length === 0) return;
+
+    items.forEach((el) => el.classList.add("wl-reveal"));
+
+    if (typeof global.IntersectionObserver !== "function") {
+      items.forEach((el) => el.classList.add("wl-revealed"));
+      return;
+    }
+
+    const observer = new global.IntersectionObserver(
+      (entries) => {
+        let batchIndex = 0;
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.style.setProperty(
+            "--wl-reveal-delay",
+            `${batchIndex * REVEAL_STAGGER_MS}ms`
+          );
+          entry.target.classList.add("wl-revealed");
+          observer.unobserve(entry.target);
+          batchIndex += 1;
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    items.forEach((el) => observer.observe(el));
+  }
+
   if (enabled) {
     rootEl.classList.add("wl-motion");
     watchLoader();
@@ -192,5 +228,6 @@
     countUp,
     setRegime,
     initTabIndicator,
+    revealOnScroll,
   };
 })(window);

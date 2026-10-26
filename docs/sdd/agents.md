@@ -97,7 +97,7 @@ Prüfen nach dem Hinzufügen: Kachel erscheint, Portfolio-Statuszeile zählt hoc
 ### 6.2 Skript-Reihenfolge (D-025)
 
 - Landing: `systems.js` → `kpi-config.js` → `motion.js` → `equity-overview-chart.js` → `regime-engine-chart.js` → `landing.js`, geladen über das Inline-Skript in `index.html`. Neue Skripte in diese Liste eintragen.
-- Dashboard: `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js` als statische Tags. `dashboard-loader.js` bleibt zuletzt, da es beim Laden sofort startet.
+- Dashboard: `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js`, geladen über das Inline-Skript in `dashboard/index.html` (D-029). Keine statischen `<script src>`-Tags im Dashboard ergänzen; sie verhindern den Seitenübergang. `dashboard-loader.js` bleibt zuletzt, da es beim Laden sofort startet.
 
 ### 6.2a Motion (D-026)
 
@@ -174,6 +174,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 8. Konsole ohne neue Fehler. Warnungen zu übersprungenen Systemen sind zu prüfen.
 9. Motion (D-026): Nach dem Loader zeichnen sich Portfolio-Linie und Regime-Linie ein, die KPI-Karten zählen auf den bisherigen Endwert hoch. Zoom, Pan und Reset zeichnen nicht neu ein. Mit aktivem `prefers-reduced-motion` erscheinen die Endwerte sofort.
 10. Motion (D-027): Ab 701 px driftet der Hintergrund und färbt sich nach dem letzten Regime-Zustand; unter 701 px nicht. Beim Prüfen im Headless-Browser GPU-Beschleunigung nicht abschalten, sonst täuscht die Drift eine niedrige Bildrate vor.
+11. Motion (D-028): Sichtbare Kacheln steigen nach dem Loader gestaffelt auf, weitere beim Scrollen; jede Kachel zeigt eine Sparkline; der Wechsel zum Dashboard und zurück überblendet (Chrome, Edge).
 
 **Dashboard (`dashboard/index.html?system=<slug>`)**
 

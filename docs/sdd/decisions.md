@@ -53,9 +53,11 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-022 | Sprache und Formatierung (UI Englisch, `en-GB`, ohne Tausendertrenner) | Darstellung | Ist-Zustand |
 | D-023 | Datenaktualisierung über automatisierte Commits | Betrieb | Ist-Zustand |
 | D-024 | Keine automatisierten Tests und keine CI im Repository | Qualität | Ist-Zustand |
-| D-025 | Skript-Ladeverfahren je Seite | Architektur | Ist-Zustand |
+| D-025 | Skript-Ladeverfahren je Seite | Architektur | Ist-Zustand; Dashboard-Teil ersetzt durch D-029 (2026-10-26) |
 | D-026 | Motion: Einlaufanimationen nur mit CSS und `requestAnimationFrame` | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-027 | Atmosphäre und Mikro-Interaktionen (Hintergrund, Regime-Tint, Tab-Indikator, Heatmap, Tabellen) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-028 | Kachel-Choreografie, Sparklines und Seitenübergang | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-029 | Dashboard lädt Skripte dynamisch und nacheinander | Architektur | Verbindlich (2026-10-26, Folge von D-028) |
 
 ---
 
@@ -303,7 +305,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 
 | | |
 |---|---|
-| **Status** | Ist-Zustand |
+| **Status** | Ist-Zustand; **Dashboard-Teil ersetzt** durch D-029 am 2026-10-26 (Grund: Seitenübergang, siehe D-029). Der Landing-Teil gilt unverändert. |
 | **Entscheidung** | Landing: ein Inline-Skript lädt die fünf Module nacheinander (je nächstes im `onload`) mit Cache-Buster; ein Ladefehler wird mit `console.error` gemeldet und stoppt die Kette. Dashboard: statische `<script>`-Tags in fester Reihenfolge. |
 | **Begründung** | nicht dokumentiert |
 | **Quelle** | `index.html`, `dashboard/index.html` |
@@ -318,7 +320,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Regeln** | 1. Aktiv nur, wenn `js/motion.js` die Klasse `wl-motion` an `<html>` setzt; bei `prefers-reduced-motion: reduce` geschieht das nicht, der Endzustand erscheint sofort. 2. Der statische Zustand ist der Endzustand; CSS animiert nur den Startzustand (`from`, `animation-fill-mode: backwards`). Ohne `motion.js` bleibt die Darstellung wie bisher. 3. Der Start erfolgt erst, wenn der Loader (`#pageLoader`) die Klasse `hidden` erhält (Fallback nach 8 s). 4. Einlauf nur beim **ersten** Rendern; Zoom, Pan und Resize zeichnen nicht neu ein. 5. Das Hochzählen setzt am Ende den ursprünglichen, bereits formatierten Text wieder ein; Werte, Formate und Berechnungen bleiben unverändert. |
 | **Begründung** | Auftrag des Auftraggebers: moderner Motion-Graphics-Eindruck. Die Regeln 1 bis 4 folgen aus D-001, D-011 und den Zoom-/Resize-Neuzeichnungen (`innerHTML`). |
 | **Quelle** | Auftrag 2026-10-26; Planungsdokument der Sitzung |
-| **Konsequenz** | D-025: `motion.js` kommt in beide Skriptlisten (nach `kpi-config.js`). D-019: ein zusätzliches, geteiltes Stylesheet `css/motion.css` nur für Motion. D-006 und D-016 bleiben unverändert. Der Vorschlag 2 (Kachel-Choreografie, Sparklines, Seitenübergang) ist **nicht** beauftragt. Der Vorschlag 3 ist mit D-027 beauftragt. |
+| **Konsequenz** | D-025: `motion.js` kommt in beide Skriptlisten (nach `kpi-config.js`). D-019: ein zusätzliches, geteiltes Stylesheet `css/motion.css` nur für Motion. D-006 und D-016 bleiben unverändert. Der Vorschlag 2 (Kachel-Choreografie, Sparklines, Seitenübergang) ist mit D-028 beauftragt, der Vorschlag 3 mit D-027. |
 
 ## D-027 – Atmosphäre und Mikro-Interaktionen
 
@@ -330,3 +332,24 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Abweichung vom Vorschlag** | a) `Caution` erhält eine schwache Färbung (im Vorschlag "neutral sonst"), weil der aktuelle Zustand `Caution` ist und der Effekt sonst nicht sichtbar wäre. b) Das Sortieren blendet die Zeilen neu ein statt sie umzuordnen (FLIP); Positionen haben keinen eindeutigen Schlüssel. |
 | **Quelle** | Auftrag 2026-10-26 |
 | **Konsequenz** | D-019: `styles.css` erhält die Heatmap-Regeln und die verkürzte `panelFadeIn`-Dauer. `motion.js` erhält `setRegime` und `initTabIndicator`; `motion.css` die zugehörigen Regeln. Der Zusammenhang Zeitraum/Regime auf der Landing-Seite (INC-09) bleibt unverändert. |
+
+## D-028 – Kachel-Choreografie, Sparklines und Seitenübergang
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26, Vorschlag 2 "Choreografie der Landing-Seite und Seitenübergang", Arbeitspaket BP-015) |
+| **Entscheidung** | Die Regeln aus D-026 gelten unverändert. Zusätzlich: 1. **Gestaffelter Eintritt:** Systemkacheln steigen beim ersten Sichtbarwerden auf (`IntersectionObserver`, 60 ms Versatz je gleichzeitig sichtbar werdender Kachel); oberhalb des Falzes nach dem Loader. Ohne `IntersectionObserver` erscheinen sie sofort. 2. **Sparkline je Kachel:** Kleine, logarithmische Equity-Kurve (höchstens ca. 120 Punkte). Die Daten stammen aus dem bereits geladenen Portfolio-Datensatz (`window._wlSystemEquitySeries`, gesetzt in `equity-overview-chart.js`); es gibt **keinen** zusätzlichen Abruf. Fehlen die Daten, entfällt die Sparkline, die Kachel bleibt. Die Sparkline ist Inhalt und erscheint auch bei Reduced-Motion; nur das Einzeichnen ist Motion. 3. **Seitenübergang:** Cross-Document View Transition (`@view-transition { navigation: auto; }`) zwischen Landing und Dashboard in beide Richtungen als weiche Überblendung; nur bei `prefers-reduced-motion: no-preference`. Browser ohne Unterstützung navigieren wie bisher. |
+| **Begründung** | Auftrag des Auftraggebers. Kein zweiter Abruf, um die Ladezeit nicht zu erhöhen (D-010 lädt ohne Cache). |
+| **Abweichung vom Vorschlag** | a) **Kein Puls** eines Kennzahl-Farbpunkts: ein solcher Punkt existiert nicht; der Auftraggeber hat am 2026-10-26 entschieden, ihn wegzulassen. b) **Loader-Fade:** bereits vorhanden (Übergang von `opacity` und `visibility` in `landing.css` und `styles.css`); keine Änderung. c) **Kein gemeinsames Titel-Element** im Seitenübergang (`view-transition-name`): Der Dashboard-Titel wird erst nach dem Laden der Daten gesetzt und ist beim ersten Bild leer; deshalb nur eine Überblendung der ganzen Seite. |
+| **Quelle** | Auftrag 2026-10-26; Rückfrage zum Puls am 2026-10-26 |
+| **Konsequenz** | `equity-overview-chart.js` stellt die Serien bereit (analog `window._wlPortfolioTimeRange`). `landing.js` hängt die Sparklines nach dem gemeinsamen Laden an. `motion.js` erhält `revealOnScroll`, `motion.css` die Kachel- und Übergangsregeln; `landing.css` die Darstellung der Sparkline. Der Tilt-Effekt und der rotierende Rand bleiben unverändert; während des Aufstiegs (600 ms) wirkt der Tilt nicht. Für den Übergang zum Dashboard ist D-029 nötig. |
+
+## D-029 – Dashboard lädt Skripte dynamisch und nacheinander
+
+| | |
+|---|---|
+| **Status** | Verbindlich (2026-10-26); ersetzt den Dashboard-Teil von D-025 |
+| **Entscheidung** | `dashboard/index.html` lädt seine sechs Skripte nicht mehr über statische `<script src>`-Tags, sondern über ein Inline-Skript, das sie nacheinander anhängt (je nächstes im `onload`), im selben Muster wie `index.html`. Reihenfolge unverändert: `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js`. Kein Cache-Buster (wie bisher im Dashboard). Ladefehler werden mit `console.error` gemeldet und stoppen die Kette (wie auf der Landing-Seite). |
+| **Begründung** | Gemessen am 2026-10-26 (Chrome headless, je Navigation Landing → Dashboard): Mit statischen Skripten rendert das Dashboard oft schon während des Parsens zum ersten Mal (`readyState: loading`, 25 bis 600 ms), und Chrome bricht den Seitenübergang mit "ViewTransition opt-in disabled" ab (Erfolg 2 von 5). Varianten: `defer` 1 von 5, `@view-transition` ohne `@media` 1 von 5, Render-Blocking bis Body-Ende (`<link rel="expect" blocking="render">`) 15 von 16, dynamisches Laden 13 von 13. Gewählt wurde die zuverlässigste Variante, die zudem dem bestehenden Muster der Landing-Seite entspricht. |
+| **Quelle** | Messungen im Rahmen von BP-015 |
+| **Konsequenz** | Die Skripte werden seriell statt parallel geladen; das Dashboard startet geringfügig später (wie die Landing-Seite). `dashboard-loader.js` bleibt zuletzt und startet beim Laden. Neue Dashboard-Skripte kommen in die Liste im Inline-Skript (`agents.md` 6.2). |

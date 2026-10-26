@@ -167,7 +167,7 @@ Wealth-Lab-Strategy-Orchestrator/
 | Seite | Mechanismus | Reihenfolge |
 |---|---|---|
 | Landing | Dynamisches, **sequenzielles** Nachladen mit Cache-Buster `?v=<Date.now()>` [CODE] | `systems.js` → `kpi-config.js` → `motion.js` → `equity-overview-chart.js` → `regime-engine-chart.js` → `landing.js` |
-| Dashboard | Statische `<script>`-Tags ohne Cache-Buster [CODE] | `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js` |
+| Dashboard | Dynamisches, **sequenzielles** Nachladen ohne Cache-Buster (seit D-029; zuvor statische `<script>`-Tags) | `monthly-returns.js` → `kpi-config.js` → `motion.js` → `equity-system-chart.js` → `main.js` → `dashboard-loader.js` |
 
 Kopplung: `monthly-returns.js` ruft Funktionen auf, die erst in `main.js` definiert werden (`escapeHtml`, `formatNumber`, `formatPercent`, `getValueClass`). Das funktioniert, weil die Aufrufe zur Laufzeit nach dem Laden aller Skripte erfolgen. [CODE]
 
@@ -322,7 +322,7 @@ Struktur: `{ date, value (0–100), state }`. [DATEN] Dieser Ordner ist kein Han
 
 ### 6.1 Systemkachel
 
-Anzeige: Name (`strategyName`, unverändert), Beschreibung (falls vorhanden), und die Zeilen Universe, APR/CAGR, Profit % (0 Dezimalstellen), Profitable %, Sharpe Ratio, Max Drawdown, Last Updated (`dd/mm/yyyy, hh:mm`, en-GB).
+Anzeige: Name (`strategyName`, unverändert), Beschreibung (falls vorhanden), Sparkline der Equity-Kurve (seit BP-015, FR-M-15), und die Zeilen Universe, APR/CAGR, Profit % (0 Dezimalstellen), Profitable %, Sharpe Ratio, Max Drawdown, Last Updated (`dd/mm/yyyy, hh:mm`, en-GB).
 
 Farbregeln: APR, Profitable %, Sharpe, Max Drawdown werden über `getKpiPresentation(..., "landing")` eingefärbt; Trophäe bei Profitable % und Sharpe. Die APR-Zeile rendert **keine** Trophäe, obwohl die Regel eine definiert (INC-10).
 
@@ -487,7 +487,7 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 - Datum: Dashboard `dd/mm/yyyy`; Kachel mit Uhrzeit; Chart `dd/mm/yy`; Positionen `d MMM yyyy`.
 - UI-Texte sind Englisch.
 
-### 10.5 Motion **[Auftrag 2026-10-26, D-026 und D-027, BP-013 und BP-014]**
+### 10.5 Motion **[Auftrag 2026-10-26, D-026 bis D-028, BP-013 bis BP-015]**
 
 **Einlaufanimationen (D-026, BP-013):**
 
@@ -512,7 +512,15 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 | FR-M-12 | Dashboard: Die ersten 20 Positionszeilen blenden gestaffelt ein, beim Öffnen und nach dem Sortieren. | Auftrag |
 | FR-M-13 | Dashboard: Der Panelwechsel (`panelFadeIn`) dauert 350 ms statt 800 ms. | Auftrag |
 
-Nicht Teil der Aufträge: gestaffelte Systemkacheln, Sparklines, Seitenübergänge (Vorschlag 2).
+**Kachel-Choreografie, Sparklines und Seitenübergang (D-028, BP-015):**
+
+| ID | Anforderung | Herkunft |
+|---|---|---|
+| FR-M-14 | Landing: Systemkacheln steigen beim ersten Sichtbarwerden gestaffelt auf (60 ms Versatz); Kacheln oberhalb des Falzes nach dem Loader. | Auftrag |
+| FR-M-15 | Landing: Jede Kachel zeigt eine logarithmische Mini-Equity-Kurve (Sparkline) aus den bereits geladenen Daten; sie zeichnet sich ein, sobald die Kachel sichtbar wird. Ohne Daten entfällt die Sparkline. | Auftrag |
+| FR-M-16 | Navigation zwischen Landing und Dashboard überblendet weich (View Transitions), sofern der Browser es unterstützt und kein Reduced-Motion aktiv ist. | Auftrag |
+
+Nicht umgesetzt (Entscheidung 2026-10-26): Puls eines Kennzahl-Farbpunkts. Bereits vorhanden: weiches Ausblenden des Loaders.
 
 ---
 
@@ -660,3 +668,4 @@ Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt n
 | 12.2 (ausserhalb des Repos) | BP-012 |
 | FR-M-01 bis FR-M-07 (10.5) | BP-013 |
 | FR-M-08 bis FR-M-13 (10.5) | BP-014 |
+| FR-M-14 bis FR-M-16 (10.5) | BP-015 |

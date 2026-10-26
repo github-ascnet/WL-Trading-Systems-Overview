@@ -79,6 +79,45 @@ html.wl-motion.wl-motion-ready .wl-stagger-in {
   animation-play-state: running;
 }
 
+/* ---- Kachel-Aufstieg (FR-M-14) und Sparkline (FR-M-15) ---- */
+
+@keyframes wl-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+html.wl-motion .wl-reveal {
+  animation: wl-rise-in 600ms var(--wl-motion-ease) backwards;
+  animation-delay: var(--wl-reveal-delay, 0ms);
+  animation-play-state: paused;
+}
+
+html.wl-motion.wl-motion-ready .wl-reveal.wl-revealed {
+  animation-play-state: running;
+}
+
+/* Inhalte einer Kachel warten, bis die Kachel sichtbar wird */
+html.wl-motion .wl-reveal:not(.wl-revealed) .wl-draw-line,
+html.wl-motion .wl-reveal:not(.wl-revealed) .wl-fade-in {
+  animation-play-state: paused;
+}
+
+/* ---- Seitenübergang Landing <-> Dashboard (FR-M-16) ---- */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--wl-motion-ease);
+}
+
 /* ---- Hintergrund-Drift (FR-M-08) und Regime-Tint (FR-M-09), ab 701 px ---- */
 
 @keyframes wl-drift-a {
@@ -199,7 +238,8 @@ html[data-wl-regime="RiskOff"] {
   .wl-draw-line,
   .wl-fade-in,
   .wl-trophy-pop,
-  .wl-stagger-in {
+  .wl-stagger-in,
+  .wl-reveal {
     animation: none !important;
   }
 

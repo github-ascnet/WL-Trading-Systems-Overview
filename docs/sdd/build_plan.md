@@ -57,6 +57,7 @@ flowchart TD
     BP012["BP-012<br/>Datenexport (extern)"]
     BP013["BP-013<br/>Motion: Einlaufanimation"]
     BP014["BP-014<br/>Atmosphäre, Mikro-Interaktionen"]
+    BP015["BP-015<br/>Kacheln, Sparklines, Übergang"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -82,6 +83,9 @@ flowchart TD
     BP009 --> BP014
     BP010 --> BP014
     BP011 --> BP014
+    BP013 --> BP015
+    BP003 --> BP015
+    BP004 --> BP015
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -282,6 +286,22 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Bekannte Abweichungen** | INC-09 (Regime-Panel folgt Zoom nicht) bleibt unberührt |
 | **Prüfung (2026-10-26)** | **Erfüllt**, mit einem Vorbehalt zu a): a) Bei 1280 px läuft die Drift (`wl-drift-a`, `wl-drift-b`, Zustand `running`); bei 390 px sind Drift und Ebene aus. Mit GPU-Beschleunigung (Intel-Grafik) 61 Bilder pro Sekunde mit und ohne Drift. **Vorbehalt:** Im Software-Rendering (`--disable-gpu`) fällt die Bildrate mit aktiver Drift auf 4 Bilder pro Sekunde (ohne Drift 61), weil die unscharfen Vollbildflächen mit Mischmodus neu zusammengesetzt werden. Geräte ohne GPU-Beschleunigung können die Drift als ruckelnd erleben. b) Letzter Zustand `Caution` setzt `data-wl-regime="Caution"`, Tint `rgba(255, 191, 95, 0.13)`; Ebene `.wl-ambient` nur bei Breite ab 701 px. c) Indikator liegt exakt auf dem aktiven Tab (`translate(4px, 4px)`, 101 px), gleitet beim Wechsel in ca. 320 ms (48 px → 287 px gemessen), ist bei 390 px aus, Hamburger-Menü und Panelwechsel funktionieren unverändert. d) 110 Heatmap-Zellen, Alpha 0,03 bis 0,30, Zahlenwerte und Klassen unverändert, Jahreswerte ohne Hintergrund. e) 72 Positionen, davon 20 mit Staffelung, nach dem Sortieren weiterhin 72/20, Sortierung korrekt. f) Mit emuliertem `prefers-reduced-motion`: keine Klassen, keine Drift, keine Ebene, kein Indikator, keine Zellanimation; Heatmap bleibt (Alpha 0,07). g) Keine Konsolenfehler. Zusätzlich: `panelFadeIn` 0,35 s. **Nicht geprüft:** Firefox, Safari, echte Mobilgeräte, Dauerlast im Leerlauf über längere Zeit. |
 
+### BP-015 – Motion: Kachel-Choreografie, Sparklines und Seitenübergang
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless mit GPU, Echtzeit, siehe "Prüfung"); nicht geprüft in anderen Browsern und auf echten Mobilgeräten |
+| **Ziel** | Lebendigere Landing-Seite und weicher Wechsel zum Dashboard (Vorschlag 2, ohne Puls). |
+| **Scope** | Gestaffelter Kachel-Eintritt (`revealOnScroll`), Sparkline je Kachel aus vorhandenen Daten, Cross-Document View Transition. |
+| **Nicht im Scope** | Puls eines Farbpunkts (entschieden: weglassen); Loader-Fade (bereits vorhanden); gemeinsames Titel-Element im Übergang; Änderung von Tilt, rotierendem Rand, Kennzahlen oder Berechnungen. |
+| **Voraussetzungen** | BP-013, BP-003, BP-004 |
+| **Betroffene Dateien** | `js/motion.js`, `css/motion.css`, `js/landing.js`, `js/equity-overview-chart.js`, `css/landing.css`, `dashboard/index.html` (Ladeverfahren, D-029) |
+| **Anforderungen / Decisions** | FR-M-14 bis FR-M-16; D-028, D-029; D-026, D-010 |
+| **Umsetzungsschritte** | 1. `equity-overview-chart.js`: `window._wlSystemEquitySeries` setzen. 2. `landing.js`: Platzhalter in der Kachel, Sparklines nach dem gemeinsamen Laden anhängen, `revealOnScroll` aufrufen. 3. `motion.js`: `revealOnScroll`. 4. `motion.css`: Aufstieg, Pausieren der Sparkline bis zur Sichtbarkeit, `@view-transition`. 5. `landing.css`: Darstellung der Sparkline. |
+| **Abschlusskriterien** | a) Sichtbare Kacheln steigen nach dem Loader gestaffelt auf; Kacheln unterhalb des Falzes erst beim Scrollen. b) Jede registrierte Kachel mit Daten zeigt eine Sparkline; keine zusätzlichen Netzwerkabrufe. c) Ohne Daten keine Sparkline und keine Fehlermeldung, Kachel unverändert. d) Klick auf eine Kachel öffnet weiterhin das richtige Dashboard; Rücklink funktioniert. e) Tilt und Rand-Effekt funktionieren nach dem Aufstieg wie zuvor. f) Reduced-Motion: kein Aufstieg, kein Einzeichnen, kein Seitenübergang; Sparkline sichtbar. g) Keine Konsolenfehler. |
+| **Bekannte Abweichungen** | siehe D-028 "Abweichung vom Vorschlag" |
+| **Prüfung (2026-10-26)** | **Erfüllt:** a) Bei 1280 × 1000 px sind 4 von 10 Kacheln sichtbar und nach dem Loader aufgestiegen (Deckkraft 1), die übrigen 6 bleiben bis zum Scrollen verborgen und steigen danach auf. b) 10 Sparklines, 10 Abrufe von `wl-equity.json` (kein zusätzlicher Abruf); Sparklines sichtbarer Kacheln eingezeichnet, die übrigen erst nach dem Scrollen. c) Fallback nicht gezielt provoziert (Code: ohne Serie wird der Platzhalter entfernt). d) Klick auf eine Kachel öffnet das richtige Dashboard, der Rücklink führt zurück; Seitenübergang in beide Richtungen aktiv, Landing → Dashboard nach D-029 in 6 von 6 Läufen (vorher 2 von 5). Fehlerpfade des Dashboards (ohne Parameter, ungültiger Slug, unbekanntes System) unverändert. e) Tilt setzt nach dem Aufstieg wieder `transform`. f) Reduced-Motion: keine Motion-Klassen, alle Kacheln sofort sichtbar, 10 Sparklines vollständig, kein Seitenübergang. g) Keine Konsolenfehler. Regression BP-013 und BP-014 mit dem neuen Ladeverfahren: Endwerte der Kennzahlen, Zoom ohne Neueinzeichnung, Equity-Tab, Regime-Tint, Drift, Tab-Indikator, Heatmap, Positionen, Mobile-Menü und Reduced-Motion unverändert erfüllt. **Nicht geprüft:** Firefox und Safari (Seitenübergang dort je nach Version nicht unterstützt, Navigation funktioniert dann wie bisher), echte Mobilgeräte. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -320,4 +340,5 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-D-12 | BP-006, BP-007 | D-006 |
 | FR-M-01 bis FR-M-07 | BP-013 | D-026 |
 | FR-M-08 bis FR-M-13 | BP-014 | D-027 |
+| FR-M-14 bis FR-M-16 | BP-015 | D-028 |
 | Q-01 | alle | D-001 |

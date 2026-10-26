@@ -168,12 +168,40 @@
     </footer>
 
     <div id="cardTooltip" class="card-tooltip" role="tooltip"></div>
-    <script src="../js/monthly-returns.js"></script>
-    <script src="../js/kpi-config.js"></script>
-    <script src="../js/motion.js"></script>
-    <script src="../js/equity-system-chart.js"></script>
-    <script src="../js/main.js"></script>
-    <script src="../js/dashboard-loader.js"></script>
+    <script>
+    // Skripte nacheinander nachladen (wie index.html): Der Parser wird nicht blockiert,
+    // damit der Seitenübergang (View Transition) zuverlässig greift (D-029).
+    (function loadScriptsSequentially() {
+        const scripts = [
+            "../js/monthly-returns.js",
+            "../js/kpi-config.js",
+            "../js/motion.js",
+            "../js/equity-system-chart.js",
+            "../js/main.js",
+            "../js/dashboard-loader.js"
+        ];
+
+        let index = 0;
+
+        function loadNext() {
+            if (index >= scripts.length) return;
+
+            const script = document.createElement("script");
+            script.src = scripts[index];
+            script.onload = function () {
+                index += 1;
+                loadNext();
+            };
+            script.onerror = function () {
+                console.error("Failed to load script:", scripts[index]);
+            };
+
+            document.body.appendChild(script);
+        }
+
+        loadNext();
+    })();
+    </script>
 </body>
 
 </html>

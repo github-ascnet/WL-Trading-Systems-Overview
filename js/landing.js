@@ -176,6 +176,9 @@
               )}</p>`
             : ""
         }
+        <div class="system-spark" data-system-id="${escapeHtml(
+          systemId
+        )}" aria-hidden="true"></div>
         <dl class="system-meta">
           <div><dt>Universe</dt><dd>${escapeHtml(symbolUniverse)}</dd></div>
           <div><dt>APR/CAGR</dt><dd class="${aprConfig.className}">${escapeHtml(
@@ -216,6 +219,51 @@
     `;
   }
 
+  // Mini-Equity-Kurve (log-Skala) für eine Systemkachel
+  function createSparklineSvg(series) {
+    const SPARK_W = 200;
+    const SPARK_H = 36;
+    const MAX_POINTS = 120;
+
+    const step = Math.max(1, Math.ceil(series.length / MAX_POINTS));
+    const points = series.filter(
+      (_, index) => index % step === 0 || index === series.length - 1
+    );
+    const logs = points.map((p) => Math.log(Math.max(Number(p.equity), 1)));
+    const logMin = Math.min(...logs);
+    const logRange = Math.max(Math.max(...logs) - logMin, 1e-9);
+
+    const linePath = logs
+      .map((value, index) => {
+        const x = (index / (logs.length - 1)) * SPARK_W;
+        const y = 2 + (1 - (value - logMin) / logRange) * (SPARK_H - 4);
+        return `${index === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
+      })
+      .join(" ");
+    const areaPath = `${linePath} L${SPARK_W} ${SPARK_H} L0 ${SPARK_H} Z`;
+
+    return `
+      <svg viewBox="0 0 ${SPARK_W} ${SPARK_H}" preserveAspectRatio="none" focusable="false">
+        <path d="${areaPath}" fill="rgba(88, 196, 255, 0.1)" class="wl-fade-in" style="--wl-delay:calc(var(--wl-reveal-delay, 0ms) + 500ms)"></path>
+        <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" class="wl-draw-line" pathLength="1" style="--wl-delay:calc(var(--wl-reveal-delay, 0ms) + 250ms)"></path>
+      </svg>
+    `;
+  }
+
+  // Sparklines aus den bereits geladenen Portfolio-Daten (equity-overview-chart.js)
+  function attachSparklines(grid) {
+    const seriesBySystem = window._wlSystemEquitySeries || {};
+
+    grid.querySelectorAll(".system-spark").forEach((sparkEl) => {
+      const series = seriesBySystem[sparkEl.dataset.systemId];
+      if (Array.isArray(series) && series.length >= 2) {
+        sparkEl.innerHTML = createSparklineSvg(series);
+      } else {
+        sparkEl.remove();
+      }
+    });
+  }
+
   async function loadCardData(system) {
     const basePath =
       typeof system.dataPath === "string" && system.dataPath.trim()
@@ -251,6 +299,7 @@
     );
 
     grid.innerHTML = cards.join("");
+    window.WL_MOTION?.revealOnScroll(grid.querySelectorAll(".system-card"));
     if (window.matchMedia("(min-width: 701px)").matches) {
       attachCardTiltEffects(grid);
     }
@@ -307,6 +356,11 @@
           : Promise.resolve(),
         renderSystems(),
       ]);
+
+      const systemsGrid = document.getElementById("systemsGrid");
+      if (systemsGrid) {
+        attachSparklines(systemsGrid);
+      }
 
       // Regime engine panel — loads its own data, X-axis synced via _wlPortfolioTimeRange
       const regimeContainer = document.getElementById("regimeEngineChart");

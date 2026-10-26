@@ -1283,6 +1283,11 @@
       const { systemsTotal, systemsLoaded, seriesCollection } =
         await loadAllSystemEquitySeries();
 
+      // Serien je System für die Sparklines der Systemkacheln (landing.js), ohne zweiten Abruf
+      global._wlSystemEquitySeries = Object.fromEntries(
+        seriesCollection.map((entry) => [entry.systemId, entry.series])
+      );
+
       if (seriesCollection.length === 0) {
         renderChartEmptyState(
           chartContainerElement,
