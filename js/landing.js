@@ -244,15 +244,39 @@
 
     return `
       <svg viewBox="0 0 ${SPARK_W} ${SPARK_H}" preserveAspectRatio="none" focusable="false">
-        <path d="${areaPath}" fill="rgba(88, 196, 255, 0.1)" class="wl-fade-in" style="--wl-delay:calc(var(--wl-reveal-delay, 0ms) + 500ms)"></path>
-        <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" class="wl-draw-line" pathLength="1" style="--wl-delay:calc(var(--wl-reveal-delay, 0ms) + 250ms)"></path>
+        <path d="${areaPath}" fill="rgba(88, 196, 255, 0.1)" class="wl-c-spark-area wl-fade-in" style="--wl-delay:calc(var(--wl-reveal-delay, 0ms) + 500ms)"></path>
+        <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="5" stroke-opacity="0.12" stroke-linejoin="round" stroke-linecap="round" visibility="hidden" class="wl-c-spark-glow wl-fade-in" style="--wl-delay:calc(var(--wl-reveal-delay, 0ms) + 500ms)"></path>
+        <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" class="wl-c-spark wl-draw-line" pathLength="1" style="--wl-delay:calc(var(--wl-reveal-delay, 0ms) + 250ms)"></path>
       </svg>
     `;
+  }
+
+  // Gemeinsame Verläufe der Sparklines für das Theme "aurora" (einmal je Seite, D-031)
+  function ensureSparklineDefs() {
+    if (document.getElementById("wlAuroraSpark")) return;
+
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="wlAuroraSpark" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#58c4ff"></stop>
+            <stop offset="55%" stop-color="#2de2c4"></stop>
+            <stop offset="100%" stop-color="#6ee7a8"></stop>
+          </linearGradient>
+          <linearGradient id="wlAuroraSparkArea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2de2c4" stop-opacity="0.22"></stop>
+            <stop offset="100%" stop-color="#2de2c4" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+      </svg>`
+    );
   }
 
   // Sparklines aus den bereits geladenen Portfolio-Daten (equity-overview-chart.js)
   function attachSparklines(grid) {
     const seriesBySystem = window._wlSystemEquitySeries || {};
+    ensureSparklineDefs();
 
     grid.querySelectorAll(".system-spark").forEach((sparkEl) => {
       const series = seriesBySystem[sparkEl.dataset.systemId];

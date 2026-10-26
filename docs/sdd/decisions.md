@@ -59,6 +59,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-028 | Kachel-Choreografie, Sparklines und Seitenübergang | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-029 | Dashboard lädt Skripte dynamisch und nacheinander | Architektur | Verbindlich (2026-10-26, Folge von D-028) |
 | D-030 | Loader als animierter Mini-Chart (reines CSS) | Darstellung | Verbindlich (Auftrag 2026-10-26) |
+| D-031 | Visuelles Theme "Aurora" (Future State), umschaltbar | Darstellung / Architektur | Verbindlich (Auftrag 2026-10-26) |
 
 ---
 
@@ -366,3 +367,15 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Begründung** | Auftrag des Auftraggebers ("Loader aufpeppen"). Thematisch passend zur Anwendung (Equity-Kurve statt neutralem Spinner). |
 | **Quelle** | Auftrag 2026-10-26 |
 | **Konsequenz** | Markup in `index.html` und `dashboard/index.html` geändert (gleiches SVG). Die nicht mehr verwendeten Regeln `.page-loader-spinner` und `@keyframes page-loader-spin` werden aus `landing.css` und `styles.css` entfernt. |
+
+## D-031 – Visuelles Theme "Aurora" (Future State), umschaltbar
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-26; Farbwelt "Aurora" und Umschaltbarkeit vom Auftraggeber gewählt; Arbeitspakete BP-017 bis BP-019) |
+| **Entscheidung** | 1. **Schalter:** `js/theme.js` setzt `<html data-theme="aurora">` oder `"classic"` aus der Konstanten `WL_VISUAL_THEME`. Die Datei wird **synchron im `<head>`** beider Seiten geladen, damit das Theme ab dem ersten Bild gilt. 2. **Stylesheet:** `css/theme-aurora.css` enthält alle Aurora-Regeln, ausschliesslich unter `html[data-theme="aurora"]`. 3. **Charts:** SVG-Elemente erhalten Klassen (`wl-c-*`); die bisherigen Farben bleiben als Präsentationsattribute im Markup (= classic) und werden im Aurora-Theme per CSS überschrieben. Zusätzliche Elemente (Glow-Pfade, Sternenfeld, HUD-Eckmarken, Orbit-Ring, Plakette) tragen `visibility="hidden"` und werden nur im Aurora-Theme sichtbar. 4. **Palette:** Nachtblau `#03060b` bis `#071420`, Cyan `#58c4ff`, Teal `#2de2c4`, Grün `#6ee7a8`, Rosé `#ff6fa3` für Drawdown. KPI-Ampelfarben (D-016) und Heatmap-Farben bleiben. |
+| **Regeln** | a) Mit `classic` ist die Darstellung pixelgleich zum Stand vor D-031. b) Glow ohne SVG-Filter (zusätzliche breite Pfade mit niedriger Deckkraft), weil die Charts bei Zoom neu zeichnen. c) Kein zusätzliches `backdrop-filter`. d) Sternenfeld mit festem Zufalls-Seed (beim Neuzeichnen identisch); höchstens 8 funkelnde Sterne je Chart, aus bei Reduced-Motion. e) Keine externe Schrift (D-001). |
+| **Begründung** | Auftrag "Future State, galaktischer". Synchroner Head-Schalter, weil `kpi-config.js` erst nach dem ersten Bild geladen wird (D-025, D-029) und sonst kurz das alte Design erschiene. |
+| **Verhältnis zu D-025 / D-029** | Ergänzung, keine Ersetzung: Die Skriptlisten bleiben; `theme.js` kommt zusätzlich in den Head. D-029 hat gezeigt, dass Skripte im Body den Seitenübergang stören; ein Head-Skript läuft vor dem Parsen des Body und muss im Rahmen von BP-017 gegen den Seitenübergang geprüft werden. |
+| **Quelle** | Auftrag und Rückfragen 2026-10-26 |
+| **Konsequenz** | D-019: drittes, themenbezogenes Stylesheet. Neue Chart-Elemente müssen Klassen nach dem Muster `wl-c-*` erhalten, damit das Theme sie erfasst. |

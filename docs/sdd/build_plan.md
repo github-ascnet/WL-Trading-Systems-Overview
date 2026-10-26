@@ -59,6 +59,9 @@ flowchart TD
     BP014["BP-014<br/>Atmosphäre, Mikro-Interaktionen"]
     BP015["BP-015<br/>Kacheln, Sparklines, Übergang"]
     BP016["BP-016<br/>Loader als Mini-Chart"]
+    BP017["BP-017<br/>Aurora: Grundlage, Flächen"]
+    BP018["BP-018<br/>Aurora: Charts, HUD"]
+    BP019["BP-019<br/>Aurora: Regime, Loader"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -89,6 +92,9 @@ flowchart TD
     BP004 --> BP015
     BP011 --> BP016
     BP013 --> BP016
+    BP016 --> BP017
+    BP017 --> BP018
+    BP017 --> BP019
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -320,6 +326,47 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Bekannte Abweichungen** | keine |
 | **Prüfung (2026-10-26)** | **Erfüllt** (Netzwerk künstlich um 2,5 s verzögert, damit der Loader sichtbar bleibt): a) Landing und Dashboard zeigen den Chart, `wl-loader-line` und `wl-loader-shimmer` laufen, die Linie zeichnet sich ein (Offset 0,03 bis 0,10 gemessen), Puls-Ring und Ausblendphase auf Aufnahmen sichtbar. b) Nach dem Ausblenden ist der Loader `visibility: hidden`, alle 15 Animationen im Loader sind pausiert (0 laufend), die Karte ist auf 0,96 verkleinert. c) Reduced-Motion: keine Animationen, Chart vollständig, Titel in normaler Textfarbe. d) Bei 390 px Breite Karte 358 px, Layout intakt. e) Keine Konsolenfehler. **Nicht geprüft:** Firefox, Safari, echte Mobilgeräte. |
 
+### BP-017 – Theme "Aurora": Grundlage, Hintergrund, Flächen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless mit GPU, siehe "Prüfung") |
+| **Ziel** | Umschaltbares Theme mit Weltraum-Hintergrund und Aurora-Flächen (Stufe 1). |
+| **Scope** | `js/theme.js` (neu, Head), `css/theme-aurora.css` (neu), Einbindung in beide Seiten; Hintergrund, Panels, Karten, Kacheln, Tabs, Tabellen, Typografie. |
+| **Nicht im Scope** | Charts, Regime-Panel, Loader (BP-018, BP-019); Änderungen an `landing.css`/`styles.css`. |
+| **Voraussetzungen** | BP-016 committet |
+| **Betroffene Dateien** | `js/theme.js`, `css/theme-aurora.css`, `index.html`, `dashboard/index.html` |
+| **Anforderungen / Decisions** | FR-T-01 bis FR-T-03, FR-T-08; D-031 |
+| **Abschlusskriterien** | a) `aurora` wirkt ab dem ersten Bild; b) `classic` pixelgleich zu den Referenzbildern vor D-031; c) Seitenübergang Landing → Dashboard weiterhin 6 von 6; d) keine Konsolenfehler. |
+| **Prüfung (2026-10-26)** | **Erfüllt:** a) `data-theme="aurora"` ab dem ersten Bild (Head-Skript). b) Sechs Referenzansichten (Landing oben, Kacheln, Dashboard Overview, Equity, Equity mit Tooltip, Monthly Returns; Reduced-Motion, 1280 × 1000) mit `classic` **0 abweichende Pixel** gegenüber dem Stand vor D-031, geprüft nach BP-017, nach BP-018/019 und nach der letzten Feinjustierung. c) Seitenübergang Landing → Dashboard 6 von 6 mit `theme.js` im Head. d) Keine Konsolenfehler. |
+
+### BP-018 – Theme "Aurora": Charts und HUD-Tooltips
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless mit GPU, siehe "Prüfung") |
+| **Ziel** | Charts als leuchtende Instrumente (Stufe 2). |
+| **Scope** | Klassen, Verläufe, Glow-Pfade, Sternenfeld und HUD-Tooltip im Portfolio-Chart und System-Chart; Verlauf und Glow der Sparklines; Sternenfeld-Helfer in `theme.js`. |
+| **Nicht im Scope** | Berechnungen, Achsenlogik, Zoom, Einzeichnen (BP-013) bleiben unverändert. |
+| **Voraussetzungen** | BP-017 |
+| **Betroffene Dateien** | `js/equity-overview-chart.js`, `js/equity-system-chart.js`, `js/landing.js`, `js/theme.js`, `css/theme-aurora.css` |
+| **Anforderungen / Decisions** | FR-T-04, FR-T-05, FR-T-08; D-031 |
+| **Abschlusskriterien** | a) Aurora-Darstellung der Charts gemäss FR-T-04/05; b) Tooltip-Werte unverändert; c) Zoom ohne Neueinzeichnung, Sternenfeld beim Zoom stabil; d) Bildrate mit GPU wie classic; e) `classic` pixelgleich. |
+| **Prüfung (2026-10-26)** | **Erfüllt:** a) Equity-Linie mit Verlauf `url(#wlAuroraLine)` und Glow, Teal-Fläche, Drawdown rosé (Deckkraft nach Sichtprüfung auf 0,55 gesenkt), 70 Sterne im Plot, HUD-Tooltip mit Eckmarken und Orbit-Ring (`wl-orbit`); Sparklines mit Verlauf und Glow. b) Tooltip-Text an gleicher Position in beiden Themes identisch (`17/10/22 | Portfolio: 6527 | Profit: 552.72% | Max Drawdown: -22.15%`). c) Nach dem Zoomen trägt die Linie nur `wl-c-equity` (keine Motion-Klasse); erster Stern vor und nach dem Zoom bei `82.2,37.3`. d) Bildrate mit GPU: Leerlauf 61, beim Zoomen 60 Bilder pro Sekunde, identisch in `aurora` und `classic`. e) siehe BP-017 b). Regression BP-013 bis BP-016 im Aurora-Theme erfüllt (KPI-Endwerte, Equity-Tab, Drift, Regime-Tint, Tab-Indikator, Heatmap, Positionen, Mobile-Menü, Kacheln, Sparklines ohne Zusatzabruf, Seitenübergang in beide Richtungen, Loader). |
+
+### BP-019 – Theme "Aurora": Regime-Panel und Loader
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-26) und im Browser geprüft (Chrome headless mit GPU, siehe "Prüfung") |
+| **Ziel** | Regime-Panel und Loader im Aurora-Stil (Stufe 3). |
+| **Scope** | Klassen, Verläufe und Plakette im Regime-Panel; Loader-Farben per CSS. |
+| **Voraussetzungen** | BP-017 |
+| **Betroffene Dateien** | `js/regime-engine-chart.js`, `css/theme-aurora.css` |
+| **Anforderungen / Decisions** | FR-T-06 bis FR-T-08; D-031 |
+| **Abschlusskriterien** | a) Bänder, Linie und Plakette gemäss FR-T-06; b) Loader in Aurora-Farben; c) `classic` pixelgleich; d) Reduced-Motion ohne Funkeln und Puls. |
+| **Prüfung (2026-10-26)** | **Erfüllt:** a) `StrongRiskOn`/`RiskOff` als vertikale Verläufe, Composite-Linie mit Verlauf und Glow, Plakette "Caution" in Bernstein sichtbar und innerhalb des Panels. b) Loader in Teal/Grün, Animation läuft, nach dem Ausblenden 0 laufende Animationen. c) siehe BP-017 b). d) Reduced-Motion: Funkeln `animation-name: none`, keine Motion-Klassen. **Nicht geprüft:** Firefox, Safari, echte Mobilgeräte. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -360,4 +407,7 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | FR-M-08 bis FR-M-13 | BP-014 | D-027 |
 | FR-M-14 bis FR-M-16 | BP-015 | D-028 |
 | FR-M-17 | BP-016 | D-030 |
+| FR-T-01 bis FR-T-03 | BP-017 | D-031 |
+| FR-T-04, FR-T-05 | BP-018 | D-031 |
+| FR-T-06, FR-T-07 | BP-019 | D-031 |
 | Q-01 | alle | D-001 |

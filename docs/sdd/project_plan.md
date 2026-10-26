@@ -528,6 +528,19 @@ Nicht umgesetzt (Entscheidung 2026-10-26): Puls eines Kennzahl-Farbpunkts. Berei
 |---|---|---|
 | FR-M-17 | Der Loader beider Seiten zeigt statt des Spinners einen animierten Mini-Chart (Equity-Linie zeichnet sich in einer Schleife ein, Volumenbalken, pulsierende Spitze) und einen schimmernden Titel; beim Ausblenden schrumpft die Karte leicht. Bei Reduced-Motion statisch. Ausgeblendet erzeugt er keine Animationslast. | Auftrag |
 
+### 10.6 Visuelles Theme "Aurora" **[Auftrag 2026-10-26, D-031, BP-017 bis BP-019]**
+
+| ID | Anforderung | BP |
+|---|---|---|
+| FR-T-01 | `WL_VISUAL_THEME` in `js/theme.js` (`"aurora"` oder `"classic"`) bestimmt das Theme beider Seiten ab dem ersten Bild. `classic` entspricht pixelgleich dem Stand vor D-031. | BP-017 |
+| FR-T-02 | Aurora-Hintergrund: tiefes Nachtblau, statisches Sternenfeld, Aurora-Bänder statt Gold-Flächen; Drift und Regime-Tint (D-027) bleiben. | BP-017 |
+| FR-T-03 | Aurora-Flächen: Panels, Karten, Kacheln, Tabs und Tabellen in dunklem Glas mit Lichtkante und Cyan-Teal-Rand; rotierender Kachelrand Cyan/Teal/Grün; Zahlen mit `tabular-nums`; KPI-Werte mit dezentem Glow in Ampelfarbe. | BP-017 |
+| FR-T-04 | Charts (Portfolio, System, Sparklines): Equity-Linie mit Zeitverlauf Cyan → Teal → Grün und Glow, Teal-Schleier als Fläche, Drawdown rosé mit Glow, Raster und Achsen in Cyan, Sternenfeld im Plotbereich. | BP-018 |
+| FR-T-05 | Chart-Tooltips als HUD: dunkle Glasfläche, Verlaufsrand, Eckmarken, Fadenkreuz mit Glow, Orbit-Ring um den Punkt. | BP-018 |
+| FR-T-06 | Regime-Panel: Zustandsbänder als Polarlicht-Vorhänge (`StrongRiskOn` grün, `RiskOff` rosé), Composite-Linie mit Verlauf und Glow, End-Label als Plakette in Zustandsfarbe. | BP-019 |
+| FR-T-07 | Loader in Aurora-Farben, nur per CSS. | BP-019 |
+| FR-T-08 | Leistung und Barrierefreiheit: keine SVG-Filter auf neu gezeichneten Pfaden, kein zusätzliches `backdrop-filter`, Funkeln und Puls aus bei Reduced-Motion; Daten, Kennzahlen, Ampelfarben, Texte und Interaktion unverändert. | alle |
+
 ---
 
 ## 11. Fehlerbehandlung (Ist)
@@ -676,3 +689,6 @@ Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt n
 | FR-M-08 bis FR-M-13 (10.5) | BP-014 |
 | FR-M-14 bis FR-M-16 (10.5) | BP-015 |
 | FR-M-17 (10.5) | BP-016 |
+| FR-T-01 bis FR-T-03 (10.6) | BP-017 |
+| FR-T-04, FR-T-05 (10.6) | BP-018 |
+| FR-T-06, FR-T-07 (10.6) | BP-019 |

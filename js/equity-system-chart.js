@@ -169,15 +169,15 @@
 
     // Einlaufanimation nur beim ersten sichtbaren Rendern (opts.animate)
     const animate = opts?.animate === true;
-    const lineMotion = animate
-      ? ' class="wl-draw-line" pathLength="1" style="--wl-delay:200ms"'
-      : "";
-    const areaMotion = animate
-      ? ' class="wl-fade-in" style="--wl-delay:900ms"'
-      : "";
-    const ddMotion = animate
-      ? ' class="wl-fade-in" style="--wl-delay:700ms"'
-      : "";
+
+    // class-Attribut: Theme-Klasse (wl-c-*) plus beim ersten Rendern die Motion-Klasse
+    function classAttrs(themeClass, motionClass, delayMs, motionExtra) {
+      return animate
+        ? ` class="${themeClass} ${motionClass}"${
+            motionExtra ?? ""
+          } style="--wl-delay:${delayMs}ms"`
+        : ` class="${themeClass}"`;
+    }
     const M = isNarrow ? M_NARROW : M_WIDE;
     const CW = SVG_W - M.left - M.right;
     const CH = SVG_H - M.top - M.bottom;
@@ -249,7 +249,7 @@
       .map(({ from, to }) => {
         const x1 = points[from].x,
           x2 = points[to].x;
-        return `<rect x="${x1.toFixed(2)}" y="${M.top}" width="${(
+        return `<rect class="wl-c-cash" x="${x1.toFixed(2)}" y="${M.top}" width="${(
           x2 - x1
         ).toFixed(2)}" height="${CH}" fill="#6b7280" opacity="0.15"/>`;
       })
@@ -268,7 +268,7 @@
     const yLabels = Array.from({ length: yLabelCnt }, (_, i) => {
       const val = Math.exp(logMax - (i / (yLabelCnt - 1)) * logRange);
       const y = M.top + (i / (yLabelCnt - 1)) * CH + 4;
-      return `<text x="12" y="${y}" fill="#aeb4be" font-size="${axisFontSz}">${esc(
+      return `<text x="12" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="${axisFontSz}">${esc(
         fmtEquity(val)
       )}</text>`;
     }).join("");
@@ -279,7 +279,7 @@
       const y = M.top + (i / (ddLabelCnt - 1)) * CH + 4;
       return `<text x="${
         SVG_W - M.right + 6
-      }" y="${y}" fill="#aeb4be" font-size="${ddFontSz}" opacity="0.8" text-anchor="start">${esc(
+      }" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="${ddFontSz}" opacity="0.8" text-anchor="start">${esc(
         fmtPct(ddVal, 0)
       )}</text>`;
     }).join("");
@@ -287,7 +287,7 @@
     const ddAxisTitle = (() => {
       const x = SVG_W - 12,
         y = M.top + CH / 2;
-      return `<text x="${x}" y="${y}" fill="#aeb4be" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
+      return `<text x="${x}" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
     })();
 
     // ── X-axis: year labels (reduced on narrow screens) ──────────────────
@@ -317,7 +317,7 @@
         const anchor = ratio < 0.08 ? "start" : ratio > 0.92 ? "end" : "middle";
         return `<text x="${x.toFixed(2)}" y="${
           SVG_H - 12
-        }" text-anchor="${anchor}" fill="#aeb4be" font-size="${axisFontSz}">${year}</text>`;
+        }" text-anchor="${anchor}" class="wl-c-axis" fill="#aeb4be" font-size="${axisFontSz}">${year}</text>`;
       })
       .join("");
 
@@ -332,31 +332,92 @@
           <stop offset="0%"   stop-color="#58c4ff" stop-opacity="0.30"/>
           <stop offset="100%" stop-color="#58c4ff" stop-opacity="0.03"/>
         </linearGradient>
+        <linearGradient id="wlAuroraLine" gradientUnits="userSpaceOnUse"
+                        x1="${M.left}" y1="0" x2="${SVG_W - M.right}" y2="0">
+          <stop offset="0%"   stop-color="#58c4ff"/>
+          <stop offset="55%"  stop-color="#2de2c4"/>
+          <stop offset="100%" stop-color="#6ee7a8"/>
+        </linearGradient>
+        <linearGradient id="wlAuroraArea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#2de2c4" stop-opacity="0.26"/>
+          <stop offset="100%" stop-color="#2de2c4" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="wlAuroraTip" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"   stop-color="#58c4ff" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#2de2c4" stop-opacity="0.45"/>
+        </linearGradient>
       </defs>
-      <g opacity="0.28" stroke="#5a5f67" stroke-width="1">${hGrid}</g>
+      <g class="wl-c-grid" opacity="0.28" stroke="#5a5f67" stroke-width="1">${hGrid}</g>
+      ${
+        global.WL_THEME
+          ? global.WL_THEME.createStarfieldSvg({
+              x: M.left,
+              y: M.top,
+              width: CW,
+              height: CH,
+              count: 70,
+              seed: 11,
+            })
+          : ""
+      }
       ${cashZoneRects}
-      <path d="${areaPath}" fill="url(#sysEquityFill)"${areaMotion}/>
+      <path d="${areaPath}" fill="url(#sysEquityFill)"${classAttrs(
+      "wl-c-area",
+      "wl-fade-in",
+      900
+    )}/>
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="12" stroke-opacity="0.07"
+            stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+              "wl-c-glow",
+              "wl-fade-in",
+              900
+            )}/>
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="6" stroke-opacity="0.16"
+            stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+              "wl-c-glow",
+              "wl-fade-in",
+              900
+            )}/>
       <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2"
-            stroke-linejoin="round" stroke-linecap="round"${lineMotion}/>
+            stroke-linejoin="round" stroke-linecap="round"${classAttrs(
+              "wl-c-equity",
+              "wl-draw-line",
+              200,
+              ' pathLength="1"'
+            )}/>
+      <path d="${ddPath}" fill="none" stroke="#ff8c00" stroke-width="5" stroke-opacity="0.1"
+            stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+              "wl-c-drawdown-glow",
+              "wl-fade-in",
+              700
+            )}/>
       <path d="${ddPath}" fill="none" stroke="#ff8c00" stroke-width="1.8"
-            stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${ddMotion}/>
+            stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${classAttrs(
+              "wl-c-drawdown",
+              "wl-fade-in",
+              700
+            )}/>
       ${yLabels}
       ${ddAxisLabels}
       ${ddAxisTitle}
       ${xLabels}
       <g id="sysTipGroup" style="display:none;">
-        <line id="sysTipLine" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 2"
+        <line id="sysTipLine" class="wl-c-crosshair" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 2"
               opacity="0.35" x1="0" x2="0" y1="${M.top}" y2="${
       SVG_H - M.bottom
     }"/>
-        <circle id="sysTipDot" r="5" fill="#58c4ff" stroke="#1e1f22" stroke-width="2"
+        <circle id="sysTipOrbit" class="wl-c-orbit" r="9" fill="none" stroke="#2de2c4" stroke-width="1.2"
+                visibility="hidden" cx="0" cy="0"/>
+        <circle id="sysTipDot" class="wl-c-dot" r="5" fill="#58c4ff" stroke="#1e1f22" stroke-width="2"
                 cx="0" cy="0"/>
-        <rect id="sysTipBox" rx="8" ry="8" fill="#2c2f34" stroke="#42464d"
+        <rect id="sysTipBox" class="wl-c-tip-box" rx="8" ry="8" fill="#2c2f34" stroke="#42464d"
               stroke-width="1" x="0" y="0" width="${TIP_W}" height="${TIP_H}"/>
-        <text id="sysTipDate"   fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="sysTipValue"  fill="#e6e6e6" font-size="13" font-weight="600" x="0" y="0"/>
-        <text id="sysTipProfit" fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="sysTipDD"     fill="#ff8c00" font-size="12" x="0" y="0"/>
+        <path id="sysTipCorners" class="wl-c-tip-corners" fill="none" stroke="#2de2c4" stroke-width="1.5"
+              visibility="hidden" d=""/>
+        <text id="sysTipDate"   class="wl-c-tip-date" fill="#b8bcc4" font-size="12" x="0" y="0"/>
+        <text id="sysTipValue"  class="wl-c-tip-value" fill="#e6e6e6" font-size="13" font-weight="600" x="0" y="0"/>
+        <text id="sysTipProfit" class="wl-c-tip-text" fill="#b8bcc4" font-size="12" x="0" y="0"/>
+        <text id="sysTipDD"     class="wl-c-tip-dd" fill="#ff8c00" font-size="12" x="0" y="0"/>
       </g>
       <rect id="sysChartOverlay" x="${M.left}" y="${
       M.top
@@ -369,7 +430,9 @@
     const tipGroup = svgEl.querySelector("#sysTipGroup");
     const tipLine = svgEl.querySelector("#sysTipLine");
     const tipDot = svgEl.querySelector("#sysTipDot");
+    const tipOrbit = svgEl.querySelector("#sysTipOrbit");
     const tipBox = svgEl.querySelector("#sysTipBox");
+    const tipCorners = svgEl.querySelector("#sysTipCorners");
     const tipDate = svgEl.querySelector("#sysTipDate");
     const tipVal = svgEl.querySelector("#sysTipValue");
     const tipProfit = svgEl.querySelector("#sysTipProfit");
@@ -408,6 +471,8 @@
       tipLine.setAttribute("x2", pt.x);
       tipDot.setAttribute("cx", pt.x);
       tipDot.setAttribute("cy", pt.y);
+      tipOrbit.setAttribute("cx", pt.x);
+      tipOrbit.setAttribute("cy", pt.y);
 
       const pad = 10;
       let bx = pt.x + 12;
@@ -419,6 +484,12 @@
 
       tipBox.setAttribute("x", bx);
       tipBox.setAttribute("y", by);
+      if (global.WL_THEME) {
+        tipCorners.setAttribute(
+          "d",
+          global.WL_THEME.hudCornersPath(bx, by, TIP_W, TIP_H)
+        );
+      }
 
       tipDate.setAttribute("x", bx + pad);
       tipDate.setAttribute("y", by + 18);

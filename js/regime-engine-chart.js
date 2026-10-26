@@ -115,7 +115,11 @@
         const x1 = mapDateToX(seg.startTs, minTs, maxTs);
         const x2 = mapDateToX(seg.endTs, minTs, maxTs);
         const segW = Math.max(0.5, x2 - x1);
-        return `<rect x="${x1.toFixed(2)}" y="${M.top}" width="${segW.toFixed(
+        // Klasse je Zustand für das Theme "aurora" (Polarlicht-Vorhänge, D-031)
+        const stateClass = String(seg.state).replace(/[^A-Za-z]/g, "");
+        return `<rect class="wl-c-band wl-c-band-${stateClass}" x="${x1.toFixed(
+          2
+        )}" y="${M.top}" width="${segW.toFixed(
           2
         )}" height="${CHART_H}" fill="${escapeHtml(color)}"/>`;
       })
@@ -159,7 +163,7 @@
     const gridLines = [0, 25, 50, 75, 100]
       .map((val) => {
         const y = mapScoreToY(val, yMin, yMax).toFixed(2);
-        return `<line x1="${M.left}" y1="${y}" x2="${
+        return `<line class="wl-c-grid-line" x1="${M.left}" y1="${y}" x2="${
           W - M.right
         }" y2="${y}" stroke="#5a5f67" stroke-width="1" opacity="0.28"/>`;
       })
@@ -170,7 +174,7 @@
         const y = mapScoreToY(val, yMin, yMax).toFixed(2);
         return `<text x="${
           M.left - 6
-        }" y="${y}" text-anchor="end" dominant-baseline="middle" fill="#aeb4be" font-size="9.5">${val}</text>`;
+        }" y="${y}" text-anchor="end" dominant-baseline="middle" class="wl-c-axis" fill="#aeb4be" font-size="9.5">${val}</text>`;
       })
       .join("\n");
 
@@ -209,7 +213,18 @@
     if (composite.length > 0) {
       const last = composite[composite.length - 1];
       const y = mapScoreToY(last.value, yMin, yMax);
-      compositeEndLabel = `<text x="${labelX}" y="${y.toFixed(
+      // Plakette hinter dem Label, nur im Theme "aurora" sichtbar (D-031)
+      const stateClass = String(last.state).replace(/[^A-Za-z]/g, "");
+      const plaqueWidth = Math.min(
+        String(last.state).length * 5 + 10,
+        W - labelX + 3
+      );
+      compositeEndLabel = `<rect class="wl-c-plaque wl-c-plaque-${stateClass}" x="${
+        labelX - 5
+      }" y="${(y - 8).toFixed(
+        2
+      )}" width="${plaqueWidth}" height="16" rx="8" ry="8" fill="none" visibility="hidden"/>
+      <text class="wl-c-regime-label" x="${labelX}" y="${y.toFixed(
         2
       )}" text-anchor="start" dominant-baseline="middle" fill="${COLOR_COMPOSITE}" font-size="8.5" font-weight="600">${escapeHtml(
         last.state
@@ -266,18 +281,18 @@
           x <= M.left + 2 ? "start" : ratio > 0.92 ? "end" : "middle";
         return `<text x="${x.toFixed(2)}" y="${
           H - 6
-        }" text-anchor="${anchor}" fill="#aeb4be" font-size="11">${year}</text>`;
+        }" text-anchor="${anchor}" class="wl-c-axis" fill="#aeb4be" font-size="11">${year}</text>`;
       })
       .join("\n");
 
     const ttBoxH = showStretch ? 60 : 44;
     const tooltipMarkup = `
       <g id="regimeTooltipGroup" style="display:none;" pointer-events="none">
-        <line id="regimeTTLine" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 2" opacity="0.28"
+        <line id="regimeTTLine" class="wl-c-crosshair" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 2" opacity="0.28"
               x1="0" x2="0" y1="${M.top}" y2="${H - M.bottom}"/>
         <circle id="regimeTTDotC" r="4" fill="${COLOR_COMPOSITE}" stroke="#1a2030" stroke-width="1.5" cx="0" cy="0"/>
         <circle id="regimeTTDotS" r="3" fill="${COLOR_STRETCH}" stroke="#1a2030" stroke-width="1.5" cx="0" cy="0"/>
-        <rect id="regimeTTBox" rx="6" ry="6" fill="#1e2430" stroke="#364055" stroke-width="1"
+        <rect id="regimeTTBox" class="wl-c-regime-tip-box" rx="6" ry="6" fill="#1e2430" stroke="#364055" stroke-width="1"
               x="0" y="0" width="190" height="${ttBoxH}"/>
         <text id="regimeTTDate"      fill="#9aa7bf" font-size="11" x="0" y="0"/>
         <text id="regimeTTComposite" fill="${COLOR_COMPOSITE}" font-size="11" font-weight="600" x="0" y="0"/>
@@ -291,10 +306,38 @@
       M.top
     }" width="${CHART_W}" height="${CHART_H}"/>
         </clipPath>
+        <linearGradient id="wlAuroraRegimeLine" gradientUnits="userSpaceOnUse" x1="${
+          M.left
+        }" y1="0" x2="${W - M.right}" y2="0">
+          <stop offset="0%" stop-color="#58c4ff"></stop>
+          <stop offset="55%" stop-color="#2de2c4"></stop>
+          <stop offset="100%" stop-color="#6ee7a8"></stop>
+        </linearGradient>
+        <linearGradient id="wlAuroraBandGreen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6ee7a8" stop-opacity="0.02"></stop>
+          <stop offset="100%" stop-color="#6ee7a8" stop-opacity="0.5"></stop>
+        </linearGradient>
+        <linearGradient id="wlAuroraBandRose" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ff6fa3" stop-opacity="0.02"></stop>
+          <stop offset="100%" stop-color="#ff6fa3" stop-opacity="0.5"></stop>
+        </linearGradient>
       </defs>
-      <rect x="${M.left}" y="${
+      <rect class="wl-c-plot-bg" x="${M.left}" y="${
       M.top
     }" width="${CHART_W}" height="${CHART_H}" fill="rgba(10,15,24,0.55)"/>
+      ${
+        window.WL_THEME
+          ? window.WL_THEME.createStarfieldSvg({
+              x: M.left,
+              y: M.top,
+              width: CHART_W,
+              height: CHART_H,
+              count: 45,
+              seed: 3,
+              twinkle: 6,
+            })
+          : ""
+      }
       <g clip-path="url(#regimeClip)" class="wl-fade-in" style="--wl-delay:600ms">${bgSegments}</g>
       <g>${gridLines}</g>
       <g>${yAxisLabels}</g>
@@ -305,7 +348,8 @@
       }
       ${
         compositePath
-          ? `<path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)" class="wl-draw-line" pathLength="1" style="--wl-delay:300ms"/>`
+          ? `<path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="7" stroke-opacity="0.12" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)" visibility="hidden" class="wl-c-regime-glow wl-fade-in" style="--wl-delay:900ms"/>
+            <path d="${compositePath}" fill="none" stroke="${COLOR_COMPOSITE}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#regimeClip)" class="wl-c-regime-line wl-draw-line" pathLength="1" style="--wl-delay:300ms"/>`
           : ""
       }
       ${compositeEndLabel}

@@ -893,15 +893,13 @@
 
     // Einlaufanimation nur beim ersten Rendern; Zoom/Pan übergibt zoomedSeries
     const animate = !zoomedSeries;
-    const lineMotion = animate
-      ? ' class="wl-draw-line" pathLength="1" style="--wl-delay:200ms"'
-      : "";
-    const areaMotion = animate
-      ? ' class="wl-fade-in" style="--wl-delay:900ms"'
-      : "";
-    const drawdownMotion = animate
-      ? ' class="wl-fade-in" style="--wl-delay:700ms"'
-      : "";
+
+    // class-Attribut: Theme-Klasse (wl-c-*) plus beim ersten Rendern die Motion-Klasse
+    function classAttrs(themeClass, motionClass, delayMs, motionExtra = "") {
+      return animate
+        ? ` class="${themeClass} ${motionClass}"${motionExtra} style="--wl-delay:${delayMs}ms"`
+        : ` class="${themeClass}"`;
+    }
 
     const activeSeries =
       Array.isArray(zoomedSeries) && zoomedSeries.length >= 2
@@ -1047,7 +1045,7 @@
       const value = Math.exp(logValue);
       const y = margin.top + (i / 4) * chartHeight + 4;
 
-      return `<text x="12" y="${y}" fill="#aeb4be" font-size="12">${escapeHtml(
+      return `<text x="12" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="12">${escapeHtml(
         formatScaledEquityValue(value, 0)
       )}</text>`;
     }).join("");
@@ -1058,7 +1056,7 @@
       const ratio = i / 6;
       const y = margin.top + ratio * chartHeight + 4;
       const x = width - margin.right + 6;
-      return `<text x="${x}" y="${y}" fill="#aeb4be" font-size="11" opacity="0.8" text-anchor="start">${escapeHtml(
+      return `<text x="${x}" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="11" opacity="0.8" text-anchor="start">${escapeHtml(
         formatPercent(ddValue, 0)
       )}</text>`;
     }).join("");
@@ -1066,7 +1064,7 @@
     const drawdownAxisTitle = (() => {
       const x = width - 12;
       const y = margin.top + chartHeight / 2;
-      return `<text x="${x}" y="${y}" fill="#aeb4be" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
+      return `<text x="${x}" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="9" opacity="0.8" text-anchor="middle" transform="rotate(-90, ${x}, ${y})">Max. Drawdown</text>`;
     })();
 
     const allYears = [
@@ -1084,7 +1082,7 @@
         const anchor = ratio < 0.08 ? "start" : ratio > 0.92 ? "end" : "middle";
         return `<text x="${x.toFixed(2)}" y="${
           height - 12
-        }" text-anchor="${anchor}" fill="#aeb4be" font-size="12">${year}</text>`;
+        }" text-anchor="${anchor}" class="wl-c-axis" fill="#aeb4be" font-size="12">${year}</text>`;
       })
       .join("");
 
@@ -1096,12 +1094,58 @@
         </linearGradient>
         <linearGradient id="portfolioOverviewDrawdownStroke" x1="0" y1="0" x2="1" y2="0">
         </linearGradient>
+        <linearGradient id="wlAuroraLine" gradientUnits="userSpaceOnUse" x1="${
+          margin.left
+        }" y1="0" x2="${width - margin.right}" y2="0">
+          <stop offset="0%" stop-color="#58c4ff"></stop>
+          <stop offset="55%" stop-color="#2de2c4"></stop>
+          <stop offset="100%" stop-color="#6ee7a8"></stop>
+        </linearGradient>
+        <linearGradient id="wlAuroraArea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2de2c4" stop-opacity="0.26"></stop>
+          <stop offset="100%" stop-color="#2de2c4" stop-opacity="0"></stop>
+        </linearGradient>
+        <linearGradient id="wlAuroraTip" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#58c4ff" stop-opacity="0.9"></stop>
+          <stop offset="100%" stop-color="#2de2c4" stop-opacity="0.45"></stop>
+        </linearGradient>
       </defs>
-      <g opacity="0.28" stroke="#5a5f67" stroke-width="1">
+      <g class="wl-c-grid" opacity="0.28" stroke="#5a5f67" stroke-width="1">
         ${horizontalGrid}
       </g>
-      <path d="${areaPath}" fill="url(#portfolioOverviewFill)"${areaMotion}></path>
-      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"${lineMotion}></path>
+      ${
+        global.WL_THEME
+          ? global.WL_THEME.createStarfieldSvg({
+              x: margin.left,
+              y: margin.top,
+              width: chartWidth,
+              height: chartHeight,
+              count: 70,
+              seed: 7,
+            })
+          : ""
+      }
+      <path d="${areaPath}" fill="url(#portfolioOverviewFill)"${classAttrs(
+      "wl-c-area",
+      "wl-fade-in",
+      900
+    )}></path>
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="12" stroke-opacity="0.07" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+      "wl-c-glow",
+      "wl-fade-in",
+      900
+    )}></path>
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="6" stroke-opacity="0.16" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+      "wl-c-glow",
+      "wl-fade-in",
+      900
+    )}></path>
+      <path d="${linePath}" fill="none" stroke="#58c4ff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"${classAttrs(
+      "wl-c-equity",
+      "wl-draw-line",
+      200,
+      ' pathLength="1"'
+    )}></path>
       ${
         // Max-DD-Segment-Overlay auf der Equity-Kurve — kann entfernt werden,
         // sobald die vollständige Drawdown-Kurve unten als ausreichend gilt.
@@ -1109,26 +1153,37 @@
           ? `<path d="${drawdownPath}" fill="none" stroke="url(#portfolioOverviewDrawdownStroke)" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"></path>`
           : ""
       }
-      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${drawdownMotion}></path>
+      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="5" stroke-opacity="0.1" stroke-linejoin="round" stroke-linecap="round" visibility="hidden"${classAttrs(
+      "wl-c-drawdown-glow",
+      "wl-fade-in",
+      700
+    )}></path>
+      <path d="${drawdownLinePath}" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"${classAttrs(
+      "wl-c-drawdown",
+      "wl-fade-in",
+      700
+    )}></path>
       ${yLabels}
       ${drawdownAxisLabels}
       ${drawdownAxisTitle}
       ${xLabels}
       <g id="portfolioTooltipGroup" style="display:none;">
-        <line id="portfolioTooltipLine" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 2" opacity="0.35" x1="0" x2="0" y1="${
+        <line id="portfolioTooltipLine" class="wl-c-crosshair" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 2" opacity="0.35" x1="0" x2="0" y1="${
           margin.top
         }" y2="${height - margin.bottom}"/>
-        <circle id="portfolioTooltipDot" r="5" fill="#58c4ff" stroke="#1e1f22" stroke-width="2" cx="0" cy="0"/>
-        <rect id="portfolioTooltipBox" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="210" height="168"/>
-        <text id="portfolioTooltipDate" fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipValue" fill="#e6e6e6" font-size="13" x="0" y="0"/>
-        <text id="portfolioTooltipProfit" fill="#b8bcc4" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipDrawdown" fill="#ff8c00" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipOpenPos" fill="#9aa7bf" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipApr" fill="#9aa7bf" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipPF" fill="#9aa7bf" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipSharpe" fill="#9aa7bf" font-size="12" x="0" y="0"/>
-        <text id="portfolioTooltipProfitable" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <circle id="portfolioTooltipOrbit" class="wl-c-orbit" r="9" fill="none" stroke="#2de2c4" stroke-width="1.2" visibility="hidden" cx="0" cy="0"/>
+        <circle id="portfolioTooltipDot" class="wl-c-dot" r="5" fill="#58c4ff" stroke="#1e1f22" stroke-width="2" cx="0" cy="0"/>
+        <rect id="portfolioTooltipBox" class="wl-c-tip-box" rx="8" ry="8" fill="#2c2f34" stroke="#42464d" stroke-width="1" x="0" y="0" width="210" height="168"/>
+        <path id="portfolioTooltipCorners" class="wl-c-tip-corners" fill="none" stroke="#2de2c4" stroke-width="1.5" visibility="hidden" d=""/>
+        <text id="portfolioTooltipDate" class="wl-c-tip-date" fill="#b8bcc4" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipValue" class="wl-c-tip-value" fill="#e6e6e6" font-size="13" x="0" y="0"/>
+        <text id="portfolioTooltipProfit" class="wl-c-tip-text" fill="#b8bcc4" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipDrawdown" class="wl-c-tip-dd" fill="#ff8c00" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipOpenPos" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipApr" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipPF" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipSharpe" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
+        <text id="portfolioTooltipProfitable" class="wl-c-tip-text" fill="#9aa7bf" font-size="12" x="0" y="0"/>
       </g>
       <rect id="portfolioChartOverlay" x="${margin.left}" y="${
       margin.top
@@ -1141,7 +1196,13 @@
     );
     const tooltipLine = containerElement.querySelector("#portfolioTooltipLine");
     const tooltipDot = containerElement.querySelector("#portfolioTooltipDot");
+    const tooltipOrbit = containerElement.querySelector(
+      "#portfolioTooltipOrbit"
+    );
     const tooltipBox = containerElement.querySelector("#portfolioTooltipBox");
+    const tooltipCorners = containerElement.querySelector(
+      "#portfolioTooltipCorners"
+    );
     const tooltipDateEl = containerElement.querySelector(
       "#portfolioTooltipDate"
     );
@@ -1183,6 +1244,8 @@
       tooltipLine.setAttribute("x2", point.x);
       tooltipDot.setAttribute("cx", point.x);
       tooltipDot.setAttribute("cy", point.y);
+      tooltipOrbit.setAttribute("cx", point.x);
+      tooltipOrbit.setAttribute("cy", point.y);
 
       const boxWidth = 210;
       const boxHeight = 168;
@@ -1199,6 +1262,12 @@
 
       tooltipBox.setAttribute("x", boxX);
       tooltipBox.setAttribute("y", boxY);
+      if (global.WL_THEME) {
+        tooltipCorners.setAttribute(
+          "d",
+          global.WL_THEME.hudCornersPath(boxX, boxY, boxWidth, boxHeight)
+        );
+      }
 
       tooltipDateEl.setAttribute("x", boxX + pad);
       tooltipDateEl.setAttribute("y", boxY + 18);

@@ -106,6 +106,14 @@ Prüfen nach dem Hinzufügen: Kachel erscheint, Portfolio-Statuszeile zählt hoc
 - Einlauf nur beim ersten Rendern. Neuzeichnen bei Zoom oder Resize erzeugt die Elemente ohne Motion-Klassen.
 - Hochzählen verändert den angezeigten Endtext nicht; Formatierung bleibt Sache der bestehenden Formatierfunktionen.
 
+### 6.2b Visuelles Theme (D-031)
+
+- Theme umschalten nur über `WL_VISUAL_THEME` in `js/theme.js` (`"aurora"` oder `"classic"`). `theme.js` bleibt synchron im `<head>` beider Seiten.
+- Aurora-Regeln nur in `css/theme-aurora.css` und nur unter `html[data-theme="aurora"]`; keine Aurora-Farben in `landing.css`, `styles.css` oder im Chart-JavaScript.
+- Neue Chart-Elemente erhalten eine Klasse nach dem Muster `wl-c-*`. Die Farben im Markup bleiben die classic-Farben; zusätzliche Aurora-Elemente tragen `visibility="hidden"`.
+- Keine SVG-Filter auf Pfaden, die beim Zoom neu gezeichnet werden; Glow über zusätzliche breite Pfade.
+- Nach jeder Änderung prüfen, dass `classic` pixelgleich bleibt (Referenzbilder, Reduced-Motion, feste Fenstergrösse).
+
 ### 6.3 CSS
 
 - Farben, Abstände, Radien über die `:root`-Variablen verwenden; keine neuen Hartwerte, wo eine Variable existiert (D-019).
@@ -176,6 +184,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 10. Motion (D-027): Ab 701 px driftet der Hintergrund und färbt sich nach dem letzten Regime-Zustand; unter 701 px nicht. Beim Prüfen im Headless-Browser GPU-Beschleunigung nicht abschalten, sonst täuscht die Drift eine niedrige Bildrate vor.
 11. Motion (D-028): Sichtbare Kacheln steigen nach dem Loader gestaffelt auf, weitere beim Scrollen; jede Kachel zeigt eine Sparkline; der Wechsel zum Dashboard und zurück überblendet (Chrome, Edge).
 12. Loader (D-030): Beim Laden zeichnet sich im Loader eine Mini-Equity-Kurve in einer Schleife ein; zum Prüfen das Netzwerk drosseln, sonst ist der Loader nur kurz sichtbar.
+13. Theme (D-031): Mit `aurora` Sternenhimmel, Verlaufslinien mit Glow, HUD-Tooltip, Polarlicht-Bänder im Regime-Panel; mit `classic` (in `js/theme.js` umstellen) exakt das bisherige Design.
 
 **Dashboard (`dashboard/index.html?system=<slug>`)**
 
