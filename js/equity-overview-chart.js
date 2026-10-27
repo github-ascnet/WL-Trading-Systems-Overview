@@ -1036,8 +1036,13 @@
     // --- Drawdown-Serie (eigene Y-Skalierung, rechte Achse) ---
     const drawdownSeries = calculateDrawdownSeries(chartSeries);
     const rawDrawdownMin = Math.min(...drawdownSeries.map((p) => p.drawdown));
-    // Mindestens -5 % Achsenausdehnung, damit die Achse bei sehr kleinen Drawdowns sinnvoll bleibt
-    const drawdownAxisMin = -30;
+    // Mindestens -30 %; tiefere Drawdowns erweitern die Achse auf das nächste 10-%-Raster (höchstens -100 %)
+    const drawdownAxisMin = Number.isFinite(rawDrawdownMin)
+      ? Math.max(-100, Math.min(-30, Math.floor(rawDrawdownMin / 10) * 10))
+      : -30;
+    // Bis -30 % in 5-%-Schritten, darüber in 10-%-Schritten
+    const drawdownAxisStep = drawdownAxisMin >= -30 ? 5 : 10;
+    const drawdownAxisSteps = Math.round(-drawdownAxisMin / drawdownAxisStep);
 
     const drawdownPoints = drawdownSeries.map((item, index) => {
       const ddRatio =
@@ -1103,10 +1108,10 @@
       )}</text>`;
     }).join("");
 
-    // 5%-Schritte: 0%, -5%, -10%, -15%, -20%, -25%, -30%
-    const drawdownAxisLabels = Array.from({ length: 7 }, (_, i) => {
-      const ddValue = i * (drawdownAxisMin / 6);
-      const ratio = i / 6;
+    // Standard 0 % bis -30 % in 5-%-Schritten; bei tieferen Drawdowns 10-%-Schritte
+    const drawdownAxisLabels = Array.from({ length: drawdownAxisSteps + 1 }, (_, i) => {
+      const ddValue = -i * drawdownAxisStep;
+      const ratio = i / drawdownAxisSteps;
       const y = margin.top + ratio * chartHeight + geometry.labelDy;
       const x = width - margin.right + 6;
       return `<text x="${x}" y="${y}" class="wl-c-axis" fill="#aeb4be" font-size="${

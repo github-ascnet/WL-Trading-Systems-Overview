@@ -588,6 +588,36 @@ body::after {
   color: #ffb6b6;
 }
 
+/* Touch: unsichtbare Tippfläche von 44 x 44 px, sichtbare Grösse unverändert (INC-25) */
+@media (pointer: coarse) {
+  .portfolio-info-icon,
+  .regime-info-icon {
+    position: relative;
+  }
+
+  .portfolio-info-icon::after,
+  .regime-info-icon::after,
+  .chart-zoom-reset::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Reduced-Motion wie im Dashboard (styles.css), inkl. Pseudo-Elemente (rotierender Kachelrand) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 @media (min-width: 1280px) {
   .landing,
   .site-footer-inner {

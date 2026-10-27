@@ -30,7 +30,11 @@ Die Liste ist eine Merkliste, kein Auftrag. Gemäss SDD wird kein Punkt umgesetz
 | OP-04 | 2026-10-27 | `FlagFile.txt` vom Auftraggeber gelöscht. |
 | OP-11 | 2026-10-27 | Strategiename auf der Landing-Seite wird nicht gekürzt (INC-11 akzeptiert). |
 | OP-12 | 2026-10-27 | Portfolio als Rohsumme; die Gewichtung erfolgt in Wealth-Lab 9 (D-013). |
+| INC-10 | BP-029 (D-041) | Keine Trophäen mehr (Schalter `showTrophies: false`). |
+| INC-14 | BP-030 (D-042) | Drawdown-Achse des Portfolio-Charts erweitert sich bei Drawdowns tiefer als −30 %. |
+| INC-20 | BP-031 (D-043) | Reduced-Motion auch auf der Landing-Seite. |
+| INC-25 | BP-031 (D-044) | Tippflächen von ca. 44 × 44 px auf Touch-Geräten. |
 
 ## Weiterhin offen
 
-Inkonsistenzen INC-10, INC-14 bis INC-20, INC-25 und offene Punkte OP-07 bis OP-09 in `project_plan.md` Kapitel 14.
+Inkonsistenzen INC-15 bis INC-19 und offene Punkte OP-07 bis OP-09 in `project_plan.md` Kapitel 14.

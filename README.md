@@ -122,6 +122,7 @@ Fehlt der Parameter, ist er ungueltig oder ist das System nicht registriert, zei
 - `display.useDisplayEquity: false`: Das Portfolio ist die Rohsumme der System-Equities. Die Gewichtung der Systeme wird in Wealth-Lab 9 festgelegt.
 - `display.showRiskRegimePanel`: Risk-Regime-Panel auf der Landing-Seite ein- oder ausblenden (Standard aus; die Regime-Faerbung des Hintergrunds bleibt).
 - `display.showRegimeStretchScore`: Stretch Score im Regime-Panel ein- oder ausblenden.
+- `display.showTrophies`: Trophaeen an den Kennzahlen ein- oder ausblenden (Standard aus).
 
 `js/theme.js`:
 

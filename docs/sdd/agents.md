@@ -181,7 +181,8 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 6. Regime-Panel: nur sichtbar bei `display.showRiskRegimePanel: true` in `kpi-config.js` (Standard `false`, D-034); dann zeigt es Kurve, Zustandsbänder und End-Label, folgt Zoom, Pan und Reset des Portfolio-Charts ohne erneutes Einzeichnen (D-038) und ist beim Ausblenden des Loaders bereits gerendert. Die Regime-Färbung wirkt in beiden Fällen.
 7. Eine Kachel je registriertem System; Klick öffnet das Dashboard mit dem richtigen Parameter.
 8. Konsole ohne neue Fehler. Warnungen zu übersprungenen Systemen sind zu prüfen.
-9. Motion (D-026): Nach dem Loader zeichnen sich Portfolio-Linie und Regime-Linie ein, die KPI-Karten zählen auf den bisherigen Endwert hoch. Zoom, Pan und Reset zeichnen nicht neu ein. Mit aktivem `prefers-reduced-motion` erscheinen die Endwerte sofort.
+9. Motion (D-026): Nach dem Loader zeichnen sich Portfolio-Linie und Regime-Linie ein, die KPI-Karten zählen auf den bisherigen Endwert hoch. Zoom, Pan und Reset zeichnen nicht neu ein. Mit aktivem `prefers-reduced-motion` erscheinen die Endwerte sofort; keine laufenden Animationen, kein Kippen der Kacheln (D-043).
+9a. Keine Trophäen an den Kennzahlen (`showTrophies: false`, D-041). Drawdown-Achse 0 bis −30 %, bei tieferem Drawdown erweitert (D-042).
 10. Motion (D-027): Ab 701 px driftet der Hintergrund und färbt sich nach dem letzten Regime-Zustand; unter 701 px nicht. Beim Prüfen im Headless-Browser GPU-Beschleunigung nicht abschalten, sonst täuscht die Drift eine niedrige Bildrate vor.
 11. Motion (D-028): Sichtbare Kacheln steigen nach dem Loader gestaffelt auf, weitere beim Scrollen; jede Kachel zeigt eine Sparkline; der Wechsel zum Dashboard und zurück überblendet (Chrome, Edge).
 12. Loader (D-030): Beim Laden zeichnet sich im Loader eine Mini-Equity-Kurve in einer Schleife ein; zum Prüfen das Netzwerk drosseln, sonst ist der Loader nur kurz sichtbar.
@@ -213,6 +214,7 @@ Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb übe
 1. In der Geräteemulation mit Touch (360 bis 412 px Breite): kein horizontales Überlaufen in allen Tabs; breite Tabellen scrollen in ihrem Rahmen.
 2. Chart-Achsen und Tooltips sind lesbar (etwa 9 px oder mehr); Tippen zeigt den Tooltip.
 2a. Touch (D-039): Waagrechtes Wischen mit einem Finger führt den Tooltip (beide Charts) und verschiebt den Ausschnitt nicht; zwei Finger zoomen und verschieben das Portfolio-Chart, auch über mehrere Bewegungen; Doppeltippen setzt zurück; senkrechtes Wischen scrollt die Seite.
+2b. Tippflächen (D-044): Info-Symbole, Hamburger und Zoom-Reset reagieren auf Touch-Geräten in ca. 44 × 44 px um das Symbol.
 3. Neue Chart-Elemente erhalten ihre Grössen aus der Geometrie (`getChartGeometry` bzw. `SIZES_WIDE`/`SIZES_NARROW`), keine festen Pixelwerte im Markup und keine CSS-Schriftgrössen für SVG-Texte.
 
 ### 9.3 Berichten

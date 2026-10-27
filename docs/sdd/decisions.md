@@ -69,6 +69,10 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-038 | Regime-Panel folgt Zoom und Pan des Portfolio-Charts | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-039 | Touch-Gesten der Charts: ein Finger Tooltip, zwei Finger Zoom/Pan | Bedienung | Verbindlich (Auftrag 2026-10-26) |
 | D-040 | `wl-signals.json` bleibt als Reserve, keine Anzeige | Daten | Verbindlich (Auftrag 2026-10-27) |
+| D-041 | Keine Trophäen (Schalter `showTrophies`) | Darstellung | Verbindlich (Auftrag 2026-10-27) |
+| D-042 | Drawdown-Achse des Portfolio-Charts dynamisch ab −30 % | Darstellung | Verbindlich (Auftrag 2026-10-27) |
+| D-043 | Reduced-Motion auch auf der Landing-Seite | Barrierefreiheit | Verbindlich (Auftrag 2026-10-27) |
+| D-044 | Tippflächen von 44 × 44 px auf Touch-Geräten | Bedienung | Verbindlich (Auftrag 2026-10-27) |
 
 ---
 
@@ -230,7 +234,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Entscheidung** | Farbe und Trophäe einer Kennzahl werden zentral in `WL_KPI_CONFIG.metrics` über geordnete Regeln definiert (erste zutreffende Regel gewinnt) und über `getKpiPresentation(metricKey, value, surface)` abgefragt. Oberflächen: `landing` und `dashboard`. |
 | **Begründung** | nicht dokumentiert |
 | **Quelle** | `js/kpi-config.js` |
-| **Konsequenz** | Schwellenwerte werden ausschliesslich dort geändert, nicht in Render-Code. Aufrufer liefern einen Fallback, falls die Funktion fehlt. Regeltabelle siehe `project_plan.md` Kapitel 9. |
+| **Konsequenz** | Schwellenwerte werden ausschliesslich dort geändert, nicht in Render-Code. Aufrufer liefern einen Fallback, falls die Funktion fehlt. Regeltabelle siehe `project_plan.md` Kapitel 9. Trophäen sind seit D-041 über `display.showTrophies` abgeschaltet. |
 
 ## D-017 – Zoom und Pan nur im Portfolio-Chart
 
@@ -478,3 +482,39 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Entscheidung** | `wl-signals.json` bleibt Teil der Vier-Dateien-Konvention (D-004) und wird weiterhin geladen, aber nicht angezeigt. Eine Anzeige der aktuellen Signale ist für später vorgesehen und nicht beauftragt. |
 | **Begründung** | Der Auftraggeber möchte die Datei für eine spätere Anzeige der jeweils neuen Signale behalten. |
 | **Konsequenz** | INC-12 ist akzeptiert; Laden und `signalCount` bleiben unverändert. Die README nennt die Datei als Reserve. |
+
+## D-041 – Keine Trophäen (Schalter `showTrophies`)
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-27; Arbeitspaket BP-029) |
+| **Entscheidung** | `getKpiPresentation` liefert `trophy` nur, wenn `WL_KPI_CONFIG.display.showTrophies` `true` ist; der Wert ist `false`. Die `trophy`-Angaben in den Regeln bleiben stehen. Gilt für beide Themes und alle Oberflächen (Kacheln, Portfolio-KPIs, Dashboard-Karten). |
+| **Begründung** | Die Trophäen passen nicht mehr ins Aurora-Design (Auftraggeber). Erledigt zugleich INC-10. |
+| **Konsequenz** | Auch `classic` zeigt keine Trophäen mehr; die classic-Referenzbilder ändern sich nur an diesen Stellen (Ausnahme von D-031 "classic pixelgleich", vom Auftraggeber gewollt). Wiedereinschalten über `showTrophies: true`. |
+
+## D-042 – Drawdown-Achse des Portfolio-Charts dynamisch ab −30 %
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-27; Arbeitspaket BP-030) |
+| **Entscheidung** | Die rechte Achse reicht mindestens bis −30 % (5-%-Schritte, wie bisher). Ist der tiefste Drawdown der gezeichneten Serie tiefer, reicht sie bis zum nächsten 10-%-Raster (höchstens −100 %) mit 10-%-Schritten. |
+| **Begründung** | INC-14: Drawdowns tiefer als −30 % wurden am unteren Rand abgeschnitten. |
+| **Konsequenz** | Bei den heutigen Daten (Max-DD um −14 %) bleibt das Chart unverändert. |
+
+## D-043 – Reduced-Motion auch auf der Landing-Seite
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-27; Arbeitspaket BP-031) |
+| **Entscheidung** | `landing.css` schaltet bei `prefers-reduced-motion: reduce` alle Animationen und Übergänge ab, einschliesslich Pseudo-Elementen (rotierender Kachelrand), wie `styles.css` im Dashboard. `landing.js` hängt den Kipp-Effekt der Kacheln bei Reduced-Motion nicht an (`WL_MOTION.enabled`). Hover-Farben und -Schatten bleiben als statischer Zustand. |
+| **Begründung** | INC-20: Loader, Kachel-Kippen und rotierender Rand liefen bei Reduced-Motion weiter. |
+| **Konsequenz** | Ohne Reduced-Motion unverändert. |
+
+## D-044 – Tippflächen von 44 × 44 px auf Touch-Geräten
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-27; Arbeitspaket BP-031) |
+| **Entscheidung** | Unter `@media (pointer: coarse)` erhalten Info-Symbol des Dashboards (`.header-info`), Hamburger, Zoom-Reset und die Info-Symbole der Landing-Seite ein unsichtbares, zentriertes `::after` von 44 × 44 px. Die sichtbare Grösse bleibt. |
+| **Begründung** | INC-25: Tippflächen von 18 × 18 bis 26 × 26 px waren auf Smartphones schwer zu treffen. |
+| **Konsequenz** | Desktop (feiner Zeiger) unverändert. Das Info-Symbol des Dashboards liegt in einem Titelcontainer mit `overflow: hidden` (Kürzung langer Titel); dort wirkt die Fläche etwa 44 × 33 px. |

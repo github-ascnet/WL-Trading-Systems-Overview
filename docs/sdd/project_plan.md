@@ -310,7 +310,7 @@ Struktur: `{ date, value (0–100), state }`. [DATEN] Dieser Ordner ist kein Han
 | FR-L-02 | Die Seite zeigt einen Portfolio-Block mit Titel "Wealth-Lab Portfolio", Statusanzeige (`"<geladen>/<gesamt> systems included"`), Equity-Chart und KPI-Karten. | [CODE] |
 | FR-L-03 | Ein Info-Symbol "!" zeigt per Hover die Portfolio-Historie als Tooltip (auf Mobile unterhalb des Titels über die volle Breite). | [CODE] |
 | FR-L-04 | Das Portfolio wird aus **allen** in `SYSTEMS` registrierten Systemen aggregiert. Fehlschlagende Systeme werden übersprungen und per `console.warn` gemeldet. | [CODE] |
-| FR-L-05 | Der Chart zeigt Equity (log-Skala, linke Achse), Drawdown (rechte Achse, orange) und Jahreslabels. | [CODE] |
+| FR-L-05 | Der Chart zeigt Equity (log-Skala, linke Achse), Drawdown (rechte Achse, orange; 0 bis −30 % in 5-%-Schritten, bei tieferem Drawdown bis zum nächsten 10-%-Raster in 10-%-Schritten, D-042) und Jahreslabels. | [CODE] |
 | FR-L-06 | Der Chart unterstützt Zoom (Mausrad), Pan (Ziehen), Reset (Doppelklick, Reset-Button), Touch (Pinch, Wischen) und einen Crosshair-Tooltip mit neun Werten. | [CODE] |
 | FR-L-07 | Sechs KPI-Karten: APR/CAGR, Profit %, Max Drawdown, Profit Factor, Sharpe Ratio, Profitable %. Die Karten können über `showPortfolioOverviewKpis` ausgeblendet werden. | [CODE] |
 | FR-L-08 | Ein Risk-Regime-Panel zeigt den Composite Score (0–100) mit Zustands-Hintergrund und optional den Stretch Score. Die X-Achse folgt dem Zeitraum des Portfolio-Charts. | [CODE] |
@@ -325,7 +325,7 @@ Struktur: `{ date, value (0–100), state }`. [DATEN] Dieser Ordner ist kein Han
 
 Anzeige: Name (`strategyName`, unverändert), Beschreibung (falls vorhanden), Sparkline der Equity-Kurve (seit BP-015, FR-M-15), und die Zeilen Universe, APR/CAGR, Profit % (0 Dezimalstellen), Profitable %, Sharpe Ratio, Max Drawdown, Last Updated (`dd/mm/yyyy, hh:mm`, en-GB).
 
-Farbregeln: APR, Profitable %, Sharpe, Max Drawdown werden über `getKpiPresentation(..., "landing")` eingefärbt; Trophäe bei Profitable % und Sharpe. Die APR-Zeile rendert **keine** Trophäe, obwohl die Regel eine definiert (INC-10).
+Farbregeln: APR, Profitable %, Sharpe, Max Drawdown werden über `getKpiPresentation(..., "landing")` eingefärbt. Trophäen sind seit 2026-10-27 über `display.showTrophies: false` abgeschaltet (D-041); zuvor bei Profitable % und Sharpe, nicht bei APR (INC-10).
 
 ---
 
@@ -452,6 +452,7 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 | `useDisplayEquity` | `false` | Chart und KPIs auf Equal-Weight-Kurve (`true`) oder Rohsumme (`false`) |
 | `showRegimeStretchScore` | `false` | Stretch Score und Legende ein/aus |
 | `showRiskRegimePanel` | `false` | Risk-Regime-Panel der Landing-Seite ein/aus; die Regime-Färbung bleibt (D-034) |
+| `showTrophies` | `false` | Trophäen an den Kennzahlen ein/aus; die `trophy`-Regeln (🏆 oben) bleiben erhalten (D-041) |
 
 ---
 
@@ -472,7 +473,8 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 | ≥ 701 px (JS) | Tilt-Effekt der Kacheln aktiv (zur Renderzeit geprüft) |
 | ≥ 1280 px (Landing) | Layoutbreite bis 1360 px, Kacheln `auto-fit` ab 260 px |
 | ≤ 768 px (Dashboard) | Tabs als Dropdown-Menü per Hamburger, Mobile-Spaltenreduktion (`col-hide-mobile`) |
-| `prefers-reduced-motion` | Animationen reduziert (Dashboard) |
+| `prefers-reduced-motion` | Animationen und Übergänge aus (Dashboard und Landing, D-043), kein Kippen der Kacheln |
+| `pointer: coarse` (Touch) | Tippfläche von Info-Symbolen, Hamburger und Zoom-Reset 44 × 44 px bei unveränderter sichtbarer Grösse (D-044) |
 
 ### 10.3 Barrierefreiheit (belegte Merkmale)
 
@@ -499,7 +501,7 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 | FR-M-02 | Das Regime-Panel zeichnet die Composite-Linie ein; die Zustandsbänder (und, falls aktiviert, die Stretch-Linie) blenden verzögert ein. | Auftrag |
 | FR-M-03 | Im Dashboard zeichnet sich die Equity-Linie des System-Charts beim ersten Sichtbarwerden des Tabs "Equity Curve" ein. | Auftrag |
 | FR-M-04 | Die Zahlenwerte der sechs Portfolio-KPI-Karten (Landing) und der neun Overview-Karten (Dashboard) zählen von 0 auf den Endwert hoch. Der Endwert ist exakt der bisherige formatierte Text. Nicht numerische Werte ("-", "N/A") werden nicht animiert. | Auftrag |
-| FR-M-05 | Trophäen erscheinen nach dem Hochzählen mit einem kurzen Pop-Effekt. | Auftrag |
+| FR-M-05 | Trophäen erscheinen nach dem Hochzählen mit einem kurzen Pop-Effekt. Seit D-041 sind Trophäen abgeschaltet; der Effekt greift nur bei `showTrophies: true`. | Auftrag |
 | FR-M-06 | Die Animationen starten erst, nachdem der Loader ausgeblendet ist (Fallback nach 8 s). Zoom, Pan, Resize und Neuzeichnen lösen keine erneute Einlaufanimation aus. | Auftrag |
 | FR-M-07 | Bei `prefers-reduced-motion: reduce` und ohne `motion.js` erscheint der Endzustand sofort; Funktion und Werte sind identisch. | Auftrag |
 
@@ -627,11 +629,11 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | INC-07 | T | **Behoben (BP-025, D-037).** Das Dashboard prüft nur das Slug-Muster, nicht das Register: unregistrierte Systeme sind per URL aufrufbar. README beschreibt `systems.js` als Eintragspunkt, nicht als Zugriffsschutz. | `dashboard-loader.js` |
 | INC-08 | T | **Behoben (BP-025):** NaN-Bereinigung jetzt in allen Ladepfaden. `fetchJson` existiert dreifach: `landing.js` und `dashboard-loader.js` mit NaN-Bereinigung, `equity-overview-chart.js` und `regime-engine-chart.js` mit `response.json()` ohne Bereinigung. Eine Equity- oder Positionsdatei mit `NaN` lässt das System im Portfolio-Chart entfallen, obwohl Kachel und Dashboard laden würden. | vier JS-Dateien |
 | INC-09 | T | **Behoben (BP-026, D-038).** Das Regime-Panel wird einmalig mit dem Gesamtzeitraum gerendert; Zoom/Pan des Portfolio-Charts ändert es nicht. Die Achsen laufen bei Zoom auseinander. Zudem wird `initRegimeEnginePanel` nicht abgewartet, der Loader kann vor dem Panel verschwinden. | `landing.js`, `equity-overview-chart.js`, `regime-engine-chart.js` |
-| INC-10 | T | `apr`-Regel definiert `trophy: true` (≥ 50), aber weder Kachel noch Dashboard-Karte rendern die Trophäe für APR. Die Portfolio-KPI-Karten rendern sie. | `kpi-config.js`, `landing.js`, `main.js`, `equity-overview-chart.js` |
+| INC-10 | T | **Behoben (BP-029, D-041): Trophäen abgeschaltet.** `apr`-Regel definiert `trophy: true` (≥ 50), aber weder Kachel noch Dashboard-Karte rendern die Trophäe für APR. Die Portfolio-KPI-Karten rendern sie. | `kpi-config.js`, `landing.js`, `main.js`, `equity-overview-chart.js` |
 | INC-11 | T | **Akzeptiert (OP-11: nein, 2026-10-27).** Landing zeigt `strategyName` ungekürzt, das Dashboard entfernt Klammerzusätze (`cleanStrategyName`). Der Name kann zwischen Kachel und Dashboard abweichen. | `landing.js`, `main.js` |
 | INC-12 | T | **Akzeptiert (OP-05, D-040):** Die Datei bleibt als Reserve für eine spätere Signalanzeige. `wl-signals.json` wird je Dashboard-Aufruf geladen, aber nicht dargestellt; `signalCount` wird berechnet und nicht verwendet. Die Leermeldung wird bei `signals.length` als 1 Signal gezählt. | `dashboard-loader.js`, `main.js` |
 | INC-13 | T | **Behoben (BP-025): Overlay entfernt.** Der Max-Drawdown-Overlay im Portfolio-Chart nutzt den Verlauf `portfolioOverviewDrawdownStroke`, der keine `<stop>`-Elemente enthält; ein Verlauf ohne Stopps wird nicht gezeichnet. Der Overlay ist vermutlich unsichtbar. Der Code-Kommentar nennt ihn "kann entfernt werden". | `equity-overview-chart.js` |
-| INC-14 | T | Die Drawdown-Achse des Portfolio-Charts ist fest auf −30 % gesetzt (Kommentar nennt "mindestens −5 %"); tiefere Drawdowns werden am unteren Rand abgeschnitten. Das System-Chart skaliert dynamisch. | `equity-overview-chart.js` |
+| INC-14 | T | **Behoben (BP-030, D-042).** Die Drawdown-Achse des Portfolio-Charts ist fest auf −30 % gesetzt (Kommentar nennt "mindestens −5 %"); tiefere Drawdowns werden am unteren Rand abgeschnitten. Das System-Chart skaliert dynamisch. | `equity-overview-chart.js` |
 | INC-15 | T | Die Spaltenzahl der Fehlerzeile in der Positionstabelle ist uneinheitlich: `colspan="7"` (Loader, leere Liste) gegenüber `colspan="9"` (`renderError`) bei 7 Spalten. | `main.js`, `dashboard-loader.js` |
 | INC-16 | T | `renderLocalPanelFallback` setzt die Meldung ohne HTML-Maskierung in `innerHTML`. Aktuell stammen die Meldungen aus festen Texten und dem validierten Slug; das Risiko ist gering, die Funktion ist aber nicht defensiv. | `dashboard-loader.js` |
 | INC-17 | T | Die Standardwerte im Code (`showRegimeStretchScore ?? true`) widersprechen dem konfigurierten Wert `false`; massgeblich ist die Konfiguration. Die CSS-Klasse `regime-legend-composite` hat keinen HTML-Gegenpart. | `regime-engine-chart.js`, `kpi-config.js` |
@@ -640,9 +642,9 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | INC-22 | T | **Behoben mit BP-024:** `.app` ist ein Grid mit impliziter `auto`-Spalte; breite Tabellen (Positions, Monthly Returns) liessen die Spalte und damit die Seite auf Smartphones breiter werden als das Gerät (bis 422 px bei 390 px), Header-Buttons wurden abgeschnitten. Bestand vor BP-013. | `css/styles.css` |
 | INC-23 | T | **Behoben mit BP-024:** Portfolio- und System-Chart werden auf Smartphones nur verkleinert; Achsentexte 2,7 bis 4 px, Tooltip-Texte der Landing-Seite 3,5 bis 4,5 px (unlesbar). | `js/equity-overview-chart.js`, `js/equity-system-chart.js` |
 | INC-24 | T | **Behoben (BP-027, D-039).** Wischen über die Charts scrollt auf Touch-Geräten die Seite, statt den Tooltip mitzuführen; Tippen zeigt den Tooltip. | Chart-Overlays |
-| INC-25 | T | Offen (nicht beauftragt): Kleine Tippflächen auf Smartphones: Info-Symbol 18 × 18 px, Hamburger 26 × 18 px, Zoom-Reset 26 × 26 px. | `css/styles.css`, `css/landing.css` |
+| INC-25 | T | **Behoben (BP-031, D-044).** Kleine Tippflächen auf Smartphones: Info-Symbol 18 × 18 px, Hamburger 26 × 18 px, Zoom-Reset 26 × 26 px. | `css/styles.css`, `css/landing.css` |
 | INC-21 | T | **Behoben mit BP-023 (D-035).** Die Portfolio-Aggregation blockiert den Main-Thread beim Laden der Landing-Seite: `countOpenPositionsOnDate` durchläuft für jedes Datum der gemeinsamen Achse alle Positionen jedes Systems (Aufwand Datumswerte × Positionen). Gemessen 2026-10-26: 1 081 ms Eigenzeit (normale CPU), Gesamttask 1,26 bis 1,48 s; bei 4-fach gedrosselter CPU 19,8 bis 24,9 s Loader-Zeit. Auf langsamen Geräten lädt die Landing-Seite entsprechend lange. | `js/equity-overview-chart.js` (`countOpenPositionsOnDate`, `aggregatePortfolioSeries`) |
-| INC-20 | T | `landing.css` enthält keine `prefers-reduced-motion`-Regel; `styles.css` schaltet alle Animationen global ab. Auf der Landing-Seite laufen die bestehenden Animationen (Loader, Kachel-Hover) bei Reduced-Motion weiter. BP-013 deckt nur die neue Motion ab (FR-M-07) und ändert dies nicht. | `css/landing.css`, `css/styles.css` |
+| INC-20 | T | **Behoben (BP-031, D-043).** `landing.css` enthält keine `prefers-reduced-motion`-Regel; `styles.css` schaltet alle Animationen global ab. Auf der Landing-Seite laufen die bestehenden Animationen (Loader, Kachel-Hover) bei Reduced-Motion weiter. BP-013 deckt nur die neue Motion ab (FR-M-07) und ändert dies nicht. | `css/landing.css`, `css/styles.css` |
 
 ### 14.2 Offene Entscheidungen und fehlende Information
 

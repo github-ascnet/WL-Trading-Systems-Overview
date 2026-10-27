@@ -330,6 +330,8 @@
   }
 
   function attachCardTiltEffects(grid) {
+    // Kein Kippen bei Reduced-Motion (INC-20); Rahmen und Schatten beim Hover bleiben
+    if (window.WL_MOTION && !window.WL_MOTION.enabled) return;
     let activeCard = null;
 
     function resetCard(card) {

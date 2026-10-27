@@ -71,6 +71,9 @@ flowchart TD
     BP026["BP-026<br/>Regime folgt Zoom"]
     BP027["BP-027<br/>Touch-Gesten"]
     BP028["BP-028<br/>README, Systembestand"]
+    BP029["BP-029<br/>Keine Trophäen"]
+    BP030["BP-030<br/>Drawdown-Achse dynamisch"]
+    BP031["BP-031<br/>Reduced-Motion, Tippflächen"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -120,6 +123,10 @@ flowchart TD
     BP024 --> BP027
     BP001 --> BP028
     BP025 --> BP028
+    BP002 --> BP029
+    BP004 --> BP030
+    BP024 --> BP031
+    BP015 --> BP031
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -511,6 +518,40 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Abschlusskriterien** | a) README-Angaben stimmen mit Code und Konfiguration überein (Systemliste, Dateien, Fallbacks, Divisoren, Schalter). b) Gelöschte Ordner werden von keinem Code referenziert; Landing-Werte unverändert. c) Keine Konsolenfehler, Seitenübergang funktioniert. |
 | **Prüfung (2026-10-27)** | **Erfüllt:** a) Systemliste gegen `js/systems.js` (zehn Einträge), Strukturbaum gegen `git ls-files`, Fallbacks gegen `safeGet`-Aufrufe in `main.js` und `landing.js`, Divisoren und Schalter gegen `kpi-config.js`, NaN-Behandlung gegen alle vier `fetchJson`; keine Abweichung. b) Keine Referenz auf die gelöschten Ordner in `js/`, `css/`, HTML; Abruf liefert 404. KPI-Karten, Statuszeile (10/10) und Tooltip-Texte an 80 Positionen identisch zu vorher. c) Keine Konsolenfehler; Seitenübergang 3 von 3. **Hinweis:** Exportiert der Strategy Monitor die beiden Systeme noch, legt der nächste Export die Ordner wieder an; die Export-Einstellung liegt beim Auftraggeber. |
 
+### BP-029 – Keine Trophäen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-27) und im Browser geprüft (Chrome headless, siehe "Prüfung"); beauftragt als INC-10 |
+| **Scope** | Schalter `display.showTrophies` (`false`) in `kpi-config.js`, ausgewertet in `getKpiPresentation`. |
+| **Nicht im Scope** | Entfernen der Trophäen-Regeln oder des Render-Codes (bleiben für ein Wiedereinschalten). |
+| **Betroffene Dateien** | `js/kpi-config.js` |
+| **Anforderungen / Decisions** | D-041; D-016, FR-M-05 |
+| **Abschlusskriterien** | a) Keine Trophäe auf Landing (Kacheln, Portfolio-KPIs) und Dashboard. b) Sonst keine Änderung an Werten und Darstellung. |
+| **Prüfung (2026-10-27)** | **Erfüllt:** a) Trophäen-Elemente HEAD/neu: Landing 6 → 0, Dashboard `strong-volume-trend` 1 → 0. b) Werte an 80 Tooltip-Positionen und Statuszeile identisch; KPI-Karten unterscheiden sich nur um das Trophäen-Zeichen. `classic`-Bilder gegen HEAD (gleiche Daten): Equity-Chart, Tooltip und Monthly 0 Pixel; Overview 335, Landing oben 95 und Kacheln 2 020 Pixel, jeweils nur an den Trophäen-Positionen. Die Referenzbilder wurden danach erneuert. |
+
+### BP-030 – Drawdown-Achse des Portfolio-Charts dynamisch
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-27) und im Browser geprüft (siehe "Prüfung"); beauftragt als INC-14 |
+| **Scope** | `drawdownAxisMin` aus dem tiefsten Drawdown (mindestens −30 %, nächstes 10-%-Raster, höchstens −100 %), Achsenbeschriftung mit 5- bzw. 10-%-Schritten. |
+| **Betroffene Dateien** | `js/equity-overview-chart.js` |
+| **Anforderungen / Decisions** | D-042; FR-L-05 |
+| **Abschlusskriterien** | a) Mit den heutigen Daten unveränderte Achse (0 bis −30 %). b) Ein Drawdown tiefer als −30 % wird vollständig gezeichnet, die Achse reicht bis darunter. c) Desktop und schmaler Raum, Zoom ohne Fehler. |
+| **Prüfung (2026-10-27)** | **Erfüllt:** a) Heutige Daten (Max-DD −13,60 %): Beschriftung 0 bis −30 % in 5-%-Schritten, Bilder pixelgleich. b) Testdaten (letzte 15 % aller Equity-Kurven halbiert, Max-DD −50,35 %): Achse 0 bis −60 % in 10-%-Schritten; tiefster Punkt der Drawdown-Linie bei y = 255 von 300 (Plotunterkante), kein Punkt auf der Unterkante; vorher wäre alles unter −30 % auf der Unterkante gelegen. c) Schmaler Raum (390 px): gleiche Achse, y = 318 von 374; nach Mausrad-Zoom fehlerfrei; keine Konsolenfehler. |
+
+### BP-031 – Reduced-Motion auf der Landing-Seite, Tippflächen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-27) und im Browser geprüft (siehe "Prüfung"); beauftragt als INC-20 und INC-25 |
+| **Scope** | a) Reduced-Motion-Regel in `landing.css` (inkl. Pseudo-Elemente), kein Kipp-Effekt bei Reduced-Motion (`landing.js`). b) Unsichtbare Tippflächen von 44 × 44 px unter `pointer: coarse` (`styles.css`, `landing.css`). |
+| **Betroffene Dateien** | `css/landing.css`, `css/styles.css`, `js/landing.js` |
+| **Anforderungen / Decisions** | D-043, D-044; FR-M-07, D-036 |
+| **Abschlusskriterien** | a) Bei Reduced-Motion auf der Landing-Seite keine laufenden Animationen, keine Übergänge, kein Kippen; ohne Reduced-Motion unverändert. b) Auf Touch-Geräten Tippflächen ca. 44 × 44 px, sichtbare Grösse unverändert; Desktop pixelgleich. c) Kein horizontales Überlaufen, keine Konsolenfehler. |
+| **Prüfung (2026-10-27)** | **Erfüllt:** a) Ohne Reduced-Motion: Kachel kippt (`perspective … rotateX`), Rand rotiert (`sc-rotate-border`), 26 laufende Animationen. Mit Reduced-Motion: kein Inline-Transform, Übergänge 0 s (Kachel, Zoom-Reset, Loader), Randanimation `none`, 0 laufende Animationen; Hover-Rand sichtbar (statisch). b) Desktop: `pointer: coarse` falsch, kein `::after`, Bilder pixelgleich. Mobil (Touch-Emulation, `pointer: coarse` wahr): `::after` 44 × 44 px; Treffer in 20 px Abstand vom Mittelpunkt: Hamburger 6/6, Landing-Info 6/6, Zoom-Reset (768 px) 6/6, Dashboard-Info 4/6 (unten durch `overflow: hidden` des Titelcontainers auf ca. 44 × 33 px begrenzt, D-044). Tippen 16 px unter dem Hamburger öffnet das Menü. c) Mobile-Audit (6 Profile) ohne Überlaufen und ohne Konsolenfehler; Seitenübergang 6 von 6; BP-013/BP-014-Regression ohne Fehler. **Teilweise:** Dashboard-Info-Symbol nur ca. 44 × 33 px. **Nicht geprüft:** echte Geräte. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -527,7 +568,7 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | C-06 | `NaN`-Bereinigung in allen Ladepfaden | Entschieden, umgesetzt in BP-025 |
 | C-07 | Regime-Panel bei Zoom synchronisieren, Loader-Abwarten | Entschieden, umgesetzt in BP-026 (D-038) |
 | C-08 | Verlaufsdefinition des Max-DD-Overlays klären oder Overlay entfernen | Entschieden (entfernen), umgesetzt in BP-025 |
-| C-09 | Drawdown-Achse des Portfolio-Charts dynamisch statt fest | INC-14 |
+| C-09 | Drawdown-Achse des Portfolio-Charts dynamisch statt fest | Entschieden, umgesetzt in BP-030 (D-042) |
 | C-10 | Gemeinsame Hilfsfunktionen statt Duplikate | INC-19: ja/nein; würde D-001 nicht verletzen, ist aber Refactoring |
 | C-11 | Angaben zur Berechnungsvariante, Skalierung und Ampelschwellen dokumentieren | OP-06 und OP-12 dokumentiert (BP-028); OP-07 offen |
 
@@ -563,4 +604,7 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | INC-09 (FR-L-08) | BP-026 | D-038 |
 | INC-24 (FR-L-06, FR-D-08) | BP-027 | D-039 |
 | INC-01 bis INC-03, INC-06; OP-03, OP-05 | BP-028 | D-040 |
+| INC-10 (FR-M-05) | BP-029 | D-041 |
+| INC-14 (FR-L-05) | BP-030 | D-042 |
+| INC-20, INC-25 (FR-M-07) | BP-031 | D-043, D-044 |
 | Q-01 | alle | D-001 |

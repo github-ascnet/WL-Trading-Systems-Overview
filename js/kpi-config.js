@@ -37,6 +37,8 @@
       showRegimeStretchScore: false,
       // false → Risk-Regime-Panel auf der Landing-Seite ausblenden (die Regime-Färbung des Hintergrunds bleibt)
       showRiskRegimePanel: false,
+      // false → keine Trophäen an den Kennzahlen (die trophy-Regeln unten bleiben für später erhalten)
+      showTrophies: false,
     },
     metrics: {
       apr: {
@@ -143,7 +145,9 @@
         surface === "dashboard"
           ? colorConfig.dashboardClass
           : colorConfig.landingClass,
-      trophy: Boolean(matchedRule.trophy),
+      trophy:
+        WL_KPI_CONFIG.display.showTrophies === true &&
+        Boolean(matchedRule.trophy),
       color: colorConfig.label,
       hex: colorConfig.hex,
     };
