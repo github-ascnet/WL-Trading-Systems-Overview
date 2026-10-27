@@ -4,7 +4,7 @@
 |---|---|
 | Dokumenttyp | SDD – Arbeitsregeln |
 | Modus | INIT (Reverse-Dokumentation) |
-| Stand | 2026-10-26 |
+| Stand | 2026-10-27 |
 | Bezug | `project_plan.md`, `decisions.md`, `build_plan.md` |
 
 Dieses Dokument enthält nur Regeln, die aus dem Projekt selbst hervorgehen (README, Code-Konventionen, Git-Verhalten) oder aus dem Auftrag. Es definiert keine zusätzlichen Technologien oder Prozesse. Regeln mit **[Ist]** sind aus dem vorhandenen Code abgeleitet; sie gelten, solange der Auftraggeber sie nicht ändert.
@@ -46,7 +46,7 @@ Rangfolge bei Konflikten: `project_plan.md` → `decisions.md` → `build_plan.m
 | `js/systems.js` | Systemregister (nur `id`, `dataPath`) | Berechnungen, Texte |
 | `js/kpi-config.js` | Schwellen, Farben, Anzeigeschalter | Render-Code |
 | `js/motion.js`, `css/motion.css` | Einlaufanimationen (D-026) | Berechnungen, Datenzugriff |
-| `systems/<slug>/` | Systemdaten (vier Dateien) | zusätzliche Dateien ohne Entscheidung (Ausnahme im Ist: `FlagFile.txt`, OP-04) |
+| `systems/<slug>/` | Systemdaten (vier Dateien) | zusätzliche Dateien ohne Entscheidung; Ordner nicht registrierter Systeme (seit BP-028 keine mehr) |
 | `systems/risk-regime/` | Regime-Daten | Handelssystem-Daten |
 | `docs/sdd/` | SDD-Dokumente | Quellcode |
 
@@ -155,7 +155,7 @@ Bevorzugt wird die kleinste fachlich und technisch vollständige Änderung. Best
 3. Neue Arbeitspakete erhalten die nächste freie ID (BP-013 ff.) und kommen nicht rückwirkend in den Plan, um bereits erfolgte Änderungen zu legitimieren.
 4. Statuswerte im Build-Plan wechseln nur, wenn die Abschlusskriterien geprüft sind.
 5. Offene Fragen bleiben als "offen" markiert und werden nicht als entschieden dargestellt.
-6. Die `README.md` ist veraltet (INC-01 bis INC-03). Sie wird nur im Rahmen eines beauftragten Pakets aktualisiert.
+6. Die `README.md` beschreibt seit BP-028 den Ist-Stand. Ändern sich Systemliste, Dateistruktur, Konfiguration oder Betriebsablauf, wird sie im selben Paket nachgezogen.
 7. Neue Abweichungen erhalten die nächste freie ID (INC-20 ff., OP-13 ff.).
 8. Die Dokumente sind in Schweizer Rechtschreibung (ohne "ß") und im sachlichen Stil der bestehenden SDD-Dateien zu pflegen.
 

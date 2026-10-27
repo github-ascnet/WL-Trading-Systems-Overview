@@ -4,7 +4,7 @@
 |---|---|
 | Dokumenttyp | SDD – Build-Plan |
 | Modus | INIT (Reverse-Dokumentation) |
-| Stand | 2026-10-26 |
+| Stand | 2026-10-27 |
 | Bezug | `project_plan.md` (Anforderungen), `decisions.md` (Entscheidungen), `agents.md` (Arbeitsregeln) |
 
 ## 1. Lesehinweise
@@ -70,6 +70,7 @@ flowchart TD
     BP025["BP-025<br/>Register, NaN, Overlay, Meta"]
     BP026["BP-026<br/>Regime folgt Zoom"]
     BP027["BP-027<br/>Touch-Gesten"]
+    BP028["BP-028<br/>README, Systembestand"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -117,6 +118,8 @@ flowchart TD
     BP004 --> BP025
     BP022 --> BP026
     BP024 --> BP027
+    BP001 --> BP028
+    BP025 --> BP028
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -283,7 +286,8 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Ziel** | Erzeugung und Veröffentlichung der JSON-Dateien. |
 | **Scope** | Export von `wl-*.json`, Regime-Dateien, automatischer Commit `Auto update trading dashboard <Zeitstempel>`. |
 | **Hinweis** | Nicht Teil dieses Repositorys. Das Paket steht hier nur, damit die Abhängigkeit sichtbar ist. Schnittstelle zum Repository ist ausschliesslich das Datenformat aus `project_plan.md` Kapitel 5. |
-| **Abschlusskriterien** | nicht definierbar ohne Information (OP-01) |
+| **Hinweis zum Ablauf** | Wealth-Lab 9 Strategy Monitor → Git-CLI → GitHub → Cloudflare (Angabe des Auftraggebers 2026-10-27, D-023). |
+| **Abschlusskriterien** | nicht prüfbar (ausserhalb des Repositorys) |
 
 ### BP-013 – Motion: Einlaufanimation von Charts und Kennzahlen
 
@@ -493,6 +497,20 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Abschlusskriterien** | a) Waagrechtes Wischen mit einem Finger zeigt den Tooltip an der Fingerposition (beide Charts). b) Ein Finger verschiebt den Ausschnitt nicht mehr; zwei Finger zoomen und verschieben. c) Maus und Mausrad unverändert. d) Keine Konsolenfehler. |
 | **Prüfung (2026-10-26)** | **Erfüllt** (390 × 844, DPR 2, Touch-Emulation, CDP-Touch-Ereignisse): a) Portfolio-Chart: Antippen zeigt den Tooltip (19/10/18), Wischen nach rechts verschiebt ihn (22/10/23); System-Chart (Tab Equity Curve): Antippen 18/10/19, Wischen 20/10/23, nach dem Loslassen ausgeblendet. b) Nach dem Wischen mit einem Finger Achse unverändert (2016–2026). Zwei Finger, sechs Schritte auseinander: 2020–2022; danach gemeinsam verschoben: 2019–2021 (die Geste bleibt über mehrere Neuzeichnungen erhalten); Doppeltippen setzt zurück. Senkrechtes Wischen über dem Portfolio-Chart scrollt die Seite wie neben dem Chart. c) Mausrad-Zoom und Doppelklick (BP-026-Prüfung, BP-013-Skript), Maus-Tooltip-Werte an 80 Positionen unverändert. d) Mobile-Audit (sechs Profile): kein horizontales Überlaufen, Tooltip auf allen Profilen, keine Konsolenfehler. **Nicht prüfbar:** Scrollen über dem System-Chart: Der Tab passt auf 844 px, es gibt nichts zu scrollen; gleiche `touch-action` wie beim Portfolio-Chart. **Nicht geprüft:** echte Geräte, Safari/iOS. |
 
+### BP-028 – README aktualisieren, Systembestand bereinigen
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-27) und geprüft (siehe "Prüfung"); beauftragt als Todo-Punkte 1 und 2 |
+| **Ziel** | README entspricht dem Ist-Stand; nur registrierte Systemordner im Repository. |
+| **Scope** | a) README: Strukturbaum mit allen Dateien, zehn registrierte Systeme, Beispiel-URL, Freigabe über `systems.js` (D-037), Datenfluss und Betrieb (D-023), Konfiguration inkl. Skalierung (D-015) und Rohsumme (D-013), `wl-signals.json` als Reserve (D-040), Hinweis HTTP-Server. b) Ordner `monday-anchor-reversion-500k-cap` und `multifactor-edge` löschen (OP-03). c) `FlagFile.txt` vom Auftraggeber gelöscht (OP-04), Löschung mit committen. d) SDD: Antworten zu OP-01 bis OP-06, OP-11, OP-12 eintragen. |
+| **Nicht im Scope** | Signalanzeige (D-040); Code-Änderungen; Export-Einstellungen in Wealth-Lab 9. |
+| **Voraussetzungen** | BP-001, BP-025 |
+| **Betroffene Dateien** | `README.md`, `systems/monday-anchor-reversion-500k-cap/*`, `systems/multifactor-edge/*`, `systems/short-burst-momentum/FlagFile.txt`, `docs/sdd/*` |
+| **Anforderungen / Decisions** | INC-01 bis INC-03, INC-06; OP-01 bis OP-06, OP-11, OP-12; D-013, D-015, D-023, D-037, D-040 |
+| **Abschlusskriterien** | a) README-Angaben stimmen mit Code und Konfiguration überein (Systemliste, Dateien, Fallbacks, Divisoren, Schalter). b) Gelöschte Ordner werden von keinem Code referenziert; Landing-Werte unverändert. c) Keine Konsolenfehler, Seitenübergang funktioniert. |
+| **Prüfung (2026-10-27)** | **Erfüllt:** a) Systemliste gegen `js/systems.js` (zehn Einträge), Strukturbaum gegen `git ls-files`, Fallbacks gegen `safeGet`-Aufrufe in `main.js` und `landing.js`, Divisoren und Schalter gegen `kpi-config.js`, NaN-Behandlung gegen alle vier `fetchJson`; keine Abweichung. b) Keine Referenz auf die gelöschten Ordner in `js/`, `css/`, HTML; Abruf liefert 404. KPI-Karten, Statuszeile (10/10) und Tooltip-Texte an 80 Positionen identisch zu vorher. c) Keine Konsolenfehler; Seitenübergang 3 von 3. **Hinweis:** Exportiert der Strategy Monitor die beiden Systeme noch, legt der nächste Export die Ordner wieder an; die Export-Einstellung liegt beim Auftraggeber. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -501,17 +519,17 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 
 | Kandidat | Bezug | Entscheidung erforderlich |
 |---|---|---|
-| C-01 | README an Ist-Stand anpassen (zehn Systeme, Dateiliste, Beispiel-URL) | INC-01 bis INC-03: ja/nein |
-| C-02 | Systembeschreibung "9 systems" und Footerjahr vereinheitlichen | INC-04 umgesetzt in BP-025; INC-05: ja/nein, gewünschter Wortlaut |
-| C-03 | Zwei nicht registrierte Systeme behandeln | OP-03: registrieren, aktualisieren oder entfernen |
-| C-04 | Anzeige oder Entfall der Signale | OP-05 |
+| C-01 | README an Ist-Stand anpassen (zehn Systeme, Dateiliste, Beispiel-URL) | Entschieden, umgesetzt in BP-028 |
+| C-02 | Systembeschreibung "9 systems" und Footerjahr vereinheitlichen | Erledigt: INC-04 in BP-025, INC-05 in BP-022 |
+| C-03 | Zwei nicht registrierte Systeme behandeln | Entschieden (entfernen), umgesetzt in BP-028 |
+| C-04 | Anzeige oder Entfall der Signale | Entschieden: Datei bleibt als Reserve, keine Anzeige (D-040) |
 | C-05 | Dashboard auf registrierte Systeme beschränken | Entschieden, umgesetzt in BP-025 (D-037) |
 | C-06 | `NaN`-Bereinigung in allen Ladepfaden | Entschieden, umgesetzt in BP-025 |
 | C-07 | Regime-Panel bei Zoom synchronisieren, Loader-Abwarten | Entschieden, umgesetzt in BP-026 (D-038) |
 | C-08 | Verlaufsdefinition des Max-DD-Overlays klären oder Overlay entfernen | Entschieden (entfernen), umgesetzt in BP-025 |
 | C-09 | Drawdown-Achse des Portfolio-Charts dynamisch statt fest | INC-14 |
 | C-10 | Gemeinsame Hilfsfunktionen statt Duplikate | INC-19: ja/nein; würde D-001 nicht verletzen, ist aber Refactoring |
-| C-11 | Angaben zur Berechnungsvariante, Skalierung und Ampelschwellen dokumentieren | OP-06, OP-07, OP-12 (reine Dokumentation) |
+| C-11 | Angaben zur Berechnungsvariante, Skalierung und Ampelschwellen dokumentieren | OP-06 und OP-12 dokumentiert (BP-028); OP-07 offen |
 
 ---
 
@@ -544,4 +562,5 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | INC-04, INC-07, INC-08, INC-13 | BP-025 | D-037 |
 | INC-09 (FR-L-08) | BP-026 | D-038 |
 | INC-24 (FR-L-06, FR-D-08) | BP-027 | D-039 |
+| INC-01 bis INC-03, INC-06; OP-03, OP-05 | BP-028 | D-040 |
 | Q-01 | alle | D-001 |

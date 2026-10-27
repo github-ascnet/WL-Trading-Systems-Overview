@@ -4,7 +4,7 @@
 |---|---|
 | Dokumenttyp | SDD – Entscheidungsregister |
 | Modus | INIT (Reverse-Dokumentation) |
-| Stand | 2026-10-26 |
+| Stand | 2026-10-27 |
 | Bezug | `project_plan.md`, `build_plan.md`, `agents.md` |
 
 ## Lesehinweise
@@ -41,9 +41,9 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-010 | Kein Browser-Caching der Daten | Betrieb | Ist-Zustand |
 | D-011 | Charts als handgeschriebenes Inline-SVG | Darstellung | Ist-Zustand |
 | D-012 | Logarithmische Equity-Achse, Drawdown auf rechter Achse | Darstellung | Ist-Zustand |
-| D-013 | Portfolio als Rohsumme der Systemkurven mit Carry-Forward | Berechnung | Ist-Zustand |
+| D-013 | Portfolio als Rohsumme der Systemkurven mit Carry-Forward | Berechnung | Verbindlich (bestätigt 2026-10-27) |
 | D-014 | Portfolio-KPIs clientseitig aus Equity- und Positionsdaten | Berechnung | Ist-Zustand |
-| D-015 | Anzeige-Skalierung der Beträge durch Divisor | Darstellung | Ist-Zustand |
+| D-015 | Anzeige-Skalierung der Beträge durch Divisor | Darstellung | Verbindlich (bestätigt 2026-10-27) |
 | D-016 | Zentrale, regelbasierte KPI-Ampel | Darstellung | Ist-Zustand |
 | D-017 | Zoom und Pan nur im Portfolio-Chart | Darstellung | Ist-Zustand |
 | D-018 | Risk-Regime-Daten in eigenem Ordner, Panel auf Landing-Seite | Daten / Darstellung | Ist-Zustand |
@@ -51,7 +51,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-020 | Responsive Breakpoints und Mobile-Navigation | Darstellung | Ist-Zustand |
 | D-021 | Tooltips über Info-Symbol und `data-tooltip` | Bedienung | Ist-Zustand |
 | D-022 | Sprache und Formatierung (UI Englisch, `en-GB`, ohne Tausendertrenner) | Darstellung | Ist-Zustand |
-| D-023 | Datenaktualisierung über automatisierte Commits | Betrieb | Ist-Zustand |
+| D-023 | Datenaktualisierung über automatisierte Commits | Betrieb | Verbindlich (bestätigt 2026-10-27) |
 | D-024 | Keine automatisierten Tests und keine CI im Repository | Qualität | Ist-Zustand |
 | D-025 | Skript-Ladeverfahren je Seite | Architektur | Ist-Zustand; Dashboard-Teil ersetzt durch D-029 (2026-10-26) |
 | D-026 | Motion: Einlaufanimationen nur mit CSS und `requestAnimationFrame` | Darstellung | Verbindlich (Auftrag 2026-10-26) |
@@ -68,6 +68,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-037 | Dashboard öffnet nur registrierte Systeme | Dashboard / Sicherheit | Verbindlich (Auftrag 2026-10-26) |
 | D-038 | Regime-Panel folgt Zoom und Pan des Portfolio-Charts | Darstellung | Verbindlich (Auftrag 2026-10-26) |
 | D-039 | Touch-Gesten der Charts: ein Finger Tooltip, zwei Finger Zoom/Pan | Bedienung | Verbindlich (Auftrag 2026-10-26) |
+| D-040 | `wl-signals.json` bleibt als Reserve, keine Anzeige | Daten | Verbindlich (Auftrag 2026-10-27) |
 
 ---
 
@@ -119,7 +120,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Entscheidung** | Ein System wird auf der Landing-Seite durch einen Eintrag `{ id, dataPath }` in `js/systems.js` bekannt gemacht. |
 | **Begründung** | nicht dokumentiert |
 | **Quelle** | `README.md`, Abschnitt "Neues System hinzufuegen" |
-| **Konsequenz** | Die Landing-Seite und das Portfolio umfassen genau die registrierten Systeme. Die Registrierung ist **kein** Zugriffsschutz für das Dashboard (siehe INC-07, OP-10). Der Ist-Zustand weicht von der README ab, die nur ein System nennt (INC-01). |
+| **Konsequenz** | Die Landing-Seite und das Portfolio umfassen genau die registrierten Systeme. Seit D-037 (2026-10-26) ist die Registrierung auch die Freigabeliste für das Dashboard (zuvor kein Zugriffsschutz, INC-07, OP-10). Die README nennt seit BP-028 alle registrierten Systeme (INC-01 behoben). |
 
 ## D-006 – Trennung von Datenladen und Rendering
 
@@ -195,11 +196,11 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 
 | | |
 |---|---|
-| **Status** | Ist-Zustand |
+| **Status** | Verbindlich (Ist-Zustand, vom Auftraggeber bestätigt 2026-10-27, OP-12) |
 | **Entscheidung** | Die Portfolio-Equity ist die Summe der Equity-Werte aller geladenen Systeme auf einer gemeinsamen Datumsachse. Fehlende Tage werden vorwärts aufgefüllt, Tage vor dem Systemstart mit dem ersten Wert. Eine Equal-Weight-Alternative (`displayEquity`) wird berechnet, aber über `useDisplayEquity = false` nicht verwendet. |
-| **Begründung** | nicht dokumentiert; Konfigurationskommentar beschreibt die zwei Varianten |
+| **Begründung** | Die Gewichtung der Systeme legt der Auftraggeber in Wealth-Lab 9 fest; das Dashboard summiert nur (Auftraggeber 2026-10-27). |
 | **Quelle** | `equity-overview-chart.js` (`aggregatePortfolioSeries`), `kpi-config.js` |
-| **Konsequenz** | Jedes System geht mit seinem eigenen Kapital (derzeit je 100 000) ein. Ein später startendes System trägt vor seinem Start sein Startkapital bei. Die Wahl der Variante ist offen (OP-12). |
+| **Konsequenz** | Jedes System geht mit seinem eigenen Kapital (derzeit je 100 000) ein. Ein später startendes System trägt vor seinem Start sein Startkapital bei. Verbindlich ist die Rohsumme; `useDisplayEquity` bleibt `false`. |
 
 ## D-014 – Portfolio-KPIs clientseitig aus Equity- und Positionsdaten
 
@@ -215,11 +216,11 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 
 | | |
 |---|---|
-| **Status** | Ist-Zustand |
+| **Status** | Verbindlich (Ist-Zustand, vom Auftraggeber bestätigt 2026-10-27, OP-06) |
 | **Entscheidung** | Dargestellte Equity-Beträge werden durch `equityDivisor` (100) geteilt, das Starting Capital im Dashboard durch `startingCapitalDivisor` (100). Berechnungen und KPIs verwenden unskalierte Werte. |
-| **Begründung** | nicht dokumentiert (Code-Kommentar: KPIs rechnen auf Rohwerten, nur die Anzeige wird skaliert; `startingCapitalDivisor` wird im Portfolio-Chart bewusst nicht angewendet) |
+| **Begründung** | Im Dashboard sollen keine Millionenbeträge erscheinen (Auftraggeber 2026-10-27). Code-Kommentar: KPIs rechnen auf Rohwerten, nur die Anzeige wird skaliert; `startingCapitalDivisor` wird im Portfolio-Chart bewusst nicht angewendet. |
 | **Quelle** | `kpi-config.js`, `main.js`, `equity-overview-chart.js`, `equity-system-chart.js` |
-| **Konsequenz** | Angezeigte Beträge entsprechen nicht den Rohwerten in den JSON-Dateien. Der Grund ist offen (OP-06). Die Divisoren dürfen nur gemeinsam mit dieser Entscheidung geändert werden. |
+| **Konsequenz** | Angezeigte Beträge entsprechen nicht den Rohwerten in den JSON-Dateien. Die Divisoren dürfen nur gemeinsam mit dieser Entscheidung geändert werden. |
 
 ## D-016 – Zentrale, regelbasierte KPI-Ampel
 
@@ -295,11 +296,11 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 
 | | |
 |---|---|
-| **Status** | Ist-Zustand |
-| **Entscheidung** | Die JSON-Daten werden durch einen Prozess ausserhalb des Repositorys erzeugt und mit der Nachricht `Auto update trading dashboard <Zeitstempel>` auf `main` committet. |
-| **Begründung** | nicht dokumentiert |
+| **Status** | Verbindlich (Ist-Zustand, vom Auftraggeber bestätigt 2026-10-27, OP-01, OP-02) |
+| **Entscheidung** | Die JSON-Daten werden in Wealth-Lab 9 über den Strategy Monitor exportiert und über die Git-CLI mit der Nachricht `Auto update trading dashboard <Zeitstempel>` auf `main` committet und nach GitHub gepusht. Cloudflare übernimmt den Stand aus GitHub und liefert die Seite aus. |
+| **Begründung** | Angabe des Auftraggebers (2026-10-27) |
 | **Quelle** | Git-Historie (1 400 Commits, Muster seit mindestens 2026-10-22 mehrfach täglich) |
-| **Konsequenz** | Der Code muss mit jedem Exportstand lauffähig bleiben (siehe D-007, D-009). Händische Änderungen an `systems/**` können durch den nächsten Export überschrieben werden. Der Prozess selbst ist nicht dokumentiert (OP-01). |
+| **Konsequenz** | Der Code muss mit jedem Exportstand lauffähig bleiben (siehe D-007, D-009). Händische Änderungen an `systems/**` können durch den nächsten Export überschrieben werden. Der Push umfasst den gesamten lokalen `main`; lokale, noch nicht gepushte Commits gehen beim nächsten Export mit online. |
 
 ## D-024 – Keine automatisierten Tests und keine CI im Repository
 
@@ -468,3 +469,12 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Entscheidung** | Portfolio-Chart und System-Chart: Ein Finger führt den Tooltip mit (Antippen und waagrechtes Wischen). Portfolio-Chart: Zwei Finger zoomen (Pinch) und verschieben den Ausschnitt (Bewegung des Mittelpunkts); das bisherige Verschieben mit einem Finger entfällt. Die Overlays erhalten `touch-action: pan-y`, damit senkrechtes Scrollen der Seite möglich bleibt. |
 | **Begründung** | INC-24: Wischen über die Charts scrollte die Seite, statt den Tooltip mitzuführen. |
 | **Konsequenz** | Desktop (Maus, Mausrad) unverändert. |
+
+## D-040 – `wl-signals.json` bleibt als Reserve, keine Anzeige
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-27; beantwortet OP-05; Arbeitspaket BP-028) |
+| **Entscheidung** | `wl-signals.json` bleibt Teil der Vier-Dateien-Konvention (D-004) und wird weiterhin geladen, aber nicht angezeigt. Eine Anzeige der aktuellen Signale ist für später vorgesehen und nicht beauftragt. |
+| **Begründung** | Der Auftraggeber möchte die Datei für eine spätere Anzeige der jeweils neuen Signale behalten. |
+| **Konsequenz** | INC-12 ist akzeptiert; Laden und `signalCount` bleiben unverändert. Die README nennt die Datei als Reserve. |

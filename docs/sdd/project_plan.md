@@ -4,7 +4,7 @@
 |---|---|
 | Dokumenttyp | SDD – Projektplan (Soll-/Ist-Beschreibung) |
 | Modus | INIT (Reverse-Dokumentation eines bestehenden Projekts) |
-| Stand | 2026-10-26 |
+| Stand | 2026-10-27 |
 | Repository | `Wealth-Lab-Strategy-Orchestrator` (Remote: `github-ascnet/WL-Trading-Systems-Overview`) |
 | Branch / letzter Commit | `main` / `bdc3124` ("Update Regime-Filter") |
 | Begleitdokumente | `decisions.md`, `build_plan.md`, `agents.md` |
@@ -95,17 +95,17 @@ Aus den SEO-Metadaten (`robots: index, follow`, `canonical`, Open Graph, JSON-LD
 
 ```mermaid
 flowchart LR
-    WL["Wealth-Lab 9<br/>(Backtest und Export)<br/>ausserhalb des Repos"]
-    GIT["Git-Repository<br/>main"]
-    HOST["Statischer Webserver<br/>(Hosting nicht belegt)"]
+    WL["Wealth-Lab 9<br/>Strategy Monitor<br/>ausserhalb des Repos"]
+    GIT["GitHub-Repository<br/>main"]
+    HOST["Cloudflare"]
     USER["Browser des Betrachters"]
 
-    WL -- "JSON-Export, Auto-Commit<br/>'Auto update trading dashboard'" --> GIT
-    GIT -- "Auslieferung" --> HOST
+    WL -- "JSON-Export, Git-CLI<br/>'Auto update trading dashboard'" --> GIT
+    GIT -- "Übernahme" --> HOST
     HOST -- "HTML, CSS, JS, JSON" --> USER
 ```
 
-Die Kanten `WL → GIT` und `GIT → HOST` sind nur indirekt belegt (Commit-Nachrichten, `canonical`-URL). Der Exportmechanismus und das Hosting sind nicht Teil des Repositorys. [GIT] [OFFEN – OP-01, OP-02]
+Wealth-Lab 9 exportiert die Systemdaten über den Strategy Monitor; die Git-CLI lädt sie nach GitHub hoch, von dort übernimmt Cloudflare den Stand. Exportmechanismus und Hosting sind nicht Teil des Repositorys. [AUFTRAGGEBER 2026-10-27, beantwortet OP-01, OP-02]
 
 ---
 
@@ -394,11 +394,11 @@ Die Startwerte für APR und Profit beziehen sich auf den Beginn des **gesamten**
 | Profit Factor | Σ Bruttogewinn / Σ Bruttoverlust aller geschlossenen Positionen aller Systeme; Fallback auf Summe positiver/negativer Schrittrenditen |
 | Profitable % | Anteil geschlossener Gewinn-Positionen; Fallback auf Anteil positiver Schrittrenditen |
 
-Alle KPIs rechnen auf der Rohsumme, solange `useDisplayEquity` `false` ist. [CODE]
+Alle KPIs rechnen auf der Rohsumme, solange `useDisplayEquity` `false` ist. [CODE] Verbindlich ist die Rohsumme; die Gewichtung der Systeme legt der Auftraggeber in Wealth-Lab 9 fest. [AUFTRAGGEBER 2026-10-27, beantwortet OP-12]
 
 ### 8.4 Anzeige-Skalierung
 
-Equity-Beträge im Chart (Achsenbeschriftung, Tooltip) werden durch `equityDivisor` (100) geteilt, Starting Capital im Dashboard durch `startingCapitalDivisor` (100). Berechnungen bleiben unskaliert. [CODE] Der fachliche Grund der Skalierung ist nicht dokumentiert. [OFFEN – OP-06]
+Equity-Beträge im Chart (Achsenbeschriftung, Tooltip) werden durch `equityDivisor` (100) geteilt, Starting Capital im Dashboard durch `startingCapitalDivisor` (100). Berechnungen bleiben unskaliert. [CODE] Zweck: Im Dashboard sollen keine Millionenbeträge erscheinen. [AUFTRAGGEBER 2026-10-27, beantwortet OP-06]
 
 ### 8.5 Monatsrenditen (Dashboard)
 
@@ -570,23 +570,23 @@ Nicht umgesetzt (Entscheidung 2026-10-26): Puls eines Kennzahl-Farbpunkts. Berei
 
 ### 12.1 Auslieferung
 
-Statische Dateien über einen Webserver. Die `canonical`-URL lautet `https://wl-trading-systems.ascnet.ch/`. [CODE] Im Repository sind weder `CNAME`, noch Workflow-Dateien, noch Server-Konfiguration vorhanden; das Hosting ist deshalb nicht belegt. [OFFEN – OP-02]
+Statische Dateien über Cloudflare, das den Stand aus dem GitHub-Repository übernimmt. Die `canonical`-URL lautet `https://wl-trading-systems.ascnet.ch/`. [CODE] [AUFTRAGGEBER 2026-10-27, beantwortet OP-02] Im Repository liegt keine Hosting-Konfiguration.
 
-Lokaler Betrieb setzt einen HTTP-Server voraus, da `fetch` relative JSON-Dateien lädt. Eine Anleitung dazu ist im Projekt nicht dokumentiert. [OFFEN – OP-08]
+Lokaler Betrieb setzt einen HTTP-Server voraus, da `fetch` relative JSON-Dateien lädt; das README nennt dies seit BP-028, ohne ein Werkzeug vorzugeben. Ein projektspezifisches Start- und Testverfahren ist nicht festgelegt. [OFFEN – OP-08]
 
 ### 12.2 Datenaktualisierung
 
-Die Git-Historie zeigt 1 400 Commits; der überwiegende Teil trägt die Nachricht `Auto update trading dashboard <Zeitstempel>` (Autoren `ASCNET`, `Sascha Affolter`, `github-ascnet`). [GIT] Das legt einen automatisierten Export nach Backtest-Läufen nahe. Der Mechanismus liegt ausserhalb des Repositorys. [OFFEN – OP-01]
+Die Git-Historie zeigt 1 400 Commits; der überwiegende Teil trägt die Nachricht `Auto update trading dashboard <Zeitstempel>` (Autoren `ASCNET`, `Sascha Affolter`, `github-ascnet`). [GIT] Der Export läuft in Wealth-Lab 9 über den Strategy Monitor; die Git-CLI committet und pusht den Stand nach GitHub. [AUFTRAGGEBER 2026-10-27, beantwortet OP-01] Der Push umfasst den gesamten lokalen `main`, also auch noch nicht gepushte lokale Commits. [GIT]
 
 Die Anwendung selbst ist auf häufig wechselnde Daten ausgelegt: `cache: "no-store"` bei allen `fetch`-Aufrufen und Cache-Buster für die Landing-Skripte. [CODE]
 
-### 12.3 Neues System hinzufügen **[README, ergänzt um Ist-Befund]**
+### 12.3 Neues System hinzufügen **[README]**
 
-1. Ordner `systems/<slug>/` anlegen (Slug: nur `a-z`, `0-9`, `-`).
+1. Ordner `systems/<slug>/` anlegen bzw. den Export aus Wealth-Lab 9 dorthin einrichten (Slug: nur `a-z`, `0-9`, `-`).
 2. Vier Dateien ablegen: `wl-current-state.json`, `wl-equity.json`, `wl-positions.json`, `wl-signals.json`.
 3. Eintrag `{ id: "<slug>", dataPath: "./systems/<slug>" }` in `js/systems.js` ergänzen.
 
-Ohne Schritt 3 ist das System über `dashboard/index.html?system=<slug>` aufrufbar, erscheint aber weder als Kachel noch im Portfolio. [CODE]
+Ohne Schritt 3 erscheint das System weder als Kachel noch im Portfolio und ist seit D-037 auch im Dashboard nicht aufrufbar. [CODE]
 
 ---
 
@@ -597,41 +597,39 @@ Ohne Schritt 3 ist das System über `dashboard/index.html?system=<slug>` aufrufb
 | `strong-volume-trend` | ja | Tech Trend-Follower | NASDAQ 100 | QQQ | 2016-10-17 | 2026-10-23 | |
 | `adaptive-knife-juggler` | ja | Adaptive Knife Juggler | NASDAQ 100 | QQQ | 2016-10-25 | 2026-10-25 | 4 Signale |
 | `capitulation-bounce` | ja | Capitulation Bounce | NASDAQ 100 | SPY | 2016-10-17 | 2026-10-23 | 4 Signale |
-| `short-burst-momentum` | ja | Short Burst Momentum | Short Burst Momentum ETFs | QQQ | 2016-10-17 | 2026-10-23 | enthält `FlagFile.txt` |
+| `short-burst-momentum` | ja | Short Burst Momentum | Short Burst Momentum ETFs | QQQ | 2016-10-17 | 2026-10-23 | `FlagFile.txt` entfernt (2026-10-27) |
 | `monday-anchor-reversion` | ja | Monday Anchor Reversion | TQQQ | TQQQ | 2016-10-17 | 2026-10-23 | |
 | `dip-snapback` | ja | Dip Snapback | TQQQ | TQQQ | 2016-10-17 | 2026-10-23 | |
 | `multifactor-fusion` | ja | Multifactor Fusion | TQQQ | QQQ | 2016-10-17 | 2026-10-23 | |
 | `bear-market-reversion` | ja | Bear Market Reversion | SOXL | SMH | 2016-10-17 | 2026-10-23 | |
 | `volatility-cycle-catcher` | ja | Volatility Cycle Catcher | SQQQ | SPY | 2016-10-17 | 2026-10-23 | |
 | `btc-gold-regime-breakout` | ja | Btc/Gold Regime Breakout | BTC.USD (Cryptocompare) | BTC.USD | 2016-10-23 | 2026-10-19 | wöchentliche Equity |
-| `monday-anchor-reversion-500k-cap` | **nein** | Monday Anchor Reversion 500k Cap | leer | TQQQ | 2023-03-06 | 2026-10-07 | `symbolUniverse` leer, Daten veraltet |
-| `multifactor-edge` | **nein** | Multifactor Edge | TQQQ | SPY | 2016-04-20 | 2026-04-20 | Daten veraltet |
 | `risk-regime` | nein (kein System) | – | – | – | 2016-12-28 / 2017-03-24 | 2026-10-22 | nur Regime-Dateien |
 
-Alle zwölf Systeme sind "Long Only" und starten mit `startingCapital` 100 000. [DATEN]
+Alle zehn Systeme sind "Long Only" und starten mit `startingCapital` 100 000. [DATEN] Die früher vorhandenen, nicht registrierten Ordner `monday-anchor-reversion-500k-cap` und `multifactor-edge` (Daten veraltet) wurden am 2026-10-27 auf Anweisung des Auftraggebers gelöscht (BP-028, OP-03).
 
 ---
 
 ## 14. Abweichungen, offene Punkte, fehlende Information
 
-Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = technische Inkonsistenz, **E** = offene Entscheidung, **I** = fehlende Information. Keine dieser Punkte wurde korrigiert; sie sind zur Entscheidung durch den Auftraggeber aufgeführt.
+Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = technische Inkonsistenz, **E** = offene Entscheidung, **I** = fehlende Information. Punkte ohne Vermerk sind offen und werden nur nach Entscheidung des Auftraggebers bearbeitet; erledigte Punkte tragen den Vermerk "Behoben", "Akzeptiert", "Beantwortet" oder "Entschieden" mit Bezug.
 
 ### 14.1 Inkonsistenzen
 
 | ID | Typ | Befund | Betroffen |
 |---|---|---|---|
-| INC-01 | D | README nennt nur ein registriertes System (`strong-volume-trend`); `systems.js` enthält zehn. | `README.md`, `js/systems.js` |
-| INC-02 | D | README-Strukturbaum listet `kpi-config.js`, `equity-overview-chart.js`, `equity-system-chart.js`, `regime-engine-chart.js` und `systems/risk-regime/` nicht. | `README.md` |
-| INC-03 | D | README-Beispiel `?system=alpha-picks` verweist auf ein nicht vorhandenes System. | `README.md` |
+| INC-01 | D | **Behoben (BP-028):** README nennt nur ein registriertes System (`strong-volume-trend`); `systems.js` enthält zehn. | `README.md`, `js/systems.js` |
+| INC-02 | D | **Behoben (BP-028):** README-Strukturbaum listet `kpi-config.js`, `equity-overview-chart.js`, `equity-system-chart.js`, `regime-engine-chart.js` und `systems/risk-regime/` nicht. | `README.md` |
+| INC-03 | D | **Behoben (BP-028):** README-Beispiel `?system=alpha-picks` verweist auf ein nicht vorhandenes System. | `README.md` |
 | INC-04 | D | **Behoben (BP-025):** Meta-Description der Landing-Seite nannte "9 independent trading systems" (registriert 10); jetzt ohne feste Anzahl. | `index.html`, `js/systems.js` |
 | INC-05 | D | **Behoben (2026-10-26, BP-022):** Footer war uneinheitlich (Landing "©2025", Dashboard "©2026"; "Designed by GitHub Copilot"). Jetzt beide Seiten "©2026 ASCNET Solutions GmbH" und "Designed by Opus 5.5". | `index.html`, `dashboard/index.html` |
-| INC-06 | D | Zwei Systemordner (`monday-anchor-reversion-500k-cap`, `multifactor-edge`) sind nicht registriert; ihre Daten sind veraltet (2026-10-07 bzw. 2026-04-20). | `systems/`, `js/systems.js` |
+| INC-06 | D | **Behoben (BP-028): Ordner gelöscht.** Zwei Systemordner (`monday-anchor-reversion-500k-cap`, `multifactor-edge`) sind nicht registriert; ihre Daten sind veraltet (2026-10-07 bzw. 2026-04-20). | `systems/`, `js/systems.js` |
 | INC-07 | T | **Behoben (BP-025, D-037).** Das Dashboard prüft nur das Slug-Muster, nicht das Register: unregistrierte Systeme sind per URL aufrufbar. README beschreibt `systems.js` als Eintragspunkt, nicht als Zugriffsschutz. | `dashboard-loader.js` |
 | INC-08 | T | **Behoben (BP-025):** NaN-Bereinigung jetzt in allen Ladepfaden. `fetchJson` existiert dreifach: `landing.js` und `dashboard-loader.js` mit NaN-Bereinigung, `equity-overview-chart.js` und `regime-engine-chart.js` mit `response.json()` ohne Bereinigung. Eine Equity- oder Positionsdatei mit `NaN` lässt das System im Portfolio-Chart entfallen, obwohl Kachel und Dashboard laden würden. | vier JS-Dateien |
 | INC-09 | T | **Behoben (BP-026, D-038).** Das Regime-Panel wird einmalig mit dem Gesamtzeitraum gerendert; Zoom/Pan des Portfolio-Charts ändert es nicht. Die Achsen laufen bei Zoom auseinander. Zudem wird `initRegimeEnginePanel` nicht abgewartet, der Loader kann vor dem Panel verschwinden. | `landing.js`, `equity-overview-chart.js`, `regime-engine-chart.js` |
 | INC-10 | T | `apr`-Regel definiert `trophy: true` (≥ 50), aber weder Kachel noch Dashboard-Karte rendern die Trophäe für APR. Die Portfolio-KPI-Karten rendern sie. | `kpi-config.js`, `landing.js`, `main.js`, `equity-overview-chart.js` |
-| INC-11 | T | Landing zeigt `strategyName` ungekürzt, das Dashboard entfernt Klammerzusätze (`cleanStrategyName`). Der Name kann zwischen Kachel und Dashboard abweichen. | `landing.js`, `main.js` |
-| INC-12 | T | `wl-signals.json` wird je Dashboard-Aufruf geladen, aber nicht dargestellt; `signalCount` wird berechnet und nicht verwendet. Die Leermeldung wird bei `signals.length` als 1 Signal gezählt. | `dashboard-loader.js`, `main.js` |
+| INC-11 | T | **Akzeptiert (OP-11: nein, 2026-10-27).** Landing zeigt `strategyName` ungekürzt, das Dashboard entfernt Klammerzusätze (`cleanStrategyName`). Der Name kann zwischen Kachel und Dashboard abweichen. | `landing.js`, `main.js` |
+| INC-12 | T | **Akzeptiert (OP-05, D-040):** Die Datei bleibt als Reserve für eine spätere Signalanzeige. `wl-signals.json` wird je Dashboard-Aufruf geladen, aber nicht dargestellt; `signalCount` wird berechnet und nicht verwendet. Die Leermeldung wird bei `signals.length` als 1 Signal gezählt. | `dashboard-loader.js`, `main.js` |
 | INC-13 | T | **Behoben (BP-025): Overlay entfernt.** Der Max-Drawdown-Overlay im Portfolio-Chart nutzt den Verlauf `portfolioOverviewDrawdownStroke`, der keine `<stop>`-Elemente enthält; ein Verlauf ohne Stopps wird nicht gezeichnet. Der Overlay ist vermutlich unsichtbar. Der Code-Kommentar nennt ihn "kann entfernt werden". | `equity-overview-chart.js` |
 | INC-14 | T | Die Drawdown-Achse des Portfolio-Charts ist fest auf −30 % gesetzt (Kommentar nennt "mindestens −5 %"); tiefere Drawdowns werden am unteren Rand abgeschnitten. Das System-Chart skaliert dynamisch. | `equity-overview-chart.js` |
 | INC-15 | T | Die Spaltenzahl der Fehlerzeile in der Positionstabelle ist uneinheitlich: `colspan="7"` (Loader, leere Liste) gegenüber `colspan="9"` (`renderError`) bei 7 Spalten. | `main.js`, `dashboard-loader.js` |
@@ -650,18 +648,18 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 
 | ID | Typ | Frage | Hinweis |
 |---|---|---|---|
-| OP-01 | I | Wie und wie oft werden die JSON-Dateien aus Wealth-Lab exportiert und committet? | Pipeline nicht im Repo |
-| OP-02 | I | Wo wird die Seite gehostet (Produktivumgebung zur `canonical`-URL)? | Kein Hosting-Artefakt im Repo |
-| OP-03 | E | Sollen `monday-anchor-reversion-500k-cap` und `multifactor-edge` registriert, aktualisiert oder entfernt werden? | INC-06 |
-| OP-04 | I | Zweck von `systems/short-burst-momentum/FlagFile.txt` (Inhalt: `short-burst-momentum`). | in keinem Code referenziert |
-| OP-05 | E | Soll `wl-signals.json` im Dashboard angezeigt werden oder entfällt die Datei aus der Konvention? | INC-12; README fordert sie als Teil der vier Dateien |
-| OP-06 | I | Fachlicher Grund der Skalierung der Anzeigewerte durch 100 (`equityDivisor`, `startingCapitalDivisor`). | Nur Code-Kommentar zur Rohsumme |
+| OP-01 | I | **Beantwortet 2026-10-27:** Wealth-Lab 9 Strategy Monitor, Git-CLI nach GitHub (Kapitel 12.2). Wie und wie oft werden die JSON-Dateien aus Wealth-Lab exportiert und committet? | Pipeline nicht im Repo |
+| OP-02 | I | **Beantwortet 2026-10-27:** Cloudflare übernimmt den Stand aus GitHub (Kapitel 12.1). Wo wird die Seite gehostet (Produktivumgebung zur `canonical`-URL)? | Kein Hosting-Artefakt im Repo |
+| OP-03 | E | **Entschieden 2026-10-27: entfernen (BP-028).** Sollen `monday-anchor-reversion-500k-cap` und `multifactor-edge` registriert, aktualisiert oder entfernt werden? | INC-06 |
+| OP-04 | I | **Erledigt 2026-10-27:** Datei vom Auftraggeber gelöscht. Zweck von `systems/short-burst-momentum/FlagFile.txt` (Inhalt: `short-burst-momentum`). | in keinem Code referenziert |
+| OP-05 | E | **Entschieden 2026-10-27: Datei bleibt, keine Anzeige (D-040).** Soll `wl-signals.json` im Dashboard angezeigt werden oder entfällt die Datei aus der Konvention? | INC-12; README fordert sie als Teil der vier Dateien |
+| OP-06 | I | **Beantwortet 2026-10-27:** keine Millionenbeträge im Dashboard (Kapitel 8.4). Fachlicher Grund der Skalierung der Anzeigewerte durch 100 (`equityDivisor`, `startingCapitalDivisor`). | Nur Code-Kommentar zur Rohsumme |
 | OP-07 | I | Begründung der Regel `apr ≥ 100 → rot` und der Schwellen insgesamt. | Konfiguration ohne Kommentar |
 | OP-08 | I | Wie wird das Projekt lokal gestartet und validiert (HTTP-Server, Testvorgehen)? | Weder README noch Skripte |
 | OP-09 | I | Zielgruppe und Freigabestatus der öffentlichen Seite (SEO-Metadaten, Footer "Designed by Opus 5.5"). | |
 | OP-10 | E | **Entschieden 2026-10-26: ja (D-037).** Soll das Dashboard auf registrierte Systeme beschränkt werden? | INC-07 |
-| OP-11 | E | Soll die Strategiename-Bereinigung auch auf der Landing-Seite gelten? | INC-11 |
-| OP-12 | E | Welche Berechnungsvariante gilt für das Portfolio verbindlich: Rohsumme oder Equal-Weight (`useDisplayEquity`)? | derzeit `false` |
+| OP-11 | E | **Entschieden 2026-10-27: nein.** Soll die Strategiename-Bereinigung auch auf der Landing-Seite gelten? | INC-11 |
+| OP-12 | E | **Entschieden 2026-10-27: Rohsumme (D-013 ergänzt).** Welche Berechnungsvariante gilt für das Portfolio verbindlich: Rohsumme oder Equal-Weight (`useDisplayEquity`)? | derzeit `false` |
 | OP-13 | E | **Entschieden 2026-10-26: ja (D-035, BP-023).** Soll die Zählung offener Positionen je Datum (INC-21) optimiert werden (z. B. einmal sortieren und fortlaufend zählen statt je Datum alle Positionen zu durchlaufen), bei identischem Ergebnis? | Performance-Änderung, nicht beauftragt |
 
 ---
