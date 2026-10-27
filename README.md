@@ -118,7 +118,7 @@ Fehlt der Parameter, ist er ungueltig oder ist das System nicht registriert, zei
 `js/kpi-config.js`:
 
 - Farbregeln (Ampel) je Kennzahl fuer Kacheln, Dashboard und Portfolio-KPIs.
-- `display.equityDivisor`, `display.startingCapitalDivisor` (je 100): Die angezeigten Betraege werden durch diesen Faktor geteilt, damit im Dashboard keine Millionenbetraege erscheinen. Berechnungen bleiben unskaliert.
+- `display.equityDivisor`, `display.startingCapitalDivisor` (je 50): Die angezeigten Betraege werden durch diesen Faktor geteilt, damit im Dashboard keine Millionenbetraege erscheinen. Berechnungen bleiben unskaliert.
 - `display.useDisplayEquity: false`: Das Portfolio ist die Rohsumme der System-Equities. Die Gewichtung der Systeme wird in Wealth-Lab 9 festgelegt.
 - `display.showRiskRegimePanel`: Risk-Regime-Panel auf der Landing-Seite ein- oder ausblenden (Standard aus; die Regime-Faerbung des Hintergrunds bleibt).
 - `display.showRegimeStretchScore`: Stretch Score im Regime-Panel ein- oder ausblenden.

@@ -398,7 +398,7 @@ Alle KPIs rechnen auf der Rohsumme, solange `useDisplayEquity` `false` ist. [COD
 
 ### 8.4 Anzeige-Skalierung
 
-Equity-Beträge im Chart (Achsenbeschriftung, Tooltip) werden durch `equityDivisor` (100) geteilt, Starting Capital im Dashboard durch `startingCapitalDivisor` (100). Berechnungen bleiben unskaliert. [CODE] Zweck: Im Dashboard sollen keine Millionenbeträge erscheinen. [AUFTRAGGEBER 2026-10-27, beantwortet OP-06]
+Equity-Beträge im Chart (Achsenbeschriftung, Tooltip) werden durch `equityDivisor` (50) geteilt, Starting Capital im Dashboard durch `startingCapitalDivisor` (50); bis 2026-10-27 je 100. Berechnungen bleiben unskaliert. [CODE] Zweck: Im Dashboard sollen keine Millionenbeträge erscheinen. [AUFTRAGGEBER 2026-10-27, beantwortet OP-06]
 
 ### 8.5 Monatsrenditen (Dashboard)
 
@@ -446,8 +446,8 @@ Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klass
 
 | Schlüssel | Aktueller Wert | Wirkung |
 |---|---|---|
-| `startingCapitalDivisor` | 100 | Anzeige Starting Capital im Dashboard |
-| `equityDivisor` | 100 | Anzeige von Equity-Beträgen in beiden Charts |
+| `startingCapitalDivisor` | 50 | Anzeige Starting Capital im Dashboard |
+| `equityDivisor` | 50 | Anzeige von Equity-Beträgen in beiden Charts |
 | `showPortfolioOverviewKpis` | `true` | Portfolio-KPI-Karten ein/aus |
 | `useDisplayEquity` | `false` | Chart und KPIs auf Equal-Weight-Kurve (`true`) oder Rohsumme (`false`) |
 | `showRegimeStretchScore` | `false` | Stretch Score und Legende ein/aus |

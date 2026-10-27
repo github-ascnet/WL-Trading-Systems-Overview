@@ -217,7 +217,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | | |
 |---|---|
 | **Status** | Verbindlich (Ist-Zustand, vom Auftraggeber bestätigt 2026-10-27, OP-06) |
-| **Entscheidung** | Dargestellte Equity-Beträge werden durch `equityDivisor` (100) geteilt, das Starting Capital im Dashboard durch `startingCapitalDivisor` (100). Berechnungen und KPIs verwenden unskalierte Werte. |
+| **Entscheidung** | Dargestellte Equity-Beträge werden durch `equityDivisor` (50) geteilt, das Starting Capital im Dashboard durch `startingCapitalDivisor` (50); bis 2026-10-27 je 100, vom Auftraggeber geändert. Berechnungen und KPIs verwenden unskalierte Werte. |
 | **Begründung** | Im Dashboard sollen keine Millionenbeträge erscheinen (Auftraggeber 2026-10-27). Code-Kommentar: KPIs rechnen auf Rohwerten, nur die Anzeige wird skaliert; `startingCapitalDivisor` wird im Portfolio-Chart bewusst nicht angewendet. |
 | **Quelle** | `kpi-config.js`, `main.js`, `equity-overview-chart.js`, `equity-system-chart.js` |
 | **Konsequenz** | Angezeigte Beträge entsprechen nicht den Rohwerten in den JSON-Dateien. Die Divisoren dürfen nur gemeinsam mit dieser Entscheidung geändert werden. |
