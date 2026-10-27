@@ -34,7 +34,9 @@ Die Liste ist eine Merkliste, kein Auftrag. Gemäss SDD wird kein Punkt umgesetz
 | INC-14 | BP-030 (D-042) | Drawdown-Achse des Portfolio-Charts erweitert sich bei Drawdowns tiefer als −30 %. |
 | INC-20 | BP-031 (D-043) | Reduced-Motion auch auf der Landing-Seite. |
 | INC-25 | BP-031 (D-044) | Tippflächen von ca. 44 × 44 px auf Touch-Geräten. |
+| INC-15 bis INC-18 | BP-032 (D-045) | Fehlerzeile, Maskierung, Stretch-Standard, Exportdatum in Safari; Achse "0%". |
+| OP-07 bis OP-09 | 2026-10-27 | Begründung APR-Schwelle, keine Start-Anleitung, Zielgruppe (eigene Nutzung auf dem Handy). |
 
 ## Weiterhin offen
 
-Inkonsistenzen INC-15 bis INC-19 und offene Punkte OP-07 bis OP-09 in `project_plan.md` Kapitel 14.
+Nur noch INC-19 (duplizierte Hilfsfunktionen, Refactoring, nicht beauftragt) in `project_plan.md` Kapitel 14.

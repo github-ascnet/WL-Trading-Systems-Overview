@@ -73,6 +73,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | D-042 | Drawdown-Achse des Portfolio-Charts dynamisch ab −30 % | Darstellung | Verbindlich (Auftrag 2026-10-27) |
 | D-043 | Reduced-Motion auch auf der Landing-Seite | Barrierefreiheit | Verbindlich (Auftrag 2026-10-27) |
 | D-044 | Tippflächen von 44 × 44 px auf Touch-Geräten | Bedienung | Verbindlich (Auftrag 2026-10-27) |
+| D-045 | Exportdatum als ISO-Ortszeit lesen | Darstellung | Verbindlich (Auftrag 2026-10-27) |
 
 ---
 
@@ -232,7 +233,7 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 |---|---|
 | **Status** | Ist-Zustand |
 | **Entscheidung** | Farbe und Trophäe einer Kennzahl werden zentral in `WL_KPI_CONFIG.metrics` über geordnete Regeln definiert (erste zutreffende Regel gewinnt) und über `getKpiPresentation(metricKey, value, surface)` abgefragt. Oberflächen: `landing` und `dashboard`. |
-| **Begründung** | nicht dokumentiert |
+| **Begründung** | Allgemein nicht dokumentiert. Zur Regel `apr ≥ 100 → rot`: Ein APR über 100 % ist für zehn Systeme praktisch unmöglich und ein Hinweis auf Overfitting (Auftraggeber 2026-10-27, OP-07). |
 | **Quelle** | `js/kpi-config.js` |
 | **Konsequenz** | Schwellenwerte werden ausschliesslich dort geändert, nicht in Render-Code. Aufrufer liefern einen Fallback, falls die Funktion fehlt. Regeltabelle siehe `project_plan.md` Kapitel 9. Trophäen sind seit D-041 über `display.showTrophies` abgeschaltet. |
 
@@ -518,3 +519,12 @@ Eine Entscheidung wird nicht überschrieben oder gelöscht. Bei einer Änderung 
 | **Entscheidung** | Unter `@media (pointer: coarse)` erhalten Info-Symbol des Dashboards (`.header-info`), Hamburger, Zoom-Reset und die Info-Symbole der Landing-Seite ein unsichtbares, zentriertes `::after` von 44 × 44 px. Die sichtbare Grösse bleibt. |
 | **Begründung** | INC-25: Tippflächen von 18 × 18 bis 26 × 26 px waren auf Smartphones schwer zu treffen. |
 | **Konsequenz** | Desktop (feiner Zeiger) unverändert. Das Info-Symbol des Dashboards liegt in einem Titelcontainer mit `overflow: hidden` (Kürzung langer Titel); dort wirkt die Fläche etwa 44 × 33 px. |
+
+## D-045 – Exportdatum als ISO-Ortszeit lesen
+
+| | |
+|---|---|
+| **Status** | Verbindlich (Auftrag vom 2026-10-27; Arbeitspaket BP-032) |
+| **Entscheidung** | `formatDate` (Landing, Dashboard) und `formatDateLong` (Dashboard) lesen Zeichenketten der Form `"YYYY-MM-DD HH:mm[:ss]"` über `parseDateValue`: Das Leerzeichen wird durch `T` ersetzt, der Wert gilt als Ortszeit. Andere Werte wie bisher. |
+| **Begründung** | INC-18: Das Format mit Leerzeichen ist kein ISO-8601; Safari liest es nicht zuverlässig, dann erschien der Rohtext statt des Datums. Hauptnutzung ist das Handy (OP-09). |
+| **Konsequenz** | In Chrome unverändert (dort wurde das Format schon als Ortszeit gelesen). Das Exportformat bleibt unverändert. Die Hilfsfunktion steht wie die übrigen Helfer je Datei (INC-19). |

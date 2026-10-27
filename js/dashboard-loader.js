@@ -6,6 +6,15 @@
     return new Promise((resolve) => window.setTimeout(resolve, ms));
   }
 
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   function setLoadingState(isLoading, message = "Loading system data...") {
     const loader = document.getElementById("pageLoader");
     const loaderText = document.getElementById("pageLoaderText");
@@ -91,7 +100,7 @@
   }
 
   function renderLocalPanelFallback(message) {
-    const safeMessage = String(message);
+    const safeMessage = escapeHtml(message);
 
     const overviewCards = document.getElementById("overviewCards");
     if (overviewCards) {

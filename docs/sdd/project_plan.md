@@ -60,7 +60,7 @@ Das Dokument übernimmt diese Beschreibung nicht als Anforderung, sondern nur al
 
 ### 1.3 Zielgruppe der Anwendung
 
-Aus den SEO-Metadaten (`robots: index, follow`, `canonical`, Open Graph, JSON-LD) geht hervor, dass die Landing-Seite öffentlich auffindbar sein soll. [CODE – `index.html`] Die genaue Zielgruppe ist nicht dokumentiert. [OFFEN – OP-09]
+Aus den SEO-Metadaten (`robots: index, follow`, `canonical`, Open Graph, JSON-LD) geht hervor, dass die Landing-Seite öffentlich auffindbar sein soll. [CODE – `index.html`] Hauptnutzer ist der Auftraggeber selbst: Die Seite dient vor allem dazu, die einzelnen Systeme unterwegs auf dem Handy kurz anzuschauen. [AUFTRAGGEBER 2026-10-27, beantwortet OP-09] Mobile Bedienbarkeit hat deshalb Gewicht.
 
 ---
 
@@ -440,7 +440,7 @@ Quelle: `js/monthly-returns.js`. [CODE]
 | `maxDrawdown` | ≤ −30 rot · ≤ −20 gelb · sonst grün |
 | `profitFactor` | ≥ 2,5 grün 🏆 · ≥ 1,75 grün · ≥ 1 gelb · sonst rot |
 
-Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klassenabbildung: Landing `kpi-positive/-warning/-danger`, Dashboard `positive/neutral/negative` (gelb wird im Dashboard als `neutral` dargestellt). Die Regel `apr ≥ 100 → rot` ist im Code nicht begründet. [OFFEN – OP-07]
+Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klassenabbildung: Landing `kpi-positive/-warning/-danger`, Dashboard `positive/neutral/negative` (gelb wird im Dashboard als `neutral` dargestellt). Die Regel `apr ≥ 100 → rot`: Ein APR über 100 % ist für ein Portfolio aus zehn Systemen praktisch unmöglich und deutet auf Overfitting hin. [AUFTRAGGEBER 2026-10-27, beantwortet OP-07]
 
 ### 9.1 Konfigurationsschalter `WL_KPI_CONFIG.display`
 
@@ -574,7 +574,7 @@ Nicht umgesetzt (Entscheidung 2026-10-26): Puls eines Kennzahl-Farbpunkts. Berei
 
 Statische Dateien über Cloudflare, das den Stand aus dem GitHub-Repository übernimmt. Die `canonical`-URL lautet `https://wl-trading-systems.ascnet.ch/`. [CODE] [AUFTRAGGEBER 2026-10-27, beantwortet OP-02] Im Repository liegt keine Hosting-Konfiguration.
 
-Lokaler Betrieb setzt einen HTTP-Server voraus, da `fetch` relative JSON-Dateien lädt; das README nennt dies seit BP-028, ohne ein Werkzeug vorzugeben. Ein projektspezifisches Start- und Testverfahren ist nicht festgelegt. [OFFEN – OP-08]
+Lokaler Betrieb setzt einen HTTP-Server voraus, da `fetch` relative JSON-Dateien lädt; das README nennt dies seit BP-028, ohne ein Werkzeug vorzugeben. Ein projektspezifisches Start- und Testverfahren wird bewusst nicht festgelegt. [AUFTRAGGEBER 2026-10-27, OP-08]
 
 ### 12.2 Datenaktualisierung
 
@@ -634,10 +634,10 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | INC-12 | T | **Akzeptiert (OP-05, D-040):** Die Datei bleibt als Reserve für eine spätere Signalanzeige. `wl-signals.json` wird je Dashboard-Aufruf geladen, aber nicht dargestellt; `signalCount` wird berechnet und nicht verwendet. Die Leermeldung wird bei `signals.length` als 1 Signal gezählt. | `dashboard-loader.js`, `main.js` |
 | INC-13 | T | **Behoben (BP-025): Overlay entfernt.** Der Max-Drawdown-Overlay im Portfolio-Chart nutzt den Verlauf `portfolioOverviewDrawdownStroke`, der keine `<stop>`-Elemente enthält; ein Verlauf ohne Stopps wird nicht gezeichnet. Der Overlay ist vermutlich unsichtbar. Der Code-Kommentar nennt ihn "kann entfernt werden". | `equity-overview-chart.js` |
 | INC-14 | T | **Behoben (BP-030, D-042).** Die Drawdown-Achse des Portfolio-Charts ist fest auf −30 % gesetzt (Kommentar nennt "mindestens −5 %"); tiefere Drawdowns werden am unteren Rand abgeschnitten. Das System-Chart skaliert dynamisch. | `equity-overview-chart.js` |
-| INC-15 | T | Die Spaltenzahl der Fehlerzeile in der Positionstabelle ist uneinheitlich: `colspan="7"` (Loader, leere Liste) gegenüber `colspan="9"` (`renderError`) bei 7 Spalten. | `main.js`, `dashboard-loader.js` |
-| INC-16 | T | `renderLocalPanelFallback` setzt die Meldung ohne HTML-Maskierung in `innerHTML`. Aktuell stammen die Meldungen aus festen Texten und dem validierten Slug; das Risiko ist gering, die Funktion ist aber nicht defensiv. | `dashboard-loader.js` |
-| INC-17 | T | Die Standardwerte im Code (`showRegimeStretchScore ?? true`) widersprechen dem konfigurierten Wert `false`; massgeblich ist die Konfiguration. Die CSS-Klasse `regime-legend-composite` hat keinen HTML-Gegenpart. | `regime-engine-chart.js`, `kpi-config.js` |
-| INC-18 | T | `lastUpdate` ist `"YYYY-MM-DD HH:mm:ss"` (nicht ISO-8601). Ob `new Date()` dies in allen Browsern parst, ist nicht belegt; bei Fehlschlag wird der Rohstring angezeigt. | `landing.js`, `main.js` |
+| INC-15 | T | **Behoben (BP-032).** Die Spaltenzahl der Fehlerzeile in der Positionstabelle ist uneinheitlich: `colspan="7"` (Loader, leere Liste) gegenüber `colspan="9"` (`renderError`) bei 7 Spalten. | `main.js`, `dashboard-loader.js` |
+| INC-16 | T | **Behoben (BP-032).** `renderLocalPanelFallback` setzt die Meldung ohne HTML-Maskierung in `innerHTML`. Aktuell stammen die Meldungen aus festen Texten und dem validierten Slug; das Risiko ist gering, die Funktion ist aber nicht defensiv. | `dashboard-loader.js` |
+| INC-17 | T | **Behoben (BP-032):** Standard jetzt ausgeblendet (`=== true`), unbenutzte Klasse entfernt. Die Standardwerte im Code (`showRegimeStretchScore ?? true`) widersprechen dem konfigurierten Wert `false`; massgeblich ist die Konfiguration. Die CSS-Klasse `regime-legend-composite` hat keinen HTML-Gegenpart. | `regime-engine-chart.js`, `kpi-config.js` |
+| INC-18 | T | **Behoben (BP-032, D-045).** `lastUpdate` ist `"YYYY-MM-DD HH:mm:ss"` (nicht ISO-8601). Ob `new Date()` dies in allen Browsern parst, ist nicht belegt; bei Fehlschlag wird der Rohstring angezeigt. | `landing.js`, `main.js` |
 | INC-19 | T | Hilfsfunktionen (`escapeHtml`, `formatNumber`, `formatPercent`, `safeGet`, `fetchJson`) sind in mehreren Dateien dupliziert, teils mit abweichenden Fallbacks ("-" gegenüber "N/A"). | `main.js`, `landing.js`, Chart-Module |
 | INC-22 | T | **Behoben mit BP-024:** `.app` ist ein Grid mit impliziter `auto`-Spalte; breite Tabellen (Positions, Monthly Returns) liessen die Spalte und damit die Seite auf Smartphones breiter werden als das Gerät (bis 422 px bei 390 px), Header-Buttons wurden abgeschnitten. Bestand vor BP-013. | `css/styles.css` |
 | INC-23 | T | **Behoben mit BP-024:** Portfolio- und System-Chart werden auf Smartphones nur verkleinert; Achsentexte 2,7 bis 4 px, Tooltip-Texte der Landing-Seite 3,5 bis 4,5 px (unlesbar). | `js/equity-overview-chart.js`, `js/equity-system-chart.js` |
@@ -656,9 +656,9 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | OP-04 | I | **Erledigt 2026-10-27:** Datei vom Auftraggeber gelöscht. Zweck von `systems/short-burst-momentum/FlagFile.txt` (Inhalt: `short-burst-momentum`). | in keinem Code referenziert |
 | OP-05 | E | **Entschieden 2026-10-27: Datei bleibt, keine Anzeige (D-040).** Soll `wl-signals.json` im Dashboard angezeigt werden oder entfällt die Datei aus der Konvention? | INC-12; README fordert sie als Teil der vier Dateien |
 | OP-06 | I | **Beantwortet 2026-10-27:** keine Millionenbeträge im Dashboard (Kapitel 8.4). Fachlicher Grund der Skalierung der Anzeigewerte durch 100 (`equityDivisor`, `startingCapitalDivisor`). | Nur Code-Kommentar zur Rohsumme |
-| OP-07 | I | Begründung der Regel `apr ≥ 100 → rot` und der Schwellen insgesamt. | Konfiguration ohne Kommentar |
-| OP-08 | I | Wie wird das Projekt lokal gestartet und validiert (HTTP-Server, Testvorgehen)? | Weder README noch Skripte |
-| OP-09 | I | Zielgruppe und Freigabestatus der öffentlichen Seite (SEO-Metadaten, Footer "Designed by Opus 5.5"). | |
+| OP-07 | I | **Beantwortet 2026-10-27:** APR > 100 % bei zehn Systemen praktisch unmöglich, Hinweis auf Overfitting (Kapitel 9). Begründung der Regel `apr ≥ 100 → rot` und der Schwellen insgesamt. | Konfiguration ohne Kommentar |
+| OP-08 | I | **Entschieden 2026-10-27: keine Anleitung im Projekt.** Wie wird das Projekt lokal gestartet und validiert (HTTP-Server, Testvorgehen)? | Weder README noch Skripte |
+| OP-09 | I | **Beantwortet 2026-10-27:** vor allem der Auftraggeber selbst, Kurzansicht der Systeme auf dem Handy (Kapitel 1.3). Zielgruppe und Freigabestatus der öffentlichen Seite (SEO-Metadaten, Footer "Designed by Opus 5.5"). | |
 | OP-10 | E | **Entschieden 2026-10-26: ja (D-037).** Soll das Dashboard auf registrierte Systeme beschränkt werden? | INC-07 |
 | OP-11 | E | **Entschieden 2026-10-27: nein.** Soll die Strategiename-Bereinigung auch auf der Landing-Seite gelten? | INC-11 |
 | OP-12 | E | **Entschieden 2026-10-27: Rohsumme (D-013 ergänzt).** Welche Berechnungsvariante gilt für das Portfolio verbindlich: Rohsumme oder Equal-Weight (`useDisplayEquity`)? | derzeit `false` |
@@ -674,7 +674,7 @@ Klassifikation nach SDD-CHECK: **D** = dokumentarische Inkonsistenz, **T** = tec
 | Q-02 | Defensiv gegenüber fehlenden Feldern (Fallback-Aliase, "-" statt Fehler). | [README] |
 | Q-03 | Teilausfälle dürfen die Gesamtseite nicht blockieren (Kacheln, Portfolio-Systeme, Regime-Panel). | [CODE] |
 | Q-04 | Daten werden bei jedem Aufruf frisch geladen (`no-store`). | [CODE] |
-| Q-05 | HTML-Ausgaben aus Daten werden maskiert (`escapeHtml`). Ausnahme siehe INC-16. | [CODE] |
+| Q-05 | HTML-Ausgaben aus Daten werden maskiert (`escapeHtml`); seit BP-032 ohne Ausnahme (INC-16). | [CODE] |
 | Q-06 | Responsive Nutzung auf Mobile, Tablet und Desktop, inklusive Touch-Bedienung der Charts. | [CODE] |
 
 Ein Testkonzept, Performance-Ziele oder Browser-Support-Matrix sind im Projekt nicht definiert. [OFFEN]

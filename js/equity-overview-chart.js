@@ -1110,7 +1110,7 @@
 
     // Standard 0 % bis -30 % in 5-%-Schritten; bei tieferen Drawdowns 10-%-Schritte
     const drawdownAxisLabels = Array.from({ length: drawdownAxisSteps + 1 }, (_, i) => {
-      const ddValue = -i * drawdownAxisStep;
+      const ddValue = i === 0 ? 0 : -i * drawdownAxisStep; // oberstes Label "0%" statt "-0%"
       const ratio = i / drawdownAxisSteps;
       const y = margin.top + ratio * chartHeight + geometry.labelDy;
       const x = width - margin.right + 6;

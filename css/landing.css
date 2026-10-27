@@ -780,10 +780,6 @@ body::after {
   color: var(--muted);
 }
 
-.regime-legend-composite {
-  color: #58c4ff;
-}
-
 .regime-legend-stretch {
   color: #f5d97a;
 }

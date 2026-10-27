@@ -82,9 +82,21 @@
     return `${formatNumber(value, decimals)}%`;
   }
 
+  // "YYYY-MM-DD HH:mm[:ss]" aus dem Export ist kein ISO-8601; mit "T" liest jeder Browser
+  // (auch Safari) den Wert als Ortszeit (INC-18)
+  function parseDateValue(value) {
+    if (typeof value !== "string") return new Date(value);
+    const text = value.trim();
+    return new Date(
+      /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?$/.test(text)
+        ? text.replace(" ", "T")
+        : text
+    );
+  }
+
   function formatDate(value) {
     if (!value) return "-";
-    const date = new Date(value);
+    const date = parseDateValue(value);
     if (Number.isNaN(date.getTime())) return String(value);
     return new Intl.DateTimeFormat("en-GB", {
       day: "2-digit",

@@ -88,7 +88,7 @@ Prüfen nach dem Hinzufügen: Kachel erscheint, Portfolio-Statuszeile zählt hoc
 - Ältere Dateien (`main.js`, `monthly-returns.js`) definieren **globale Funktionen**; Seitenmodule (`landing.js`, `dashboard-loader.js`) und Chart-Module sind **IIFE**. Chart-Module hängen ihre API an `window` (`window.initEquityOverviewChart`, …). Neue Funktionen im Stil der jeweiligen Datei ergänzen.
 - Namen: `camelCase` für Funktionen und Variablen, `UPPER_SNAKE_CASE` für Konstanten (`SVG_WIDTH`, `LOADER_MIN_VISIBLE_MS`), DOM-IDs in `camelCase`, CSS-Klassen in `kebab-case`, Dateinamen in `kebab-case`.
 - Globale Schnittstellen: `window.SYSTEMS`, `window.WL_KPI_CONFIG`, `window.getKpiPresentation`, `window.bootDashboard`, `window.renderError`, `window.initEquityOverviewChart`, `window.initRegimeEnginePanel`, `window._wlPortfolioTimeRange`, `window.mountSystemEquityChart`, `window.renderSystemEquityChart`. Nicht umbenennen.
-- Daten, die in HTML gelangen, mit `escapeHtml` maskieren (Q-05). Neue `innerHTML`-Stellen mit Datenwerten nicht ohne Maskierung ergänzen (INC-16 ist kein Vorbild).
+- Daten, die in HTML gelangen, mit `escapeHtml` maskieren (Q-05). Neue `innerHTML`-Stellen mit Datenwerten nicht ohne Maskierung ergänzen.
 - Zahlen- und Datumsformatierung über die vorhandenen Funktionen (`formatNumber`, `formatPercent`, `formatDate`, `formatDateLong`) beziehungsweise dieselbe `Intl`-Konfiguration (`en-GB`, `useGrouping: false`) (D-022).
 - Asynchrones Laden mit `fetch` und `async`/`await`; Teilausfälle mit `Promise.allSettled` abfangen, wo ein Teilergebnis genügt (Landing). `Promise.all` nur, wo alle Dateien zwingend sind (Dashboard).
 - Event-Listener auf wiederverwendeten Elementen mit `dataset.bound`-Marker beziehungsweise `AbortController` absichern, wie im Ist-Code.
@@ -167,7 +167,7 @@ Es gibt keine automatisierten Tests (D-024). Vorgehen gemäss SDD: vorhandene Mi
 
 ### 9.1 Ausführung
 
-Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb über einen HTTP-Server ausgeliefert werden; ein Start per Doppelklick (`file://`) ist dafür nicht vorgesehen. Ein projektspezifisches Startverfahren ist nicht dokumentiert (OP-08). Den Server wählt der Entwickler; es wird kein Werkzeug ins Projekt aufgenommen.
+Die Seiten laden JSON per `fetch` mit relativen Pfaden. Sie müssen deshalb über einen HTTP-Server ausgeliefert werden; ein Start per Doppelklick (`file://`) ist dafür nicht vorgesehen. Ein projektspezifisches Startverfahren wird bewusst nicht dokumentiert (OP-08). Den Server wählt der Entwickler; es wird kein Werkzeug ins Projekt aufgenommen.
 
 ### 9.2 Manuelle Prüfliste
 

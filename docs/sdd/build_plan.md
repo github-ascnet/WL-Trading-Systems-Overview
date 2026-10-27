@@ -74,6 +74,7 @@ flowchart TD
     BP029["BP-029<br/>Keine Trophäen"]
     BP030["BP-030<br/>Drawdown-Achse dynamisch"]
     BP031["BP-031<br/>Reduced-Motion, Tippflächen"]
+    BP032["BP-032<br/>Datum, Fehlerzeile, Stretch-Standard"]
 
     BP012 --> BP001
     BP001 --> BP003
@@ -127,6 +128,8 @@ flowchart TD
     BP004 --> BP030
     BP024 --> BP031
     BP015 --> BP031
+    BP006 --> BP032
+    BP030 --> BP032
 ```
 
 Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht der logischen Baufolge, nicht der Entstehungsgeschichte (nicht rekonstruierbar ohne tiefere Git-Analyse).
@@ -552,6 +555,18 @@ Die Pfeilrichtung bedeutet "ist Voraussetzung für". Die Reihenfolge entspricht 
 | **Abschlusskriterien** | a) Bei Reduced-Motion auf der Landing-Seite keine laufenden Animationen, keine Übergänge, kein Kippen; ohne Reduced-Motion unverändert. b) Auf Touch-Geräten Tippflächen ca. 44 × 44 px, sichtbare Grösse unverändert; Desktop pixelgleich. c) Kein horizontales Überlaufen, keine Konsolenfehler. |
 | **Prüfung (2026-10-27)** | **Erfüllt:** a) Ohne Reduced-Motion: Kachel kippt (`perspective … rotateX`), Rand rotiert (`sc-rotate-border`), 26 laufende Animationen. Mit Reduced-Motion: kein Inline-Transform, Übergänge 0 s (Kachel, Zoom-Reset, Loader), Randanimation `none`, 0 laufende Animationen; Hover-Rand sichtbar (statisch). b) Desktop: `pointer: coarse` falsch, kein `::after`, Bilder pixelgleich. Mobil (Touch-Emulation, `pointer: coarse` wahr): `::after` 44 × 44 px; Treffer in 20 px Abstand vom Mittelpunkt: Hamburger 6/6, Landing-Info 6/6, Zoom-Reset (768 px) 6/6, Dashboard-Info 4/6 (unten durch `overflow: hidden` des Titelcontainers auf ca. 44 × 33 px begrenzt, D-044). Tippen 16 px unter dem Hamburger öffnet das Menü. c) Mobile-Audit (6 Profile) ohne Überlaufen und ohne Konsolenfehler; Seitenübergang 6 von 6; BP-013/BP-014-Regression ohne Fehler. **Teilweise:** Dashboard-Info-Symbol nur ca. 44 × 33 px. **Nicht geprüft:** echte Geräte. |
 
+### BP-032 – Exportdatum, 0-%-Label, Fehlerzeile, Stretch-Standard
+
+| | |
+|---|---|
+| **Status** | Umgesetzt (2026-10-27) und im Browser geprüft (Chrome headless, siehe "Prüfung"); beauftragt als INC-15 bis INC-18 und Achsenbeschriftung |
+| **Scope** | a) INC-18: `parseDateValue` in `landing.js` und `main.js` (D-045). b) Oberste Beschriftung der Drawdown-Achse "0%" statt "-0%". c) INC-15: `colspan="7"` in `renderError`. d) INC-16: `escapeHtml` in `dashboard-loader.js` für `renderLocalPanelFallback`. e) INC-17: `showRegimeStretchScore` nur bei `=== true`; CSS-Klasse `regime-legend-composite` entfernt. f) SDD: OP-07 bis OP-09. |
+| **Nicht im Scope** | Exportformat; Zusammenführung der Helfer (INC-19). |
+| **Betroffene Dateien** | `js/landing.js`, `js/main.js`, `js/equity-overview-chart.js`, `js/dashboard-loader.js`, `js/regime-engine-chart.js`, `css/landing.css` |
+| **Anforderungen / Decisions** | D-045; FR-L-05, Q-05, D-034 |
+| **Abschlusskriterien** | a) Mit einem Browser, der das Exportformat nicht liest, erscheint ein formatiertes Datum; in Chrome unverändert. b) Achse beginnt mit "0%". c) Fehlerzeile der Positionen mit 7 Spalten. d) Fehlermeldungen maskiert. e) Fehlt der Schalter, bleibt der Stretch Score ausgeblendet; mit `false` unverändert. f) Sonst keine Änderung, keine Konsolenfehler. |
+| **Prüfung (2026-10-27)** | **Erfüllt:** a) Chrome HEAD/neu gleich ("27/10/2026, 08:04", Badge "Updated: 27/10/2026"). Safari-Simulation (`Date` lehnt das Format mit Leerzeichen ab): HEAD zeigte den Rohtext "2026-10-27 08:04:12", neu das formatierte Datum. b) Beschriftung "0% -5% … -30%"; `classic`-Bilder gegen HEAD (gleiche Daten): nur Landing oben 159 Pixel an dieser Beschriftung, alle anderen 0. c) Kaputte Exportdatei (`wl-current-state.json` beginnt mit HTML): Fehlerzeile `colspan` 9 → 7. d) In diesem Fall setzt der Loader einen festen Text ("Data file is invalid …"); die Maskierung ist am Code geprüft, ein Datenwert erreicht die Meldung im Test nicht. e) Konfiguration ohne den Schlüssel: HEAD zeigte Stretch-Legende und -Linie (3 Pfade), neu ausgeblendet (2 Pfade); mit `false` pixelgleich. f) Werte an 80 Positionen identisch; Seitenübergang 6 von 6; BP-013/BP-014-Regression und Mobile-Audit ohne Fehler und ohne Überlaufen. **Nicht geprüft:** echtes Safari. |
+
 ---
 
 ## 4. Änderungskandidaten (nicht freigegeben)
@@ -570,7 +585,7 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | C-08 | Verlaufsdefinition des Max-DD-Overlays klären oder Overlay entfernen | Entschieden (entfernen), umgesetzt in BP-025 |
 | C-09 | Drawdown-Achse des Portfolio-Charts dynamisch statt fest | Entschieden, umgesetzt in BP-030 (D-042) |
 | C-10 | Gemeinsame Hilfsfunktionen statt Duplikate | INC-19: ja/nein; würde D-001 nicht verletzen, ist aber Refactoring |
-| C-11 | Angaben zur Berechnungsvariante, Skalierung und Ampelschwellen dokumentieren | OP-06 und OP-12 dokumentiert (BP-028); OP-07 offen |
+| C-11 | Angaben zur Berechnungsvariante, Skalierung und Ampelschwellen dokumentieren | Erledigt: OP-06, OP-12 (BP-028), OP-07 (BP-032) |
 
 ---
 
@@ -607,4 +622,5 @@ Die folgenden Punkte ergeben sich aus den Inkonsistenzen und offenen Fragen in `
 | INC-10 (FR-M-05) | BP-029 | D-041 |
 | INC-14 (FR-L-05) | BP-030 | D-042 |
 | INC-20, INC-25 (FR-M-07) | BP-031 | D-043, D-044 |
+| INC-15 bis INC-18 (FR-L-05) | BP-032 | D-045 |
 | Q-01 | alle | D-001 |

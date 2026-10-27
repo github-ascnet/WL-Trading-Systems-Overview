@@ -157,8 +157,9 @@
       ? ' class="wl-c-regime-line wl-draw-line" pathLength="1" style="--wl-delay:300ms"'
       : ' class="wl-c-regime-line"';
 
+    // Standard wie in kpi-config.js: ausgeblendet, nur bei ausdrücklich true sichtbar (INC-17)
     const showStretch =
-      window.WL_KPI_CONFIG?.display?.showRegimeStretchScore ?? true;
+      window.WL_KPI_CONFIG?.display?.showRegimeStretchScore === true;
     const yMin = showStretch ? -5 : 0;
     const yMax = showStretch ? 105 : 100;
     const timeRange = Math.max(maxTs - minTs, 1);
@@ -579,7 +580,7 @@
       const legendStretch = document.getElementById("regimeLegendStretch");
       if (legendStretch) {
         legendStretch.style.display =
-          window.WL_KPI_CONFIG?.display?.showRegimeStretchScore ?? true
+          window.WL_KPI_CONFIG?.display?.showRegimeStretchScore === true
             ? ""
             : "none";
       }
