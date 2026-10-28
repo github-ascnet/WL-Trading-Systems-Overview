@@ -1,3 +1,4 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-10-27 08:08:02"}
+  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Burst/RSI Exit - Global RSI","orderType":"Market","signalStatus":"Staged","weight":0.828760184311802},
+  {"symbol":"TQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Burst/RSI Exit - Global RSI","orderType":"Market","signalStatus":"Staged","weight":0.262041949689185}
 ]
