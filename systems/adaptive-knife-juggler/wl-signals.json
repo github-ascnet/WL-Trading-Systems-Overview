@@ -1,4 +1,5 @@
 ﻿[
-  {"symbol":"CSX","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-28 00:00:00","entryPrice":51.5564836358952,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.471441170164588},
-  {"symbol":"ADBE","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-28 00:00:00","entryPrice":259.111649071239,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.081030451036949}
+  {"symbol":"ISRG","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-28 00:00:00","entryPrice":454.74811774078,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.728768367987391},
+  {"symbol":"COST","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-28 00:00:00","entryPrice":1006.79459841089,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.635391004964754},
+  {"symbol":"MSFT","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-28 00:00:00","entryPrice":537.455452865384,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.477975233918921}
 ]
