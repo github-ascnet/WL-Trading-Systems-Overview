@@ -27,8 +27,8 @@
       },
     },
     display: {
-      startingCapitalDivisor: 50,
-      equityDivisor: 50,
+      startingCapitalDivisor: 1,
+      equityDivisor: 10,
       showPortfolioOverviewKpis: true,
       // true  → Kurven und KPIs basieren auf der normalisierten Equal-Weight-Kurve (displayEquity)
       // false → Kurven und KPIs basieren auf der rohen Dollarsumme (equity)
