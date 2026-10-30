@@ -1,0 +1,53 @@
+Vorschlag 1 – Daten zum Leben erwecken (Charts und Kennzahlen)
+Wirkung: Beim Öffnen zeichnet sich die Portfolio-Kurve ein, die Kennzahlen zählen hoch, das Regime-Panel blendet nach. Das ist der sichtbarste Effekt pro Aufwand.
+
+Wo und was
+
+Stelle	Änderung
+js/equity-overview-chart.js, renderEquityOverviewChart	Equity-Linie mit pathLength="1" und stroke-dasharray/-dashoffset von 1 auf 0 einzeichnen (ca. 1,4 s, --easing-standard). Flächenverlauf blendet danach ein, Drawdown-Linie (orange) mit kurzer Verzögerung. Nur beim ersten Aufruf; applyZoom ruft die Funktion erneut auf und übergibt zoomedSeries, daran lässt sich der Erstaufruf erkennen.
+renderPortfolioOverviewCards / createKpiCard	Count-up der Zahlenwerte von 0 auf numericValue per requestAnimationFrame, mit denselben Dezimalstellen wie formattedValue. Trophäe erscheint erst nach dem Hochzählen (kleiner Pop). Farbe aus getKpiPresentation bleibt unverändert.
+js/regime-engine-chart.js, renderRegimeEnginePanel	Composite-Linie einzeichnen, Zustandsbänder (StrongRiskOn/RiskOff) per Opacity von links nach rechts einblenden (Maske/clipPath mit animierter Breite).
+js/equity-system-chart.js (Dashboard)	Dieselbe Einzeichnung, aber erst beim Aktivieren des Tabs "Equity Curve": mountSystemEquityChart rendert im versteckten Panel. Der Tab-Klick in setupTabs (js/main.js) löst die Animation aus.
+js/main.js, renderOverview	Count-up der neun Overview-Karten.
+css/landing.css	Keyframes für Einzeichnung, @media (prefers-reduced-motion: reduce) ergänzen.
+Wiederverwendung: formatNumber, formatPercent, getKpiPresentation, vorhandene Pfad-Strings (linePath, areaPath, drawdownLinePath) – es wird nur das Markup um Attribute und Klassen ergänzt.
+
+Aufwand: mittel (1 neues Arbeitspaket, 4 JS-Dateien, 1 CSS). Risiko: gering, Berechnungen bleiben unberührt. Zu beachten: Count-up nur für numerische Werte; Zahlen im Tooltip bleiben statisch.
+
+Vorschlag 2 – Choreografie der Landing-Seite und Seitenübergang
+Wirkung: Die Systemkacheln erscheinen gestaffelt, enthalten eine animierte Mini-Equity-Kurve (Sparkline), und der Wechsel von Landing zu Dashboard wirkt wie ein durchgehender Übergang.
+
+Wo und was
+
+Stelle	Änderung
+js/landing.js, renderSystems	Kacheln mit gestaffeltem Eintritt (animation-delay: i * 60ms, opacity + translateY), ausgelöst über IntersectionObserver, damit Kacheln unterhalb des Falzes erst beim Scrollen erscheinen.
+js/landing.js, createCardHtml	Sparkline je Kachel (kleines Inline-SVG, Einzeichnung wie in Vorschlag 1). Die Equity-Daten werden bereits in equity-overview-chart.js (loadAllSystemEquitySeries) geladen. Sie sollen nicht ein zweites Mal geladen werden: die Serien über ein Window-Objekt bereitstellen, analog zu window._wlPortfolioTimeRange. Fallback ohne Sparkline, wenn die Daten fehlen (Kachel muss auch bei Ausfall funktionieren, Q-03).
+css/landing.css, .system-card	Vorhandenen rotierenden Rand (@property --sc-angle) und Tilt-Effekt behalten. Neu: dezenter Puls des Kennzahl-Farbpunkts je Ampelstatus, Einblend-Keyframes.
+index.html, dashboard/index.html, beide Stylesheets	Seitenübergang über die View Transitions API als progressive Erweiterung: @view-transition { navigation: auto; } plus view-transition-name für Kachel-Titel und Dashboard-Titel. Browser ohne Unterstützung navigieren wie bisher.
+index.html Loader	Loader-Overlay als kurzer Fade statt hartem Ausblenden (.hidden-Klasse in landing.js und dashboard-loader.js gleich behandeln).
+Abwägung: Die Sparkline ist die einzige Änderung mit Datenabhängigkeit zwischen Modulen und damit der grösste Eingriff. Wird das nicht gewünscht, bleibt Vorschlag 2 auf Staffelung, Puls und Übergang beschränkt und ist rein kosmetisch.
+
+Aufwand: mittel bis hoch (mit Sparkline), gering ohne. Risiko: mittel: View Transitions sind nur in neueren Browsern verfügbar, daher Fallback zwingend.
+
+Vorschlag 3 – Lebendige Atmosphäre und modernes Dashboard
+Wirkung: Der Hintergrund reagiert auf das aktuelle Marktregime, und das Dashboard erhält moderne Mikro-Interaktionen.
+
+Wo und was
+
+Stelle	Änderung
+css/landing.css, css/styles.css (body::before/::after)	Die vorhandenen unscharfen Goldflächen langsam driften lassen (transform: translate3d über 30 bis 60 s, alternate), statt zusätzliche Filter zu animieren.
+js/regime-engine-chart.js + js/landing.js	Regime-bewusster Glow: Der letzte Zustand der Composite-Serie (Neutral, RiskOn, StrongRiskOn, Caution, RiskOff) setzt eine CSS-Variable am body (--regime-tint). Der Hintergrund färbt sich weich über (grünlich bei Risk-On, rötlich bei Risk-Off, neutral sonst). Rein visuell, keine Handelsaussage.
+css/styles.css, .tabs / .tab	Gleitender Indikator, der beim Tab-Wechsel zum aktiven Tab wandert (statt hartem Umschalten). Auf Mobile (Hamburger-Menü) entfällt er.
+js/monthly-returns.js	Monatsrenditen als Heatmap: Zellenfarbe mit Intensität proportional zum Wert (die Klassen positive/negative bleiben), Zellen blenden diagonal gestaffelt ein.
+js/main.js, renderPositionsRows	Tabellenzeilen mit kurzem Stagger beim Öffnen des Tabs; beim Sortieren sanfte Umordnung statt hartem Neuaufbau.
+css/styles.css	panelFadeIn (800 ms) auf 300 bis 400 ms straffen, damit der Tab-Wechsel nicht träge wirkt.
+Abwägung: Die Driftanimation und der Regime-Glow wirken am stärksten, haben aber das höchste Performance-Risiko auf schwachen Mobilgeräten. Daher auf Viewports ≤ 700 px und bei prefers-reduced-motion abschalten.
+
+Aufwand: mittel (viele kleine Stellen). Risiko: gering bis mittel.
+
+Empfehlung
+Reihenfolge: 1 → 3 → 2.
+
+Vorschlag 1 zuerst: grösster sichtbarer Effekt, klar abgegrenzt, keine Abhängigkeiten zwischen Modulen.
+Vorschlag 3 danach, weil er die Atmosphäre und das Dashboard abrundet.
+Vorschlag 2 zuletzt, weil Sparkline und View Transitions die meisten Querbezüge und Browser-Abhängigkeiten haben.
