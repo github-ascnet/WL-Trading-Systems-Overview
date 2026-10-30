@@ -44,16 +44,14 @@ Wealth-Lab-Meta-Systems/
 
 ## Registrierte Systeme
 
-`js/systems.js` enthaelt aktuell zehn Systeme:
+`js/systems.js` enthaelt aktuell acht Systeme:
 
 - `strong-volume-trend`
 - `adaptive-knife-juggler`
 - `capitulation-bounce`
 - `short-burst-momentum`
-- `monday-anchor-reversion`
 - `dip-snapback`
 - `multifactor-fusion`
-- `bear-market-reversion`
 - `volatility-cycle-catcher`
 - `btc-gold-regime-breakout`
 
