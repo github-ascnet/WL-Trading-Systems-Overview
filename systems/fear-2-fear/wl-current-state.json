@@ -1,10 +1,10 @@
 ﻿{
   "strategyName": "Fear 2 Fear",
   "strategyDescription": "A systematic, regime-adaptive long/short strategy designed to exploit extreme fear-driven capitulation events and subsequent speculative market euphoria in semiconductor ETFs. It combines staged drawdown-based accumulation, Fear & Greed sentiment analysis, volatility-adjusted exhaustion signals and momentum divergence detection to capture recovery cycles, progressively realize profits near market climaxes and transition into short exposure during potential trend reversals.",
-  "symbolUniverse": "Argentina - MerVal;Yahoo! Finance",
+  "symbolUniverse": "SOXL;WealthData",
   "benchmark": "SOXL",
   "mode": "Long Only",
-  "lastUpdate": "2026-10-30 13:22:12",
+  "lastUpdate": "2026-10-30 13:23:12",
   "startingCapital": 10000,
   "backtestStartDate": "2016-10-31",
   "apr": 133.347977384676,
