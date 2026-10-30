@@ -1,0 +1,6 @@
+﻿[
+  {"symbol":"UGE","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-30 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.946713915608067},
+  {"symbol":"ULE","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-30 00:00:00","entryPrice":10.920308,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Stop","orderType":"Stop","signalStatus":"Staged","weight":0.566366736588873},
+  {"symbol":"UGL","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-30 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.434161178608153},
+  {"symbol":"UYM","action":"SELL","isEntry":"FALSE","signalDate":"2026-10-30 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.418006362486426}
+]
