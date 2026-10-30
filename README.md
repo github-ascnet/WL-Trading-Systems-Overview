@@ -44,7 +44,7 @@ Wealth-Lab-Meta-Systems/
 
 ## Registrierte Systeme
 
-`js/systems.js` enthaelt aktuell acht Systeme:
+`js/systems.js` enthaelt aktuell neun Systeme:
 
 - `strong-volume-trend`
 - `adaptive-knife-juggler`
@@ -53,6 +53,7 @@ Wealth-Lab-Meta-Systems/
 - `dip-snapback`
 - `multifactor-fusion`
 - `volatility-cycle-catcher`
+- `fear-2-fear`
 - `btc-gold-regime-breakout`
 
 Nur registrierte Systeme erscheinen auf der Landing-Seite, fliessen ins Portfolio ein und lassen sich im Dashboard oeffnen.

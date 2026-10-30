@@ -440,7 +440,7 @@ Quelle: `js/monthly-returns.js`. [CODE]
 | `maxDrawdown` | ≤ −30 rot · ≤ −20 gelb · sonst grün |
 | `profitFactor` | ≥ 2,5 grün 🏆 · ≥ 1,75 grün · ≥ 1 gelb · sonst rot |
 
-Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klassenabbildung: Landing `kpi-positive/-warning/-danger`, Dashboard `positive/neutral/negative` (gelb wird im Dashboard als `neutral` dargestellt). Die Regel `apr ≥ 100 → rot`: Ein APR über 100 % ist für ein Portfolio aus acht Systemen praktisch unmöglich und deutet auf Overfitting hin. [AUFTRAGGEBER 2026-10-27, beantwortet OP-07]
+Farben: grün `#6ee7a8`, gelb `#ffd166`, rot `#ff7b7b`, neutral `#a8b4cd`. Klassenabbildung: Landing `kpi-positive/-warning/-danger`, Dashboard `positive/neutral/negative` (gelb wird im Dashboard als `neutral` dargestellt). Die Regel `apr ≥ 100 → rot`: Ein APR über 100 % ist für ein Portfolio aus neun Systemen praktisch unmöglich und deutet auf Overfitting hin. [AUFTRAGGEBER 2026-10-27, beantwortet OP-07]
 
 ### 9.1 Konfigurationsschalter `WL_KPI_CONFIG.display`
 
@@ -603,10 +603,11 @@ Ohne Schritt 3 erscheint das System weder als Kachel noch im Portfolio und ist s
 | `dip-snapback` | ja | Dip Snapback | TQQQ | TQQQ | 2016-10-17 | 2026-10-23 | |
 | `multifactor-fusion` | ja | Multifactor Fusion | TQQQ | QQQ | 2016-10-17 | 2026-10-23 | |
 | `volatility-cycle-catcher` | ja | Volatility Cycle Catcher | SQQQ | SPY | 2016-10-17 | 2026-10-23 | |
+| `fear-2-fear` | ja | Fear 2 Fear | – | SOXL | 2016-10-31 | 2026-10-30 | |
 | `btc-gold-regime-breakout` | ja | Btc/Gold Regime Breakout | BTC.USD (Cryptocompare) | BTC.USD | 2016-10-23 | 2026-10-19 | wöchentliche Equity |
 | `risk-regime` | nein (kein System) | – | – | – | 2016-12-28 / 2017-03-24 | 2026-10-22 | nur Regime-Dateien |
 
-Alle acht Systeme sind "Long Only" und starten mit `startingCapital` 100 000. [DATEN] Die früher vorhandenen, nicht registrierten Ordner `monday-anchor-reversion-500k-cap` und `multifactor-edge` (Daten veraltet) wurden am 2026-10-27 auf Anweisung des Auftraggebers gelöscht (BP-028, OP-03).
+Alle neun Systeme sind laut `mode` "Long Only" und starten mit `startingCapital` 100 000. [DATEN] Die früher vorhandenen, nicht registrierten Ordner `monday-anchor-reversion-500k-cap` und `multifactor-edge` (Daten veraltet) wurden am 2026-10-27 auf Anweisung des Auftraggebers gelöscht (BP-028, OP-03).
 
 ---
 
