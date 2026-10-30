@@ -32,6 +32,10 @@ const SYSTEMS = [
     dataPath: "./systems/fear-2-fear",
   },
   {
+    id: "bull-power-rotation",
+    dataPath: "./systems/bull-power-rotation",
+  },
+  {
     id: "btc-gold-regime-breakout",
     dataPath: "./systems/btc-gold-regime-breakout",
   },
