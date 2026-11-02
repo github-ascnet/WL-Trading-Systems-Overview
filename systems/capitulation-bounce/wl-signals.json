@@ -1,3 +1,4 @@
 ﻿[
-  {"message":"No signals generated for the latest backtest run","timestamp":"2026-10-30 12:56:32"}
+  {"symbol":"NFLX","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-30 00:00:00","entryPrice":62.08,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-30.6180804919774},
+  {"symbol":"META","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-30 00:00:00","entryPrice":614.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-33.2126176079432}
 ]
