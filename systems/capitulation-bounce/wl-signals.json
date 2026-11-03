@@ -1,4 +1,6 @@
 ﻿[
-  {"symbol":"NFLX","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-30 00:00:00","entryPrice":62.08,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-30.6180804919774},
-  {"symbol":"META","action":"BUY","isEntry":"TRUE","signalDate":"2026-10-30 00:00:00","entryPrice":614.99,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-33.2126176079432}
+  {"symbol":"META","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-02 00:00:00","entryPrice":614.15,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.93217785049034},
+  {"symbol":"NFLX","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-02 00:00:00","entryPrice":62.08,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.51781668612811},
+  {"symbol":"APP","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-02 00:00:00","entryPrice":228.85,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-25.3214199353654},
+  {"symbol":"PCAR","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-02 00:00:00","entryPrice":102.74,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-29.2394699683147}
 ]
