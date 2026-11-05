@@ -1,7 +1,7 @@
 ﻿[
-  {"symbol":"SHOP","entryDate":"2026-11-03","exitDate":null,"entryPrice":136.22,"exitPrice":null,"qty":177,"pl":1111.89453,"plPercent":4.61157686096021,"isOpen":true },
-  {"symbol":"PCAR","entryDate":"2026-11-03","exitDate":null,"entryPrice":102.74,"exitPrice":null,"qty":269,"pl":-204.808529999998,"plPercent":-0.74106482382713,"isOpen":true },
-  {"symbol":"MELI","entryDate":"2026-11-03","exitDate":null,"entryPrice":1676.79,"exitPrice":null,"qty":16,"pl":-247.494319999998,"plPercent":-0.922500432373755,"isOpen":true },
+  {"symbol":"SHOP","entryDate":"2026-11-03","exitDate":"2026-11-04","entryPrice":136.22,"exitPrice":143.45,"qty":177,"pl":1254.959205,"plPercent":5.20493686683306,"isOpen":false },
+  {"symbol":"PCAR","entryDate":"2026-11-03","exitDate":"2026-11-04","entryPrice":102.74,"exitPrice":103.53,"qty":269,"pl":184.766685000002,"plPercent":0.668546817208494,"isOpen":false },
+  {"symbol":"MELI","entryDate":"2026-11-03","exitDate":"2026-11-04","entryPrice":1676.79,"exitPrice":1713.89,"qty":16,"pl":566.474560000002,"plPercent":2.11145462461013,"isOpen":false },
   {"symbol":"META","entryDate":"2026-11-02","exitDate":"2026-11-03","entryPrice":614.15,"exitPrice":614.15,"qty":45,"pl":-27.63675,"plPercent":-0.1,"isOpen":false },
   {"symbol":"NFLX","entryDate":"2026-11-02","exitDate":"2026-11-03","entryPrice":62.08,"exitPrice":62.65,"qty":451,"pl":228.943385,"plPercent":0.817711018041238,"isOpen":false },
   {"symbol":"SNDK","entryDate":"2026-10-26","exitDate":"2026-10-27","entryPrice":1238.03,"exitPrice":1267.08,"qty":19,"pl":528.151454999999,"plPercent":2.24529655985719,"isOpen":false },
