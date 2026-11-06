@@ -1,8 +1,8 @@
 ﻿[
-  {"symbol":"NVDA","entryDate":"2026-04-09","exitDate":null,"entryPrice":182.01,"exitPrice":null,"qty":2453,"pl":60316.804735,"plPercent":13.509694522279,"isOpen":true },
-  {"symbol":"INTC","entryDate":"2026-04-09","exitDate":null,"entryPrice":58.46,"exitPrice":null,"qty":7577,"pl":15614.45429,"plPercent":3.52509408142319,"isOpen":true },
-  {"symbol":"TSLA","entryDate":"2026-04-09","exitDate":null,"entryPrice":343.25,"exitPrice":null,"qty":1301,"pl":71656.965875,"plPercent":16.0461398397669,"isOpen":true },
-  {"symbol":"MU","entryDate":"2026-04-09","exitDate":null,"entryPrice":409.89,"exitPrice":null,"qty":1098,"pl":488615.55039,"plPercent":108.566946009905,"isOpen":true },
+  {"symbol":"NVDA","entryDate":"2026-04-09","exitDate":null,"entryPrice":182.01,"exitPrice":null,"qty":2453,"pl":-1228.96526499999,"plPercent":-0.275262348222623,"isOpen":true },
+  {"symbol":"INTC","entryDate":"2026-04-09","exitDate":null,"entryPrice":58.46,"exitPrice":null,"qty":7577,"pl":-47274.64571,"plPercent":-10.6726479644201,"isOpen":true },
+  {"symbol":"TSLA","entryDate":"2026-04-09","exitDate":null,"entryPrice":343.25,"exitPrice":null,"qty":1301,"pl":349.155874999997,"plPercent":0.078186453022578,"isOpen":true },
+  {"symbol":"MU","entryDate":"2026-04-09","exitDate":null,"entryPrice":409.89,"exitPrice":null,"qty":1098,"pl":270431.97039,"plPercent":60.088085827905,"isOpen":true },
   {"symbol":"NVDA","entryDate":"2025-05-02","exitDate":"2026-03-13","entryPrice":114.11,"exitPrice":184.9,"qty":2453,"pl":173281.134235,"plPercent":61.9056130049952,"isOpen":false },
   {"symbol":"TSLA","entryDate":"2025-05-02","exitDate":"2026-03-13","entryPrice":284.92,"exitPrice":398.77,"qty":976,"pl":110783.95928,"plPercent":39.8386055734943,"isOpen":false },
   {"symbol":"INTC","entryDate":"2025-05-02","exitDate":"2026-03-13","entryPrice":20.26,"exitPrice":46,"qty":13707,"pl":352364.06709,"plPercent":126.884846989141,"isOpen":false },
