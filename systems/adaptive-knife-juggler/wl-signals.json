@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"AMGN","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-05 00:00:00","entryPrice":485.717607678488,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.924553717552485},
-  {"symbol":"CMCSA","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-05 00:00:00","entryPrice":24.3425089420348,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.879375502924246},
-  {"symbol":"CPRT","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-05 00:00:00","entryPrice":31.3864127034799,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.786661066886062},
-  {"symbol":"GILD","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-05 00:00:00","entryPrice":177.776489706441,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.70685961370729}
+  {"symbol":"COST","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-05 00:00:00","entryPrice":1056.2752383072,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.717780846822189}
 ]
