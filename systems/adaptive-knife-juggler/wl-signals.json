@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"ROP","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-04 00:00:00","entryPrice":472.763584909608,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.943716754711128},
-  {"symbol":"ISRG","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-04 00:00:00","entryPrice":450.191758170132,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.419267299705739},
-  {"symbol":"EXC","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-04 00:00:00","entryPrice":46.7716637669488,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.410946817562903},
-  {"symbol":"SBUX","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-04 00:00:00","entryPrice":105.239116837095,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.33781843548016}
+  {"symbol":"AMGN","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-05 00:00:00","entryPrice":485.717607678488,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.924553717552485},
+  {"symbol":"CMCSA","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-05 00:00:00","entryPrice":24.3425089420348,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.879375502924246},
+  {"symbol":"CPRT","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-05 00:00:00","entryPrice":31.3864127034799,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.786661066886062},
+  {"symbol":"GILD","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-05 00:00:00","entryPrice":177.776489706441,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.70685961370729}
 ]
