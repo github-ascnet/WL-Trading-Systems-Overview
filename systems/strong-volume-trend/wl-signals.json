@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"TSLA","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-05 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell At Market","orderType":"Market","signalStatus":"Staged","weight":0.658303303236874},
-  {"symbol":"INTC","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-05 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell At Market","orderType":"Market","signalStatus":"Staged","weight":0.451299942052057},
-  {"symbol":"MU","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-05 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell At Market","orderType":"Market","signalStatus":"Staged","weight":0.231819164290067},
-  {"symbol":"NVDA","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-05 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Sell At Market","orderType":"Market","signalStatus":"Staged","weight":0.102382188416565}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-11-09 09:04:12"}
 ]
