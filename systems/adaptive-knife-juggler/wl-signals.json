@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"COST","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-05 00:00:00","entryPrice":1056.2752383072,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.717780846822189}
+  {"symbol":"FER","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-06 00:00:00","entryPrice":59.9456479808811,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.84073149660515},
+  {"symbol":"GILD","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-06 00:00:00","entryPrice":177.779915221119,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.766452176714378},
+  {"symbol":"AMGN","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-06 00:00:00","entryPrice":485.767352294563,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.607742536017545},
+  {"symbol":"CPRT","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-06 00:00:00","entryPrice":33.2469079316941,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.355085742876455}
 ]
