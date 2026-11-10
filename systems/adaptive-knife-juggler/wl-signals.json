@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"MAR","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-09 00:00:00","entryPrice":413.391272475131,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.989011039836293},
-  {"symbol":"CPRT","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-09 00:00:00","entryPrice":32.9359375351094,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.844344823597658},
-  {"symbol":"FER","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-09 00:00:00","entryPrice":59.620009418163,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.813324796710531},
-  {"symbol":"ROP","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-09 00:00:00","entryPrice":462.694119393125,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.794590290900725}
+  {"symbol":"TRI","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-09 00:00:00","entryPrice":116.214035413648,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.29993212798595}
 ]
