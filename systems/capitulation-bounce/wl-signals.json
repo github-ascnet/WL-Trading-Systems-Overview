@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"SHOP","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-06 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.931809286630467}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-11-10 09:10:04"}
 ]
