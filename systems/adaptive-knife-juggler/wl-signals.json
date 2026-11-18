@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"CDNS","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-16 00:00:00","entryPrice":338.384862450173,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.642094723512358}
+  {"symbol":"FAST","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-17 00:00:00","entryPrice":56.0228900887502,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.578962690501945},
+  {"symbol":"APP","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-17 00:00:00","entryPrice":423.864331065405,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.541402523087153},
+  {"symbol":"FER","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-17 00:00:00","entryPrice":63.2565725336988,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.321615308532119},
+  {"symbol":"CPRT","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-17 00:00:00","entryPrice":32.5997269795557,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.301682823617344}
 ]
