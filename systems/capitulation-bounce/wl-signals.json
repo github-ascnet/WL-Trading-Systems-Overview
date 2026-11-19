@@ -1,5 +1,5 @@
 ﻿[
-  {"symbol":"NVDA","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-17 00:00:00","entryPrice":155.46,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-22.5033920048708},
-  {"symbol":"MSTR","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-17 00:00:00","entryPrice":96.5,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-26.1983419248768},
-  {"symbol":"MELI","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-17 00:00:00","entryPrice":1436.83,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-30.2640789902136}
+  {"symbol":"NVDA","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-18 00:00:00","entryPrice":155.46,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.965922820458807},
+  {"symbol":"MSTR","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-18 00:00:00","entryPrice":94.74,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.764197490504587},
+  {"symbol":"MELI","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-18 00:00:00","entryPrice":1433.08,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.73882542702065}
 ]
