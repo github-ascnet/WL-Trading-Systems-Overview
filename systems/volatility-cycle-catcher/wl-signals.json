@@ -1,3 +1,3 @@
 ﻿[
-  {"symbol":"SQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-18 00:00:00","entryPrice":51.1392,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Momentum Profit Target","orderType":"Limit","signalStatus":"Staged","weight":0.560582051691796}
+  {"symbol":"SQQQ","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-19 00:00:00","entryPrice":51.1392,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Momentum Profit Target","orderType":"Limit","signalStatus":"Staged","weight":0.741591989837187}
 ]
