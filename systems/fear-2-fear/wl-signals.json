@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"COVER_by_L1T1","orderType":"Market","signalStatus":"Staged","weight":0.978324480323663},
-  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"COVER_by_L1T1","orderType":"Market","signalStatus":"Staged","weight":0.828233034378731},
-  {"symbol":"SOXL","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L1T2","orderType":"Market","signalStatus":"Staged","weight":0.632557716616435},
-  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"COVER_by_L1T1","orderType":"Market","signalStatus":"Staged","weight":0.553065690802806}
+  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"COVER_by_L1T1","orderType":"Market","signalStatus":"Staged","weight":0.975452569948186},
+  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"COVER_by_L1T1","orderType":"Market","signalStatus":"Staged","weight":0.938564449869063},
+  {"symbol":"SOXL","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L1T1","orderType":"Market","signalStatus":"Staged","weight":0.931375683009941},
+  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"COVER_by_L1T1","orderType":"Market","signalStatus":"Staged","weight":0.888904992641943}
 ]
