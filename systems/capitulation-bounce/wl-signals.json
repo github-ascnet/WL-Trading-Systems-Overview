@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"MSTR","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-19 00:00:00","entryPrice":94.74,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.800548477646562},
-  {"symbol":"NVDA","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-19 00:00:00","entryPrice":145.98,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-19.6438272351228},
-  {"symbol":"MELI","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-19 00:00:00","entryPrice":1355.49,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-25.7239216562069},
-  {"symbol":"DASH","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-19 00:00:00","entryPrice":157.13,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":-33.4685482874126}
+  {"symbol":"MELI","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Profit","orderType":"Market","signalStatus":"Staged","weight":0.877759981098746},
+  {"symbol":"NVDA","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":143.54,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.772744108217135},
+  {"symbol":"MSTR","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":94.74,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.740301088281448},
+  {"symbol":"DASH","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":153.66,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Breakeven","orderType":"Limit","signalStatus":"Staged","weight":0.463152332463061}
 ]
