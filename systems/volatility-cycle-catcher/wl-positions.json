@@ -1,4 +1,5 @@
 ﻿[
+  {"symbol":"SQQQ","entryDate":"2026-11-23","exitDate":null,"entryPrice":44.49,"exitPrice":null,"qty":1026,"pl":-1510.52337,"plPercent":-3.30915936165429,"isOpen":true },
   {"symbol":"SQQQ","entryDate":"2026-11-17","exitDate":"2026-11-20","entryPrice":45.66,"exitPrice":51.1392,"qty":1151,"pl":6250.85126040001,"plPercent":11.894,"isOpen":false },
   {"symbol":"SQQQ","entryDate":"2026-11-11","exitDate":"2026-11-12","entryPrice":41.14,"exitPrice":42.33,"qty":1182,"pl":1357.24923,"plPercent":2.79111570247933,"isOpen":false },
   {"symbol":"SQQQ","entryDate":"2026-11-02","exitDate":"2026-11-05","entryPrice":40.97,"exitPrice":45.8864,"qty":1102,"pl":5370.0149236,"plPercent":11.894,"isOpen":false },
