@@ -1,3 +1,6 @@
 ﻿[
-  {"symbol":"GILD","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-19 00:00:00","entryPrice":171.741640224759,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.6775631927066}
+  {"symbol":"IDXX","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-23 00:00:00","entryPrice":700.876245659639,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.929566943308523},
+  {"symbol":"APP","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-23 00:00:00","entryPrice":390.281791123122,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.766356346996038},
+  {"symbol":"ROP","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-23 00:00:00","entryPrice":479.663280907411,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.58745278497007},
+  {"symbol":"GILD","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-23 00:00:00","entryPrice":172.457295927845,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"","orderType":"Limit","signalStatus":"Staged","weight":0.534088372136637}
 ]
