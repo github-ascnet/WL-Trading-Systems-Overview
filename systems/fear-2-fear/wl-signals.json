@@ -1,6 +1,3 @@
 ﻿[
-  {"symbol":"SOXL","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L1T3","orderType":"Market","signalStatus":"Staged","weight":0.987313411620364},
-  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"COVER_by_L1T1","orderType":"Market","signalStatus":"Staged","weight":0.651183616134459},
-  {"symbol":"SOXL","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"L1T1","orderType":"Market","signalStatus":"Staged","weight":0.590486685293296},
-  {"symbol":"SOXL","action":"COVER","isEntry":"FALSE","signalDate":"2026-11-20 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"COVER_by_L1T1","orderType":"Market","signalStatus":"Staged","weight":0.494272057104406}
+  {"message":"No signals generated for the latest backtest run","timestamp":"2026-11-24 09:12:00"}
 ]
