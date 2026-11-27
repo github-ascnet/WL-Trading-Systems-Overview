@@ -1,6 +1,6 @@
 ﻿[
-  {"symbol":"UWM","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.96261193097568},
-  {"symbol":"ULE","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-27 00:00:00","entryPrice":10.920308,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Stop","orderType":"Stop","signalStatus":"Staged","weight":0.946470804360246},
-  {"symbol":"UST","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.534207909213214},
-  {"symbol":"UCO","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.428105066690282}
+  {"symbol":"UBT","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.987290061030048},
+  {"symbol":"UPW","action":"BUY","isEntry":"TRUE","signalDate":"2026-11-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.606913153680767},
+  {"symbol":"URE","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.349992288946242},
+  {"symbol":"UWM","action":"SELL","isEntry":"FALSE","signalDate":"2026-11-27 00:00:00","entryPrice":0,"stopPrice":null,"targetPrice":null,"positionSizePercent":null,"signalName":"Rotation","orderType":"Market","signalStatus":"Staged","weight":0.281404831182505}
 ]
