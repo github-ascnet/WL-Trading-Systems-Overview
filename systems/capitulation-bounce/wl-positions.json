@@ -2,7 +2,7 @@
   {"symbol":"NVDA","entryDate":"2026-11-20","exitDate":"2026-11-23","entryPrice":143.54,"exitPrice":167.08,"qty":183,"pl":4279.39827,"plPercent":16.2914100599136,"isOpen":false },
   {"symbol":"MELI","entryDate":"2026-11-20","exitDate":"2026-11-23","entryPrice":1337.37,"exitPrice":1413.07,"qty":19,"pl":1412.17082,"plPercent":5.55753306863471,"isOpen":false },
   {"symbol":"DASH","entryDate":"2026-11-20","exitDate":"2026-11-23","entryPrice":153.66,"exitPrice":160.44,"qty":170,"pl":1125.9015,"plPercent":4.31013276064038,"isOpen":false },
-  {"symbol":"MSTR","entryDate":"2026-11-18","exitDate":null,"entryPrice":94.74,"exitPrice":null,"qty":305,"pl":-5257.39785,"plPercent":-18.1943951868271,"isOpen":true },
+  {"symbol":"MSTR","entryDate":"2026-11-18","exitDate":null,"entryPrice":94.74,"exitPrice":null,"qty":305,"pl":-4522.34785,"plPercent":-15.6505910914081,"isOpen":true },
   {"symbol":"MELI","entryDate":"2026-11-18","exitDate":"2026-11-19","entryPrice":1433.08,"exitPrice":1433.08,"qty":20,"pl":-28.6616,"plPercent":-0.1,"isOpen":false },
   {"symbol":"NVDA","entryDate":"2026-11-18","exitDate":"2026-11-19","entryPrice":155.46,"exitPrice":155.46,"qty":189,"pl":-29.38194,"plPercent":-0.1,"isOpen":false },
   {"symbol":"SHOP","entryDate":"2026-11-06","exitDate":"2026-11-09","entryPrice":143.41,"exitPrice":150.67,"qty":195,"pl":1387.0272,"plPercent":4.95987727494595,"isOpen":false },
